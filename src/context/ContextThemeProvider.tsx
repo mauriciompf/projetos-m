@@ -23,10 +23,7 @@ function ContextThemeProvider({ children }: ContextThemeProviderProps) {
     initialState: isDarkSchema ? "dark" : "light",
   });
 
-  const lightTheme = () => {
-    setTheme("light");
-    console.log(theme);
-  };
+  const lightTheme = () => setTheme("light");
   const darkTheme = () => setTheme("dark");
 
   return (
