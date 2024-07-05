@@ -7,10 +7,10 @@ export default function HomeHeader() {
       <Heading as="h1">Projetos</Heading>
       <ul className="flex gap-4">
         <li>
-          <ThemeButton themeIcon={"light"} />
+          <ThemeButton themeName={"light"} />
         </li>
         <li>
-          <ThemeButton themeIcon={"dark"} />
+          <ThemeButton themeName={"dark"} />
         </li>
       </ul>
     </header>
