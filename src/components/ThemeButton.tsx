@@ -2,37 +2,47 @@ import Button from "./Button";
 import useThemeContext from "../customHooks/useThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import toggleThemeClasses from "../utils/toggleThemeClasses";
 import { useEffect } from "react";
 
 const darkIcon = <FontAwesomeIcon icon={faMoon} />;
 const lightIcon = <FontAwesomeIcon icon={faSun} />;
 
 type ThemeButtonProps = {
-  themeIcon: "dark" | "light";
+  themeName: "dark" | "light";
 };
 
-export default function ThemeButton({ themeIcon }: ThemeButtonProps) {
+export default function ThemeButton({ themeName }: ThemeButtonProps) {
   const { theme, lightTheme, darkTheme } = useThemeContext();
 
+  const handleThemeNameChange = () =>
+    themeName === "dark" ? darkTheme() : lightTheme();
+
   useEffect(() => {
-    document.body.classList.remove("bg-white", "bg-black");
-    document.body.classList.add(theme === "dark" ? "bg-black" : "bg-white");
-    document.body.classList.add(
-      "transition-colors",
-      "duration-200",
-      "ease-in-out",
-    );
+    const bodyClassList = document.body.classList;
+    bodyClassList.remove("bg-black", "bg-white", "text-white", "text-black");
+    bodyClassList.add("transition-colors", "duration-300", "ease-in-out");
+
+    if (theme === "dark") {
+      bodyClassList.add("bg-black", "text-white");
+    } else {
+      bodyClassList.add("bg-white", "text-black");
+    }
   }, [theme]);
 
   return (
     <>
       <span className="sr-only">Mude o tema</span>
       <Button
-        onClick={themeIcon === "dark" ? darkTheme : lightTheme}
-        className={`flex gap-2 ${theme === "dark" && "bg-black text-white"}`}
+        onClick={handleThemeNameChange}
+        className={toggleThemeClasses(
+          theme === "dark" ? "bg-white text-black" : "bg-black text-white",
+          "flex gap-2",
+        )}
+        aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
       >
-        <span>{themeIcon === "dark" ? darkIcon : lightIcon}</span>
-        <span>{themeIcon === "dark" ? "Escuro" : "Claro"}</span>
+        <span>{themeName === "dark" ? darkIcon : lightIcon}</span>
+        <span>{themeName === "dark" ? "Escuro" : "Claro"}</span>
       </Button>
     </>
   );
