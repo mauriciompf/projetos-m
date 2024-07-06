@@ -1,10 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import useLocalStorage from "../customHooks/useLocalStorage";
 
 export interface TypeTheme {
   theme: string;
-  lightTheme: () => void;
-  darkTheme: () => void;
+  setLight: () => void;
+  setDark: () => void;
 }
 
 const ContextTheme = createContext<TypeTheme | null>(null);
@@ -14,20 +14,20 @@ type ContextThemeProviderProps = {
 };
 
 function ContextThemeProvider({ children }: ContextThemeProviderProps) {
-  const isDarkSchema =
+  const prefersDarkMode = () =>
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   const [theme, setTheme] = useLocalStorage({
     key: "theme",
-    initialState: isDarkSchema ? "dark" : "light",
+    initialState: prefersDarkMode() ? "dark" : "light",
   });
 
-  const lightTheme = () => setTheme("light");
-  const darkTheme = () => setTheme("dark");
+  const setLight = () => setTheme("light");
+  const setDark = () => setTheme("dark");
 
   return (
-    <ContextTheme.Provider value={{ theme, lightTheme, darkTheme }}>
+    <ContextTheme.Provider value={{ theme, setLight, setDark }}>
       {children}
     </ContextTheme.Provider>
   );
