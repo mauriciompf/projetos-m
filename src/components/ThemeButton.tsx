@@ -13,20 +13,25 @@ type ThemeButtonProps = {
 };
 
 export default function ThemeButton({ themeName }: ThemeButtonProps) {
-  const { theme, lightTheme, darkTheme } = useThemeContext();
+  const { theme, setLight, setDark } = useThemeContext();
 
   const handleThemeNameChange = () =>
-    themeName === "dark" ? darkTheme() : lightTheme();
+    themeName === "dark" ? setDark() : setLight();
 
   useEffect(() => {
     const bodyClassList = document.body.classList;
-    bodyClassList.remove("bg-black", "bg-white", "text-white", "text-black");
+    bodyClassList.remove(
+      `bg-[#282b30]`,
+      "bg-white",
+      "text-white",
+      `text-black`,
+    );
     bodyClassList.add("transition-colors", "duration-300", "ease-in-out");
 
     if (theme === "dark") {
-      bodyClassList.add("bg-black", "text-white");
+      bodyClassList.add(`bg-[#282b30]`, "text-white");
     } else {
-      bodyClassList.add("bg-white", "text-black");
+      bodyClassList.add("bg-white", `text-black`);
     }
   }, [theme]);
 
@@ -37,7 +42,7 @@ export default function ThemeButton({ themeName }: ThemeButtonProps) {
         onClick={handleThemeNameChange}
         className={toggleThemeClasses(
           theme === "dark" ? "bg-white text-black" : "bg-black text-white",
-          "flex gap-2",
+          "flex gap-2 shadow-sm",
         )}
         aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
       >
