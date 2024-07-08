@@ -5,6 +5,7 @@ import { useState } from "react";
 // import toggleThemeClasses from "../../utils/toggleThemeClasses";
 import SideBarNav from "./SideBarNav";
 import SideBarHeader from "./SideBarHeader";
+import toggleThemeClasses from "../../utils/toggleThemeClasses";
 
 export default function SideBar() {
   const [isOpenMenu, setIsOpenMenu] = useState(true);
@@ -19,9 +20,17 @@ export default function SideBar() {
         <hr className="mx-auto my-6 w-auto border-2" />
         <SideBarNav setIsOpenMenu={setIsOpenMenu} isOpenMenu={isOpenMenu} />
         <hr className="mx-auto my-6 w-auto border-2" />
-        <section className="flex justify-center gap-2">
-          <ThemeButton themeName="light" />
-          <ThemeButton themeName="dark" />
+        <section className={"flex justify-center gap-2"}>
+          <ThemeButton
+            className={`${!isOpenMenu && "translate-x-6 translate-y-0"} relative transition-all duration-500`}
+            isOpenMenu={isOpenMenu}
+            themeName="light"
+          />
+          <ThemeButton
+            className={`${!isOpenMenu && "-translate-x-6 translate-y-10"} relative transition-all duration-500`}
+            isOpenMenu={isOpenMenu}
+            themeName="dark"
+          />
         </section>
       </aside>
 
