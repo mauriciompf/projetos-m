@@ -1,18 +1,25 @@
 import Button from "./Button";
 import useThemeContext from "../customHooks/useThemeContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import toggleThemeClasses from "../utils/toggleThemeClasses";
 import { useEffect } from "react";
+import { twMerge } from "tailwind-merge";
 
-const darkIcon = <FontAwesomeIcon icon={faMoon} />;
-const lightIcon = <FontAwesomeIcon icon={faSun} />;
+// const darkIcon = <FontAwesomeIcon icon={faMoon} />;
+// const lightIcon = <FontAwesomeIcon icon={faSun} />;
 
 type ThemeButtonProps = {
   themeName: "dark" | "light";
+  className?: string;
+  isOpenMenu?: boolean;
 };
 
-export default function ThemeButton({ themeName }: ThemeButtonProps) {
+export default function ThemeButton({
+  themeName,
+  className,
+  isOpenMenu,
+}: ThemeButtonProps) {
   const { theme, setLight, setDark } = useThemeContext();
 
   const handleThemeNameChange = () =>
@@ -40,14 +47,21 @@ export default function ThemeButton({ themeName }: ThemeButtonProps) {
       <span className="sr-only">Mude o tema</span>
       <Button
         onClick={handleThemeNameChange}
-        className={toggleThemeClasses(
-          theme === "dark" ? "bg-white text-black" : "bg-black text-white",
-          "flex gap-2 shadow-sm",
+        className={twMerge(
+          toggleThemeClasses(
+            theme === "dark" ? "bg-white text-black" : "bg-black text-white",
+            "flex gap-1 shadow-sm",
+          ),
+          className,
         )}
         aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
       >
-        <span>{themeName === "dark" ? darkIcon : lightIcon}</span>
-        <span>{themeName === "dark" ? "Escuro" : "Claro"}</span>
+        <span>{themeName === "dark" ? "🌑" : "💡"}</span>
+        <span
+          className={`transition-all duration-500 ${!isOpenMenu && "w-0 opacity-0"}`}
+        >
+          {themeName === "dark" ? "Escuro" : "Claro"}
+        </span>
       </Button>
     </>
   );
