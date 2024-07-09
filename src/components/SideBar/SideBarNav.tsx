@@ -1,9 +1,12 @@
+import useIsOpenMenu from "../../customHooks/useIsOpenMenuContext";
 import useThemeContext from "../../customHooks/useThemeContext";
 import projectList from "../../utils/projectList";
 import toggleThemeClasses from "../../utils/toggleThemeClasses";
 
-export default function SideBarNav({ isOpenMenu }: any) {
+export default function SideBarNav() {
+  const { isOpenMenu } = useIsOpenMenu();
   const { theme } = useThemeContext();
+
   return (
     <section className={toggleThemeClasses(isOpenMenu && "ml-5")}>
       <nav>
