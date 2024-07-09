@@ -3,16 +3,14 @@ import { Link } from "react-router-dom";
 import Heading from "../Heading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCaretLeft, faHouse } from "@fortawesome/free-solid-svg-icons";
+import useIsOpenMenu from "../../customHooks/useIsOpenMenuContext";
 
 const hideMenuIcon = <FontAwesomeIcon icon={faSquareCaretLeft} />;
 const homeIcon = <FontAwesomeIcon icon={faHouse} />;
 
-export default function SideBarHeader({ setIsOpenMenu, isOpenMenu }: any) {
+export default function SideBarHeader() {
+  const { isOpenMenu, handleToggleMenu } = useIsOpenMenu();
   const [headingVisible, setHeadingVisible] = useState(false);
-
-  const handleToggleMenu = () => {
-    setIsOpenMenu(!isOpenMenu);
-  };
 
   useEffect(() => {
     if (isOpenMenu) {
@@ -32,7 +30,7 @@ export default function SideBarHeader({ setIsOpenMenu, isOpenMenu }: any) {
         as="h1"
       >
         <Link
-          className={`${!isOpenMenu && "pointer-events-none"} flex items-center gap-2`}
+          className={`${!isOpenMenu && "pointer-events-none"} flex items-center gap-2 hover:underline focus:underline`}
           to={"/"}
         >
           <span className="cursor-pointer text-lg">{homeIcon}</span>
@@ -42,7 +40,7 @@ export default function SideBarHeader({ setIsOpenMenu, isOpenMenu }: any) {
       <span className="sr-only">Minimizar o menu</span>
       <button
         onClick={handleToggleMenu}
-        className={`${isOpenMenu && "right-0 mr-4"} absolute right-[4px] text-2xl transition-all duration-300 ease-in-out`}
+        className={`${isOpenMenu ? "right-0 mr-4" : "rotate-180"} absolute right-[4px] text-2xl transition-all duration-500 ease-in-out`}
       >
         {hideMenuIcon}
       </button>
