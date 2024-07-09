@@ -55,7 +55,7 @@ export default function ThemeButton({
           toggleThemeClasses(
             theme === "dark" ? "bg-white text-black" : "bg-black text-white",
             !isHomePage && isOpenMenu && "gap-1",
-            "flex select-none shadow-sm transition-all",
+            "flex select-none shadow-sm",
           ),
           className,
         )}
