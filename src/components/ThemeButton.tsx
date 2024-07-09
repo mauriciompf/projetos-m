@@ -5,6 +5,8 @@ import useThemeContext from "../customHooks/useThemeContext";
 import toggleThemeClasses from "../utils/toggleThemeClasses";
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
+import { useLocation } from "react-router-dom";
+import useIsOpenMenu from "../customHooks/useIsOpenMenuContext";
 
 // const darkIcon = <FontAwesomeIcon icon={faMoon} />;
 // const lightIcon = <FontAwesomeIcon icon={faSun} />;
@@ -18,9 +20,11 @@ type ThemeButtonProps = {
 export default function ThemeButton({
   themeName,
   className,
-  isOpenMenu,
 }: ThemeButtonProps) {
+  const { isOpenMenu } = useIsOpenMenu();
   const { theme, setLight, setDark } = useThemeContext();
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   const handleThemeNameChange = () =>
     themeName === "dark" ? setDark() : setLight();
@@ -50,15 +54,16 @@ export default function ThemeButton({
         className={twMerge(
           toggleThemeClasses(
             theme === "dark" ? "bg-white text-black" : "bg-black text-white",
-            "flex gap-1 shadow-sm",
+            !isHomePage && isOpenMenu && "gap-1",
+            "flex select-none shadow-sm transition-all",
           ),
           className,
         )}
         aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
       >
-        <span>{themeName === "dark" ? "🌑" : "💡"}</span>
+        <span draggable={false}>{themeName === "dark" ? "🌑" : "💡"}</span>
         <span
-          className={`transition-all duration-500 ${!isOpenMenu && "w-0 opacity-0"}`}
+          className={`transition-all duration-300 ease-in-out ${!isHomePage && !isOpenMenu && "w-0 opacity-0"}`}
         >
           {themeName === "dark" ? "Escuro" : "Claro"}
         </span>
