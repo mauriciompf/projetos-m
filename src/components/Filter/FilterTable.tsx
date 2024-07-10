@@ -9,15 +9,35 @@ export const tableHeaders = [
   "Telefone",
 ];
 
-export default function FilterTable({ usersData }) {
+export default function FilterTable({ selectColumn, usersData, orderBy }) {
   const { theme } = useThemeContext();
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
 
-  const sortedUserData = [...usersData].sort((a, b) =>
-    a.firstName.localeCompare(b.firstName),
-  );
+  const sortedUserData = () => {
+    const usersDataCopy = [...usersData];
+    switch (selectColumn) {
+      case "ID":
+        if (orderBy === "DESC") {
+          return usersDataCopy.sort((a, b) => b.id - a.id);
+        }
+        break;
+      case "Nome":
+        if (orderBy === "ASC") {
+          return usersDataCopy.sort((a, b) =>
+            a.firstName.localeCompare(b.firstName),
+          );
+        } else if (orderBy === "DESC") {
+          return usersDataCopy.sort((a, b) =>
+            b.firstName.localeCompare(a.firstName),
+          );
+        }
+        break;
+    }
+
+    return usersDataCopy;
+  };
 
   return (
     <table className="mx-auto w-[80%] table-auto rounded-lg">
@@ -31,7 +51,7 @@ export default function FilterTable({ usersData }) {
         </tr>
       </thead>
       <tbody>
-        {sortedUserData
+        {sortedUserData()
           // .filter((user) => user.firstName  arr.sort())
           .map((user) => {
             return (
