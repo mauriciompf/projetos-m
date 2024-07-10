@@ -14,7 +14,7 @@ export default function HomeMain({}) {
                 to={"../pages/filter"}
                 className="grid size-60 place-items-center text-2xl"
               >
-                Filter
+                Filtro
               </Link>
             </li>
           ))}
