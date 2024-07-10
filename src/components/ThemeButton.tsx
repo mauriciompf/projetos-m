@@ -61,7 +61,7 @@ export default function ThemeButton({
         )}
         aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
       >
-        <span draggable={false}>{themeName === "dark" ? "🌑" : "💡"}</span>
+        <span draggable={false}>{themeName === "dark" ? "🌙" : "💡"}</span>
         <span
           className={`transition-all duration-300 ease-in-out ${!isHomePage && !isOpenMenu && "w-0 opacity-0"}`}
         >
