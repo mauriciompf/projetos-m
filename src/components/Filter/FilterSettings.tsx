@@ -3,12 +3,16 @@ import { createPortal } from "react-dom";
 import Button from "../Button";
 import { tableHeaders } from "./FilterTable";
 
-export default function FilterSettings() {
+export default function FilterSettings({
+  orderBy,
+  setOrderBy,
+  selectColumn,
+  setSelectColumn,
+}) {
   const [toggleSortBy, setToggleSortBy] = useState(false);
+
   const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
-  const [selectColumn, setSelectColumn] = useState("");
   const [toggleOrderBy, setToggleOrderBy] = useState(false);
-  const [orderBy, setOrderBy] = useState("");
 
   const handleToggleSortBy = () => {
     setToggleSortBy(!toggleSortBy);
@@ -28,6 +32,7 @@ export default function FilterSettings() {
 
   const handleOrderBy = (label: string) => {
     setOrderBy(label);
+    setToggleOrderBy(false);
   };
 
   const removeSelectedColumn = (col: string) => {
@@ -102,7 +107,12 @@ export default function FilterSettings() {
             </div>
             <div>
               {orderBy ? (
-                <SelectedSortBy col={orderBy} />
+                <Button
+                  onClick={handleToggleOrderBy}
+                  className="flex w-full items-center gap-2 border border-black p-2"
+                >
+                  <span className="font-bold">{orderBy}</span>
+                </Button>
               ) : (
                 <Button
                   onClick={handleToggleOrderBy}
@@ -112,7 +122,7 @@ export default function FilterSettings() {
                 </Button>
               )}
 
-              {!orderBy && toggleOrderBy && (
+              {toggleOrderBy && (
                 <ul>
                   {OrderByLabels.map((label) => (
                     <li className="border border-black" key={label}>
