@@ -4,47 +4,95 @@ import Button from "../Button";
 import { tableHeaders } from "./FilterTable";
 
 export default function FilterSettings() {
-  const [toggleSortBy, setToggleBy] = useState(false);
+  const [toggleSortBy, setToggleSortBy] = useState(false);
   const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
+  const [selectColumn, setSelectColumn] = useState("");
+  const [toggleOrderBy, setToggleOrderBy] = useState(false);
+  const [orderBy, setOrderBy] = useState("");
 
-  const handleSortBy = () => {
-    setToggleBy(!toggleSortBy);
+  const handleToggleSortBy = () => {
+    setToggleSortBy(!toggleSortBy);
   };
 
-  const handleSelectColumn = () => {
+  const handleToggleSelectColumn = () => {
     setToggleSelectColumn(!toggleSelectColumn);
   };
 
+  const handleSelectColumn = (header: string) => {
+    setSelectColumn(header);
+  };
+
+  const handleToggleOrderBy = () => {
+    setToggleOrderBy(!toggleOrderBy);
+  };
+
+  const handleOrderBy = (label: string) => {
+    setOrderBy(label);
+  };
+
+  const removeSelectedColumn = (col: string) => {
+    tableHeaders.forEach((column) => {
+      if (col === column) setSelectColumn("");
+    });
+
+    OrderByLabels.forEach((label) => {
+      if (col === label) setOrderBy("");
+    });
+  };
+
+  function SelectedSortBy({ col }: { col: string }) {
+    return (
+      <div className="flex items-center gap-2 border border-black p-2">
+        <span className="font-bold">{col}</span>
+        <Button
+          onClick={() => removeSelectedColumn(col)}
+          className="rounded-full bg-red-500 px-2 py-0 ring-transparent hover:bg-red-300 focus:bg-red-300"
+        >
+          x
+        </Button>
+      </div>
+    );
+  }
+
+  const OrderByLabels = ["ASC", "DESC", "Padrão"];
+
   return (
-    <div className="mx-auto mb-6 flex w-[80%] items-center gap-4">
+    <div className="relative mx-auto mb-6 flex w-[80%] items-center gap-4">
       <Button
-        onClick={handleSortBy}
+        onClick={handleToggleSortBy}
         className="rounded-md bg-slate-300 px-4 py-2 font-bold"
       >
-        SORT BY
+        ORGANIZAR
       </Button>
 
       <Button className="rounded-md bg-slate-300 px-4 py-2 font-bold">
-        FILTER
+        FILTRO
       </Button>
 
       <span>Show x/y</span>
 
       {toggleSortBy &&
         createPortal(
-          <article className="left-[290px] top-[180px] flex items-start gap-2 rounded-md bg-slate-300 p-4">
+          <article className="fixed left-[290px] top-[180px] flex items-start gap-2 rounded-md bg-slate-300 p-4">
             <div>
-              <Button
-                onClick={handleSelectColumn}
-                className="border border-black p-2"
-              >
-                Select Column
-              </Button>
-              {toggleSelectColumn && (
+              {selectColumn ? (
+                <SelectedSortBy col={selectColumn} />
+              ) : (
+                <Button
+                  onClick={handleToggleSelectColumn}
+                  className="border border-black p-2"
+                >
+                  Selecione uma coluna
+                </Button>
+              )}
+              {!selectColumn && toggleSelectColumn && (
                 <ul>
                   {tableHeaders.map((header) => (
                     <li className="border border-black" key={header}>
-                      <Button className="w-full text-left hover:bg-black hover:text-white focus:bg-black focus:text-white">
+                      <Button
+                        onClick={() => handleSelectColumn(header)}
+                        className="w-full p-2 text-left hover:bg-black hover:text-white focus:bg-black focus:text-white"
+                      >
                         {header}
                       </Button>
                     </li>
@@ -52,7 +100,33 @@ export default function FilterSettings() {
                 </ul>
               )}
             </div>
-            <Button className="border border-black p-2">Order By</Button>
+            <div>
+              {orderBy ? (
+                <SelectedSortBy col={orderBy} />
+              ) : (
+                <Button
+                  onClick={handleToggleOrderBy}
+                  className="border border-black p-2"
+                >
+                  Ordernar por
+                </Button>
+              )}
+
+              {!orderBy && toggleOrderBy && (
+                <ul>
+                  {OrderByLabels.map((label) => (
+                    <li className="border border-black" key={label}>
+                      <Button
+                        onClick={() => handleOrderBy(label)}
+                        className="w-full p-2 text-left hover:bg-black hover:text-white focus:bg-black focus:text-white"
+                      >
+                        {label}
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </article>,
           document.body,
         )}
