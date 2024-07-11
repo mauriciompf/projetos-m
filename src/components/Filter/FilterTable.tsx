@@ -17,21 +17,30 @@ export default function FilterTable({ selectColumn, usersData, orderBy }) {
 
   const sortedUserData = () => {
     const usersDataCopy = [...usersData];
+    const descOrder = orderBy === "Decrescente";
+    const ascOrder = orderBy === "Crescente";
     switch (selectColumn) {
       case "ID":
-        if (orderBy === "DESC") {
+        if (descOrder) {
           return usersDataCopy.sort((a, b) => b.id - a.id);
         }
         break;
       case "Nome":
-        if (orderBy === "ASC") {
+        if (ascOrder) {
           return usersDataCopy.sort((a, b) =>
             a.firstName.localeCompare(b.firstName),
           );
-        } else if (orderBy === "DESC") {
+        } else if (descOrder) {
           return usersDataCopy.sort((a, b) =>
             b.firstName.localeCompare(a.firstName),
           );
+        }
+        break;
+      case "Idade":
+        if (ascOrder) {
+          return usersDataCopy.sort((a, b) => a.age - b.age);
+        } else if (descOrder) {
+          return usersDataCopy.sort((a, b) => b.age - a.age);
         }
         break;
     }
