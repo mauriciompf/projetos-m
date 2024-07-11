@@ -1,18 +1,50 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Button from "../Button";
 import { tableHeaders } from "./FilterTable";
+
+type FilterSettingsProps = {
+  orderBy: string;
+  setOrderBy: (val: string) => void;
+  selectColumn: string;
+  setSelectColumn: (val: string) => void;
+};
 
 export default function FilterSettings({
   orderBy,
   setOrderBy,
   selectColumn,
   setSelectColumn,
-}) {
+}: FilterSettingsProps) {
   const [toggleSortBy, setToggleSortBy] = useState(false);
 
   const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
   const [toggleOrderBy, setToggleOrderBy] = useState(false);
+  const refSortByBox = useRef<HTMLElement | null>(null);
+  const refSortByBtn = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: React.MouseEvent) => {
+      const val = e.target as HTMLInputElement;
+      console.log(val);
+
+      if (!refSortByBox.current) {
+        return;
+      }
+
+      if (val !== refSortByBtn.current) {
+        if (!refSortByBox.current.contains(val)) {
+          setToggleSortBy(false);
+        }
+      }
+    };
+
+    window.addEventListener("click", (e) => handleClickOutside(e));
+
+    return () => {
+      window.removeEventListener("click", (e) => handleClickOutside(e));
+    };
+  }, [refSortByBtn, refSortByBox]);
 
   const handleToggleSortBy = () => {
     setToggleSortBy(!toggleSortBy);
@@ -59,11 +91,12 @@ export default function FilterSettings({
     );
   }
 
-  const OrderByLabels = ["ASC", "DESC", "Padrão"];
+  const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
   return (
     <div className="relative mx-auto mb-6 flex w-[80%] items-center gap-4">
       <Button
+        refBtn={refSortByBtn}
         onClick={handleToggleSortBy}
         className="rounded-md bg-slate-300 px-4 py-2 font-bold"
       >
@@ -78,7 +111,10 @@ export default function FilterSettings({
 
       {toggleSortBy &&
         createPortal(
-          <article className="fixed left-[290px] top-[180px] flex items-start gap-2 rounded-md bg-slate-300 p-4">
+          <article
+            ref={refSortByBox}
+            className="fixed left-[290px] top-[180px] flex items-start gap-2 rounded-md bg-slate-300 p-4"
+          >
             <div>
               {selectColumn ? (
                 <SelectedSortBy col={selectColumn} />
@@ -92,16 +128,23 @@ export default function FilterSettings({
               )}
               {!selectColumn && toggleSelectColumn && (
                 <ul>
-                  {tableHeaders.map((header) => (
-                    <li className="border border-black" key={header}>
-                      <Button
-                        onClick={() => handleSelectColumn(header)}
-                        className="w-full p-2 text-left hover:bg-black hover:text-white focus:bg-black focus:text-white"
-                      >
-                        {header}
-                      </Button>
-                    </li>
-                  ))}
+                  {tableHeaders
+                    .filter(
+                      (header) =>
+                        header !== "Sexo" &&
+                        header !== "Email" &&
+                        header !== "Telefone",
+                    )
+                    .map((header) => (
+                      <li className="border border-black" key={header}>
+                        <Button
+                          onClick={() => handleSelectColumn(header)}
+                          className="w-full p-2 text-left hover:bg-black hover:text-white focus:bg-black focus:text-white"
+                        >
+                          {header}
+                        </Button>
+                      </li>
+                    ))}
                 </ul>
               )}
             </div>
