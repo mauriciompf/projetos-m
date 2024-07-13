@@ -21,13 +21,13 @@ export default function SideBar() {
         <hr className="mx-auto my-6 w-auto border-2" />
         <SideBarNav />
         <hr className="mx-auto my-6 w-auto border-2" />
-        <section className={"flex justify-center gap-2"}>
+        <section className={`flex justify-center ${isOpenMenu && "gap-2"}`}>
           <ThemeButton
-            className={`${!isOpenMenu && "translate-x-[1.4rem] translate-y-0"} relative transition-all duration-500`}
+            className={`${!isOpenMenu && "translate-x-[1rem] translate-y-0"} relative transition-all duration-500`}
             themeName="light"
           />
           <ThemeButton
-            className={`${!isOpenMenu && "-translate-x-[1.4rem] translate-y-10"} relative transition-all duration-500`}
+            className={`${!isOpenMenu && "-translate-x-[1rem] translate-y-10"} relative transition-all duration-500`}
             isOpenMenu={isOpenMenu}
             themeName="dark"
           />
