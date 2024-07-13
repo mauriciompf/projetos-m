@@ -9,7 +9,17 @@ export const tableHeaders = [
   "Telefone",
 ];
 
-export default function FilterTable({ selectColumn, usersData, orderBy }) {
+type FilterTableProps = {
+  selectColumn: string;
+  usersData: any;
+  orderBy: string;
+};
+
+export default function FilterTable({
+  selectColumn,
+  usersData,
+  orderBy,
+}: FilterTableProps) {
   const { theme } = useThemeContext();
 
   const getSexNameTranslated = (sex: string) =>
