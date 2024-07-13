@@ -17,7 +17,7 @@ export default function Button({
       ref={refBtn}
       {...props}
       className={twMerge(
-        "bg-transparent px-2 py-1 font-bold hover:ring-4 focus:ring-4",
+        `bg-transparent px-2 py-1 font-bold hover:ring-4 focus:outline-none focus:ring-4`,
         className,
       )}
     >
