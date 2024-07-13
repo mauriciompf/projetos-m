@@ -1,15 +1,15 @@
 import Button from "./Button";
 import useThemeContext from "../customHooks/useThemeContext";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import toggleThemeClasses from "../utils/toggleThemeClasses";
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { useLocation } from "react-router-dom";
 import useIsOpenMenu from "../customHooks/useIsOpenMenuContext";
 
-// const darkIcon = <FontAwesomeIcon icon={faMoon} />;
-// const lightIcon = <FontAwesomeIcon icon={faSun} />;
+const lightIcon = <FontAwesomeIcon icon={faSun} />;
+const darkIcon = <FontAwesomeIcon width="16px" icon={faMoon} />;
 
 type ThemeButtonProps = {
   themeName: "dark" | "light";
@@ -61,7 +61,9 @@ export default function ThemeButton({
         )}
         aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
       >
-        <span draggable={false}>{themeName === "dark" ? "🌙" : "💡"}</span>
+        <span draggable={false}>
+          {themeName === "dark" ? darkIcon : lightIcon}
+        </span>
         <span
           className={`transition-all duration-300 ease-in-out ${!isHomePage && !isOpenMenu && "w-0 opacity-0"}`}
         >
