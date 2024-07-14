@@ -6,9 +6,11 @@ import FilterSettings from "../components/Filter/FilterSettings";
 import { useState } from "react";
 
 const Filter = () => {
+  // #TODO create context hook in theses useStates and create custom hook
   const [orderBy, setOrderBy] = useState("");
   const [selectColumn, setSelectColumn] = useState("");
 
+  // #TODO create custom hook
   const queryUsers = async () => {
     const { data } = await axios.get("https://dummyjson.com/users");
     return data.users;
