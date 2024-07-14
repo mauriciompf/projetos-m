@@ -4,13 +4,24 @@ import Button from "../Button";
 import SortByBox from "./sortBy/SortByBox";
 import useThemeContext from "../../customHooks/useThemeContext";
 import FilterSettingsBox from "./filter/FilterSettingsBox";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFilter,
+  faSort,
+  faSortDown,
+  faSortUp,
+} from "@fortawesome/free-solid-svg-icons";
+
+const sortIcon = <FontAwesomeIcon icon={faSort} />;
+const filterIcon = <FontAwesomeIcon icon={faFilter} />;
+const downIcon = <FontAwesomeIcon icon={faSortDown} />;
+const upIcon = <FontAwesomeIcon icon={faSortUp} />;
 
 type FilterSettingsProps = {
   orderBy: string;
   setOrderBy: (val: string) => void;
   selectColumn: string;
   setSelectColumn: (val: string) => void;
-  setToggleSortBy?: (val: boolean) => void;
 };
 
 export default function FilterSettings({
@@ -35,14 +46,14 @@ export default function FilterSettings({
         onClick={handleToggleSortBy}
         className={`rounded-md ${theme === "dark" ? "bg-black" : "bg-slate-300"} px-4 py-2 font-bold`}
       >
-        ORGANIZAR
+        {sortIcon} ORGANIZAR
       </Button>
 
       <Button
         onClick={handleToggleFilter}
         className={`rounded-md ${theme === "dark" ? "bg-black" : "bg-slate-300"} px-4 py-2 font-bold`}
       >
-        FILTRO
+        {filterIcon} FILTRO
       </Button>
 
       <span>Show x/y</span>
@@ -56,6 +67,8 @@ export default function FilterSettings({
             setOrderBy={setOrderBy}
             setSelectColumn={setSelectColumn}
             setToggleSortBy={setToggleSortBy}
+            downIcon={downIcon}
+            upIcon={upIcon}
           />,
           document.body,
         )}
