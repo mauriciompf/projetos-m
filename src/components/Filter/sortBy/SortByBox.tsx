@@ -1,8 +1,11 @@
 import { tableHeaders } from "../FilterTable";
 import { useEffect, useRef, useState, useCallback } from "react";
-import Button from "../../Button";
-import useThemeContext from "../../../customHooks/useThemeContext";
 import WrapSettingsBox from "../../WrapSettingsBox";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
+import SortByListItem from "./SortByListItem";
+import SortByHeader from "./SortByHeader";
 
 type SortByBoxProps = {
   orderBy: string;
@@ -11,7 +14,11 @@ type SortByBoxProps = {
   refSortByBtn: any;
   setSelectColumn: (val: string) => void;
   setToggleSortBy?: (val: boolean) => void;
+  downIcon: any;
+  upIcon: any;
 };
+
+const removeButton = <FontAwesomeIcon icon={faSquareXmark} />;
 
 export default function SortByBox({
   orderBy,
@@ -20,12 +27,13 @@ export default function SortByBox({
   setOrderBy,
   setSelectColumn,
   setToggleSortBy,
+  downIcon,
+  upIcon,
 }: SortByBoxProps) {
   const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
   const [toggleOrderBy, setToggleOrderBy] = useState(false);
   const refSortByBox = useRef<HTMLElement | null>(null);
   const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
-  const { theme } = useThemeContext();
 
   const handleClickOutside = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -57,22 +65,6 @@ export default function SortByBox({
     });
   };
 
-  function SelectedSortBy({ col }: { col: string }) {
-    return (
-      <div
-        className={`${theme === "dark" ? "border-white" : "border-black"} flex items-center gap-2 border border-black p-2`}
-      >
-        <span className="font-bold">{col}</span>
-        <Button
-          onClick={() => removeSelectedColumn(col)}
-          className="rounded-full bg-red-500 px-2 py-0 ring-transparent hover:bg-red-300 focus:bg-red-300"
-        >
-          x
-        </Button>
-      </div>
-    );
-  }
-
   const handleToggleSelectColumn = () => {
     setToggleSelectColumn(!toggleSelectColumn);
   };
@@ -94,15 +86,22 @@ export default function SortByBox({
     <WrapSettingsBox refElem={refSortByBox}>
       <div>
         {selectColumn ? (
-          <SelectedSortBy col={selectColumn} />
+          <SortByHeader
+            onClick={() => removeSelectedColumn(selectColumn)}
+            headerLabel={selectColumn}
+            isRemoveButton={true}
+            removeButton={removeButton}
+          />
         ) : (
-          <Button
+          <SortByHeader
             onClick={handleToggleSelectColumn}
-            className={`${theme === "dark" ? "border-white" : "border-black"} border p-2`}
-          >
-            Selecione uma coluna
-          </Button>
+            isOrderByOpen={toggleSelectColumn}
+            upIcon={upIcon}
+            downIcon={downIcon}
+            headerLabel={"Selecione uma coluna"}
+          />
         )}
+
         {!selectColumn && toggleSelectColumn && (
           <ul>
             {tableHeaders
@@ -113,52 +112,41 @@ export default function SortByBox({
                   header !== "Telefone",
               )
               .map((header) => (
-                <li
-                  className={`${theme === "dark" ? "border-white" : "border-black"} border`}
-                  key={header}
-                >
-                  <Button
-                    onClick={() => handleSelectColumn(header)}
-                    className={`${theme !== "dark" && "hover:bg-black hover:text-white focus:bg-black focus:text-white"} w-full p-2 text-left hover:bg-white hover:text-black focus:bg-white focus:text-black`}
-                  >
-                    {header}
-                  </Button>
-                </li>
+                <SortByListItem
+                  list={header}
+                  handleClick={() => handleSelectColumn(header)}
+                />
               ))}
           </ul>
         )}
       </div>
+
       <div>
         {orderBy ? (
-          <Button
+          <SortByHeader
             onClick={handleToggleOrderBy}
-            className={`flex w-full items-center gap-2 border border-black p-2 ${theme === "dark" ? "border-white" : "border-black"} `}
-          >
-            <span className="font-bold">{orderBy}</span>
-          </Button>
+            isOrderByOpen={toggleOrderBy}
+            upIcon={upIcon}
+            downIcon={downIcon}
+            headerLabel={orderBy}
+          />
         ) : (
-          <Button
+          <SortByHeader
             onClick={handleToggleOrderBy}
-            className={`${theme === "dark" ? "border-white" : "border-black"} border p-2`}
-          >
-            Ordernar por
-          </Button>
+            isOrderByOpen={toggleOrderBy}
+            upIcon={upIcon}
+            downIcon={downIcon}
+            headerLabel={"Ordernar por"}
+          />
         )}
 
         {toggleOrderBy && (
           <ul>
             {OrderByLabels.map((label) => (
-              <li
-                className={`${theme === "dark" ? "border-white" : "border-black"} border`}
-                key={label}
-              >
-                <Button
-                  onClick={() => handleOrderBy(label)}
-                  className={`${theme !== "dark" && "hover:bg-black hover:text-white focus:bg-black focus:text-white"} w-full p-2 text-left hover:bg-white hover:text-black focus:bg-white focus:text-black`}
-                >
-                  {label}
-                </Button>
-              </li>
+              <SortByListItem
+                list={label}
+                handleClick={() => handleOrderBy(label)}
+              />
             ))}
           </ul>
         )}
