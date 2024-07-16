@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Button from "../Button";
 import SortByBox from "./sortBy/SortByBox";
-import useThemeContext from "../../customHooks/useThemeContext";
+
 import FilterSettingsBox from "./filter/FilterSettingsBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,6 +11,7 @@ import {
   faSortDown,
   faSortUp,
 } from "@fortawesome/free-solid-svg-icons";
+import { useThemeContext } from "../../context/ThemeContext";
 
 const sortIcon = <FontAwesomeIcon icon={faSort} />;
 const filterIcon = <FontAwesomeIcon icon={faFilter} />;

@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import Heading from "../Heading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCaretLeft, faHouse } from "@fortawesome/free-solid-svg-icons";
-import useIsOpenMenu from "../../customHooks/useIsOpenMenuContext";
+import { useMenuContext } from "../../context/MenuContext";
 
 const hideMenuIcon = <FontAwesomeIcon icon={faSquareCaretLeft} />;
 const homeIcon = <FontAwesomeIcon icon={faHouse} />;
 
 export default function SideBarHeader() {
-  const { isOpenMenu, handleToggleMenu } = useIsOpenMenu();
+  const { isOpenMenu, handleToggleMenu } = useMenuContext();
   const [headingVisible, setHeadingVisible] = useState(false);
 
   useEffect(() => {

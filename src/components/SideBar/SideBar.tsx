@@ -1,15 +1,12 @@
 import { Outlet } from "react-router-dom";
 import ThemeButton from "../ThemeButton";
-import useThemeContext from "../../customHooks/useThemeContext";
-// import toggleThemeClasses from "../../utils/toggleThemeClasses";
 import SideBarNav from "./SideBarNav";
 import SideBarHeader from "./SideBarHeader";
-import useIsOpenMenu from "../../customHooks/useIsOpenMenuContext";
-// import toggleThemeClasses from "../../utils/toggleThemeClasses";
+import { useMenuContext } from "../../context/MenuContext";
+import { useThemeContext } from "../../context/ThemeContext";
 
 export default function SideBar() {
-  // const [isOpenMenu, setIsOpenMenu] = useState(true);
-  const { isOpenMenu } = useIsOpenMenu();
+  const { isOpenMenu } = useMenuContext();
   const { theme } = useThemeContext();
 
   return (

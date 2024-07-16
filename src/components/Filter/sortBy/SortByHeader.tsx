@@ -1,4 +1,4 @@
-import useThemeContext from "../../../customHooks/useThemeContext";
+import { useThemeContext } from "../../../context/ThemeContext";
 import Button from "../../Button";
 
 type SortByHeaderProps = {

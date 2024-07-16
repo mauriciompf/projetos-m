@@ -1,5 +1,6 @@
-import useThemeContext from "../customHooks/useThemeContext";
+import { useThemeContext } from "../context/ThemeContext";
 
+// #FIXME any type
 export default function WrapSettingsBox({ refElem, children }: any) {
   const { theme } = useThemeContext();
   return (

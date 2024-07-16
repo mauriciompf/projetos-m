@@ -1,4 +1,4 @@
-import useThemeContext from "../../../customHooks/useThemeContext";
+import { useThemeContext } from "../../../context/ThemeContext";
 
 export default function FilterSettingsBox() {
   const { theme } = useThemeContext();

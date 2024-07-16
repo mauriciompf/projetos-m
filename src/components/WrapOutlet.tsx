@@ -1,4 +1,4 @@
-import useIsOpenMenu from "../customHooks/useIsOpenMenuContext";
+import { useMenuContext } from "../context/MenuContext";
 import toggleThemeClasses from "../utils/toggleThemeClasses";
 import Heading from "./Heading";
 
@@ -8,7 +8,7 @@ type WrapOutletProps = {
 };
 
 export default function WrapOutlet({ children, projectName }: WrapOutletProps) {
-  const { isOpenMenu } = useIsOpenMenu();
+  const { isOpenMenu } = useMenuContext();
 
   return (
     <main

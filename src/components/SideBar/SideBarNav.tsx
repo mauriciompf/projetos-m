@@ -1,10 +1,10 @@
-import useIsOpenMenu from "../../customHooks/useIsOpenMenuContext";
-import useThemeContext from "../../customHooks/useThemeContext";
+import { useMenuContext } from "../../context/MenuContext";
+import { useThemeContext } from "../../context/ThemeContext";
 import projectList from "../../utils/projectList";
 import toggleThemeClasses from "../../utils/toggleThemeClasses";
 
 export default function SideBarNav() {
-  const { isOpenMenu } = useIsOpenMenu();
+  const { isOpenMenu } = useMenuContext();
   const { theme } = useThemeContext();
 
   return (

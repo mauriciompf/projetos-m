@@ -1,7 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
+import useCustomHookContext from "../customHooks/useCustomHookContext";
 
+// #FIXME type any
 const ToggleContext = createContext<any | null>(null);
 
+// #FIXME type any
 function ToggleContextProvider({ children }: any) {
   const [orderBy, setOrderBy] = useState("");
   const [selectColumn, setSelectColumn] = useState("");
@@ -20,16 +23,11 @@ function ToggleContextProvider({ children }: any) {
   );
 }
 
-const useToggleContext = () => {
-  const context = useContext(ToggleContext);
+const useToggleContext = () =>
+  useCustomHookContext(
+    ToggleContext,
+    "useToggleContext",
+    "ToggleContextProvider",
+  );
 
-  if (!context) {
-    throw new Error(
-      "useToggleContext must be used within a ToggleProvider in root",
-    );
-  }
-
-  return context;
-};
-
-export { ToggleContext, ToggleContextProvider, useToggleContext };
+export { ToggleContextProvider, useToggleContext };

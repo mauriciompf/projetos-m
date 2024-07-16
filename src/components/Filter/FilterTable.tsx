@@ -1,5 +1,5 @@
-import { useToggleContext } from "../../context/ToggleContextProvider";
-import useThemeContext from "../../customHooks/useThemeContext";
+import { useThemeContext } from "../../context/ThemeContext";
+import { useToggleContext } from "../../context/ToggleContext";
 
 export const tableHeaders = [
   "ID",
@@ -11,9 +11,7 @@ export const tableHeaders = [
 ];
 
 type FilterTableProps = {
-  selectColumn: string;
   usersData: any;
-  orderBy: string;
 };
 
 export default function FilterTable({ usersData }: any) {

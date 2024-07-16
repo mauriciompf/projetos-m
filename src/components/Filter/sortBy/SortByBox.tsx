@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
 import SortByListItem from "./SortByListItem";
 import SortByHeader from "./SortByHeader";
-import { useToggleContext } from "../../../context/ToggleContextProvider";
+import { useToggleContext } from "../../../context/ToggleContext";
 
 type SortByBoxProps = {
   orderBy: string;

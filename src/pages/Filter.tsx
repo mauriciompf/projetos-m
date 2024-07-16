@@ -1,27 +1,27 @@
-import axios from "axios";
 import WrapOutlet from "../components/WrapOutlet";
-import { useQuery } from "@tanstack/react-query";
 import FilterTable from "../components/Filter/FilterTable";
 import FilterSettings from "../components/Filter/FilterSettings";
+import useFetch from "../customHooks/useFetch";
 
 const Filter = () => {
-  // #TODO create context hook in theses useStates and create custom hook
-
-  // #TODO create custom hook
-  const queryUsers = async () => {
-    const { data } = await axios.get("https://dummyjson.com/users");
-    return data.users;
-  };
-  const myQuery = useQuery({
-    queryKey: ["users"],
-    queryFn: queryUsers,
-  });
-
-  const { data: usersData, isLoading, isError } = myQuery;
+  const {
+    data: usersData,
+    isLoading,
+    isError,
+  } = useFetch("https://dummyjson.com/users", "users", "users");
 
   return (
     <WrapOutlet projectName="Filtro">
-      {isLoading && <p>Loading...</p>}
+      // #HACK isLoading in all query components
+      {isLoading && (
+        <section className="mt-32 grid place-items-center">
+          <img
+            src="../../public/InternetSlowdown_Day.gif"
+            className="size-32 mix-blend-multiply"
+            alt="Loading..."
+          />
+        </section>
+      )}
       {isError && <p>Error...</p>}
       {!isLoading && !isError && usersData && <p>Error...</p> && (
         <>

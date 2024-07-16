@@ -1,12 +1,12 @@
 import Button from "./Button";
-import useThemeContext from "../customHooks/useThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import toggleThemeClasses from "../utils/toggleThemeClasses";
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { useLocation } from "react-router-dom";
-import useIsOpenMenu from "../customHooks/useIsOpenMenuContext";
+import { useMenuContext } from "../context/MenuContext";
+import { useThemeContext } from "../context/ThemeContext";
 
 const lightIcon = <FontAwesomeIcon icon={faSun} />;
 const darkIcon = <FontAwesomeIcon width="16px" icon={faMoon} />;
@@ -21,7 +21,7 @@ export default function ThemeButton({
   themeName,
   className,
 }: ThemeButtonProps) {
-  const { isOpenMenu } = useIsOpenMenu();
+  const { isOpenMenu } = useMenuContext();
   const { theme, setLight, setDark } = useThemeContext();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
