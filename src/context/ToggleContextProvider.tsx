@@ -1,18 +1,18 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const ToggleContext = createContext<any | null>(null);
 
 function ToggleContextProvider({ children }: any) {
-  const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
-  const [toggleOrderBy, setToggleOrderBy] = useState(false);
+  const [orderBy, setOrderBy] = useState("");
+  const [selectColumn, setSelectColumn] = useState("");
 
   return (
     <ToggleContext.Provider
       value={{
-        toggleSelectColumn,
-        setToggleSelectColumn,
-        toggleOrderBy,
-        setToggleOrderBy,
+        orderBy,
+        setOrderBy,
+        selectColumn,
+        setSelectColumn,
       }}
     >
       {children}
@@ -20,4 +20,16 @@ function ToggleContextProvider({ children }: any) {
   );
 }
 
-export { ToggleContext, ToggleContextProvider };
+const useToggleContext = () => {
+  const context = useContext(ToggleContext);
+
+  if (!context) {
+    throw new Error(
+      "useToggleContext must be used within a ToggleProvider in root",
+    );
+  }
+
+  return context;
+};
+
+export { ToggleContext, ToggleContextProvider, useToggleContext };
