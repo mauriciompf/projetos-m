@@ -1,3 +1,4 @@
+import { useToggleContext } from "../../context/ToggleContextProvider";
 import useThemeContext from "../../customHooks/useThemeContext";
 
 export const tableHeaders = [
@@ -15,11 +16,8 @@ type FilterTableProps = {
   orderBy: string;
 };
 
-export default function FilterTable({
-  selectColumn,
-  usersData,
-  orderBy,
-}: FilterTableProps) {
+export default function FilterTable({ usersData }: any) {
+  const { orderBy, selectColumn } = useToggleContext();
   const { theme } = useThemeContext();
 
   const getSexNameTranslated = (sex: string) =>
