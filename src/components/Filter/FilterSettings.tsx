@@ -24,12 +24,7 @@ type FilterSettingsProps = {
   setSelectColumn: (val: string) => void;
 };
 
-export default function FilterSettings({
-  orderBy,
-  selectColumn,
-  setOrderBy,
-  setSelectColumn,
-}: FilterSettingsProps) {
+export default function FilterSettings() {
   const { theme } = useThemeContext();
   const [toggleSortBy, setToggleSortBy] = useState(false);
   const [toggleFilter, setToggleFilter] = useState(false);
@@ -61,11 +56,7 @@ export default function FilterSettings({
       {toggleSortBy &&
         createPortal(
           <SortByBox
-            orderBy={orderBy}
-            selectColumn={selectColumn}
             refSortByBtn={refSortByBtn}
-            setOrderBy={setOrderBy}
-            setSelectColumn={setSelectColumn}
             setToggleSortBy={setToggleSortBy}
             downIcon={downIcon}
             upIcon={upIcon}
