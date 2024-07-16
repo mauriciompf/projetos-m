@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
 import SortByListItem from "./SortByListItem";
 import SortByHeader from "./SortByHeader";
+import { useToggleContext } from "../../../context/ToggleContextProvider";
 
 type SortByBoxProps = {
   orderBy: string;
@@ -21,15 +22,14 @@ type SortByBoxProps = {
 const removeButton = <FontAwesomeIcon icon={faSquareXmark} />;
 
 export default function SortByBox({
-  orderBy,
-  selectColumn,
   refSortByBtn,
-  setOrderBy,
-  setSelectColumn,
   setToggleSortBy,
   downIcon,
   upIcon,
-}: SortByBoxProps) {
+}: any) {
+  const { orderBy, setOrderBy, selectColumn, setSelectColumn } =
+    useToggleContext();
+
   const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
   const [toggleOrderBy, setToggleOrderBy] = useState(false);
   const refSortByBox = useRef<HTMLElement | null>(null);
