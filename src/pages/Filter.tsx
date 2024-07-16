@@ -3,12 +3,9 @@ import WrapOutlet from "../components/WrapOutlet";
 import { useQuery } from "@tanstack/react-query";
 import FilterTable from "../components/Filter/FilterTable";
 import FilterSettings from "../components/Filter/FilterSettings";
-import { useState } from "react";
 
 const Filter = () => {
   // #TODO create context hook in theses useStates and create custom hook
-  const [orderBy, setOrderBy] = useState("");
-  const [selectColumn, setSelectColumn] = useState("");
 
   // #TODO create custom hook
   const queryUsers = async () => {
@@ -29,17 +26,8 @@ const Filter = () => {
       {!isLoading && !isError && usersData && <p>Error...</p> && (
         <>
           <section className="my-10 text-lg">
-            <FilterSettings
-              selectColumn={selectColumn}
-              setSelectColumn={setSelectColumn}
-              orderBy={orderBy}
-              setOrderBy={setOrderBy}
-            />
-            <FilterTable
-              selectColumn={selectColumn}
-              orderBy={orderBy}
-              usersData={usersData}
-            />
+            <FilterSettings />
+            <FilterTable usersData={usersData} />
           </section>
         </>
       )}
