@@ -15,21 +15,16 @@ type SortByBoxProps = {
   refSortByBtn: any;
   setSelectColumn: (val: string) => void;
   setToggleSortBy?: (val: boolean) => void;
-  downIcon: any;
-  upIcon: any;
 };
 
 const removeButton = <FontAwesomeIcon icon={faSquareXmark} />;
 
-export default function SortByBox({
-  refSortByBtn,
-  setToggleSortBy,
-  downIcon,
-  upIcon,
-}: any) {
+// #FIXME type any
+export default function SortByBox({ refSortByBtn, setToggleSortBy }: any) {
   const { orderBy, setOrderBy, selectColumn, setSelectColumn } =
     useToggleContext();
 
+  // #HACK custom hook
   const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
   const [toggleOrderBy, setToggleOrderBy] = useState(false);
   const refSortByBox = useRef<HTMLElement | null>(null);
@@ -84,6 +79,7 @@ export default function SortByBox({
 
   return (
     <WrapSettingsBox refElem={refSortByBox}>
+      {/* #HACK component */}
       <div>
         {selectColumn ? (
           <SortByHeader
@@ -96,8 +92,6 @@ export default function SortByBox({
           <SortByHeader
             onClick={handleToggleSelectColumn}
             isOrderByOpen={toggleSelectColumn}
-            upIcon={upIcon}
-            downIcon={downIcon}
             headerLabel={"Selecione uma coluna"}
           />
         )}
@@ -126,16 +120,12 @@ export default function SortByBox({
           <SortByHeader
             onClick={handleToggleOrderBy}
             isOrderByOpen={toggleOrderBy}
-            upIcon={upIcon}
-            downIcon={downIcon}
             headerLabel={orderBy}
           />
         ) : (
           <SortByHeader
             onClick={handleToggleOrderBy}
             isOrderByOpen={toggleOrderBy}
-            upIcon={upIcon}
-            downIcon={downIcon}
             headerLabel={"Ordernar por"}
           />
         )}
