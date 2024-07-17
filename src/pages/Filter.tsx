@@ -12,7 +12,7 @@ const Filter = () => {
 
   return (
     <WrapOutlet projectName="Filtro">
-      // #HACK isLoading in all query components
+      {/* #HACK isLoading in all query components */}
       {isLoading && (
         <section className="mt-32 grid place-items-center">
           <img
