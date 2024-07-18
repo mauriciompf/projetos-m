@@ -12,21 +12,22 @@ import {
   faSort,
   faSortDown,
   faSortUp,
+  faSquareXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSortDown, faSortUp);
+library.add(faSortDown, faSortUp, faSquareXmark);
 const sortIcon = <FontAwesomeIcon icon={faSort} />;
 const filterIcon = <FontAwesomeIcon icon={faFilter} />;
 
 export default function FilterSettings() {
   const { theme } = useThemeContext();
+  // HACK Custom hook
   const [toggleSortBy, setToggleSortBy] = useState(false);
   const [toggleFilter, setToggleFilter] = useState(false);
   const refSortByBtn = useRef<HTMLButtonElement | null>(null);
-
-  // #FIXME change name
   const refWrapSortBy = useRef<HTMLDivElement | null>(null);
   const refWrapFilter = useRef(null);
+  const refFilterBtn = useRef(null);
 
   const handleToggleSortBy = () => setToggleSortBy((prev) => !prev);
   const handleToggleFilter = () => setToggleFilter((prev) => !prev);
@@ -45,6 +46,7 @@ export default function FilterSettings() {
 
       <div ref={refWrapFilter} className="relative">
         <Button
+          refBtn={refFilterBtn}
           onClick={handleToggleFilter}
           className={`${theme === "dark" ? "bg-black" : "bg-slate-300"} rounded-md px-4 py-2 font-bold`}
         >
@@ -64,7 +66,13 @@ export default function FilterSettings() {
         )}
 
       {toggleFilter &&
-        createPortal(<FilterSettingsBox />, refWrapFilter.current!)}
+        createPortal(
+          <FilterSettingsBox
+            refFilterBtn={refFilterBtn}
+            setToggleFilter={setToggleFilter}
+          />,
+          refWrapFilter.current!,
+        )}
     </div>
   );
 }
