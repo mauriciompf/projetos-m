@@ -1,81 +1,39 @@
 import { tableHeaders } from "../FilterTable";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useRef, RefObject } from "react";
 import WrapSettingsBox from "../../WrapSettingsBox";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
 import SortByListItem from "./SortByListItem";
 import SortByHeader from "./SortByHeader";
 import { useToggleContext } from "../../../context/ToggleContext";
+import useToggleDropDown from "../../../customHooks/useToggleDropDown";
+import useClickOutside from "../../../customHooks/useClickOutside";
 
 type SortByBoxProps = {
-  orderBy: string;
-  selectColumn: string;
-  setOrderBy: (val: string) => void;
-  refSortByBtn: any;
-  setSelectColumn: (val: string) => void;
-  setToggleSortBy?: (val: boolean) => void;
+  refSortByBtn: RefObject<HTMLButtonElement>;
+  setToggleSortBy: (val: boolean) => void;
 };
-
+// #TODO Change to global icon
 const removeButton = <FontAwesomeIcon icon={faSquareXmark} />;
+export default function SortByBox({
+  refSortByBtn,
+  setToggleSortBy,
+}: SortByBoxProps) {
+  const { orderBy, selectColumn } = useToggleContext();
 
-// #FIXME type any
-export default function SortByBox({ refSortByBtn, setToggleSortBy }: any) {
-  const { orderBy, setOrderBy, selectColumn, setSelectColumn } =
-    useToggleContext();
-
-  // #HACK custom hook
-  const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
-  const [toggleOrderBy, setToggleOrderBy] = useState(false);
   const refSortByBox = useRef<HTMLElement | null>(null);
   const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
+  useClickOutside(refSortByBox, refSortByBtn, () => setToggleSortBy(false));
 
-  const handleClickOutside = useCallback((e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-
-    if (
-      refSortByBox.current &&
-      !refSortByBox.current.contains(target) &&
-      target !== refSortByBtn.current
-    ) {
-      setToggleSortBy!(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [handleClickOutside]);
-
-  const removeSelectedColumn = (col: string) => {
-    tableHeaders.forEach((header) => {
-      if (col === header) setSelectColumn("");
-    });
-
-    OrderByLabels.forEach((label) => {
-      if (col === label) setOrderBy("");
-    });
-  };
-
-  const handleToggleSelectColumn = () => {
-    setToggleSelectColumn(!toggleSelectColumn);
-  };
-
-  const handleSelectColumn = (header: string) => {
-    setSelectColumn(header);
-  };
-
-  const handleToggleOrderBy = () => {
-    setToggleOrderBy(!toggleOrderBy);
-  };
-
-  const handleOrderBy = (label: string) => {
-    setOrderBy(label);
-    setToggleOrderBy(false);
-  };
+  const {
+    removeSelectedColumn,
+    handleToggleSelectColumn,
+    handleSelectColumn,
+    handleToggleOrderBy,
+    handleOrderBy,
+    toggleSelectColumn,
+    toggleOrderBy,
+  } = useToggleDropDown();
 
   return (
     <WrapSettingsBox refElem={refSortByBox}>
@@ -107,6 +65,7 @@ export default function SortByBox({ refSortByBtn, setToggleSortBy }: any) {
               )
               .map((header) => (
                 <SortByListItem
+                  key={header}
                   list={header}
                   handleClick={() => handleSelectColumn(header)}
                 />
@@ -135,6 +94,7 @@ export default function SortByBox({ refSortByBtn, setToggleSortBy }: any) {
             {OrderByLabels.map((label) => (
               <SortByListItem
                 list={label}
+                key={label}
                 handleClick={() => handleOrderBy(label)}
               />
             ))}
