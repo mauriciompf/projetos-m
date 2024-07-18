@@ -2,10 +2,10 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useThemeContext } from "../../../context/ThemeContext";
 import Button from "../../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 const upIcon = <FontAwesomeIcon icon={"fa-solid fa-sort-up" as IconProp} />;
 const downIcon = <FontAwesomeIcon icon={"fa-solid fa-sort-down" as IconProp} />;
 
+// FIXME any type
 type SortByHeaderProps = {
   onClick: () => void;
   isOrderByOpen?: boolean;
@@ -30,7 +30,7 @@ export default function SortByHeader({
       <span className="font-bold">{headerLabel}</span>
       <Button
         onClick={onClick}
-        className="w-max py-0 ring-transparent hover:text-red-500 focus:text-red-500"
+        className="py-0 ring-transparent hover:text-red-500 focus:text-red-500"
       >
         {removeButton}
       </Button>
@@ -38,7 +38,7 @@ export default function SortByHeader({
   ) : (
     <Button
       onClick={onClick}
-      className={`flex w-max items-center gap-2 border p-2 ${theme === "dark" ? "border-white" : "border-black"} `}
+      className={`flex w-full items-center gap-2 border p-2 ${theme === "dark" ? "border-white" : "border-black"} `}
     >
       <span>{headerLabel}</span>
 
