@@ -1,25 +1,24 @@
-import { useToggleContext } from "../context/ToggleContext";
 import useToggleDropDown from "../customHooks/useToggleDropDown";
 import { tableHeaders } from "./Filter/FilterTable";
 import ListItem from "./ListItem";
 import HeaderControl from "./HeaderControl";
 
 type ColumnSelectorProps = {
+  keyName: string;
   restrictedList?: string[];
 };
 
 export default function ColumnSelector({
+  keyName,
   restrictedList,
 }: ColumnSelectorProps) {
-  // FIXME Same state shared by SortBy and Filter. Create 2 diff contexts
-  const { selectColumn } = useToggleContext();
-
   const {
     removeSelectedColumn,
     handleToggleSelectColumn,
     handleSelectColumn,
     toggleSelectColumn,
-  } = useToggleDropDown();
+    selectColumn,
+  } = useToggleDropDown(keyName);
 
   return (
     <div>
