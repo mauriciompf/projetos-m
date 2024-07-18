@@ -21,12 +21,15 @@ export default function SortByBox({
   const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
   useClickOutside(refSortByBox, refSortByBtn, () => setToggleSortBy(false));
 
-  const { handleToggleOrderBy, handleOrderBy, toggleOrderBy } =
-    useToggleDropDown();
+  const { handleToggleOrderBy, handleSelectOrderBy, toggleOrderBy } =
+    useToggleDropDown("sortByBox");
 
   return (
     <WrapSettingsBox refElem={refSortByBox}>
-      <ColumnSelector restrictedList={["Sexo", "Email", "Telefone"]} />
+      <ColumnSelector
+        keyName="sortByBox"
+        restrictedList={["Sexo", "Email", "Telefone"]}
+      />
 
       <div>
         {orderBy ? (
@@ -49,7 +52,7 @@ export default function SortByBox({
               <ListItem
                 list={label}
                 key={label}
-                handleClick={() => handleOrderBy(label)}
+                handleClick={() => handleSelectOrderBy(label)}
               />
             ))}
           </ul>
