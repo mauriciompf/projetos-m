@@ -8,7 +8,6 @@ export default function SortByListItem({ list, handleClick }: any) {
   return (
     <li
       className={`${theme === "dark" ? "border-white" : "border-black"} border`}
-      key={list}
     >
       <Button
         onClick={handleClick}
