@@ -4,6 +4,7 @@ import useClickOutside from "../../../customHooks/useClickOutside";
 import { RefObject, useRef, useState } from "react";
 import HeaderControl from "../../HeaderControl";
 import ListItem from "../../ListItem";
+import { useThemeContext } from "../../../context/ThemeContext";
 
 type FilterSettingsBoxProps = {
   refFilterBtn: RefObject<HTMLButtonElement>;
@@ -19,17 +20,19 @@ export default function FilterSettingsBox({
   const [statusToggle, setStatusToggle] = useState(false);
   const refFilterBox = useRef<HTMLElement | null>(null);
   useClickOutside(refFilterBox, refFilterBtn, () => setToggleFilter(false));
+  const { theme } = useThemeContext();
   const statusLabels = ["É", "Não É"];
 
   const handleStatusToggle = () => setStatusToggle((prev) => !prev);
 
   const handleStatusSelect = (status: string) => {
     setStatusDropdown(status);
+    setStatusToggle(false);
   };
 
   return (
     <WrapSettingsBox refElem={refFilterBox}>
-      <ColumnSelector />
+      <ColumnSelector keyName="Filter" />
 
       <div>
         <HeaderControl
@@ -50,7 +53,13 @@ export default function FilterSettingsBox({
           </ul>
         )}
       </div>
-      <div>col 3</div>
+      <div>
+        <input
+          type="text"
+          className={`border ${theme === "dark" ? "border-white" : "border-black"} bg-transparent p-2 outline-none hover:ring-4`}
+          placeholder="..."
+        />
+      </div>
     </WrapSettingsBox>
   );
 }
