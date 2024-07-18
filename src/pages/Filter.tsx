@@ -16,7 +16,7 @@ const Filter = () => {
       {isLoading && (
         <section className="mt-32 grid place-items-center">
           <img
-            src="../../public/InternetSlowdown_Day.gif"
+            src="/InternetSlowdown_Day.gif"
             className="size-32 mix-blend-multiply"
             alt="Loading..."
           />
