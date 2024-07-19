@@ -1,3 +1,4 @@
+import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import { useToggleContext } from "../../context/ToggleContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
@@ -17,8 +18,12 @@ type FilterTableProps = {
 
 export default function FilterTable({ usersData }: any) {
   const { orderBy } = useToggleContext();
-  const { selectColumn } = useToggleDropDown("sortByBox");
+  const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortByBox");
+  const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
+
+  const { searchParams } = useFilterSearchContext();
+  console.log(searchParams.get(selectColumnFilter));
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -27,7 +32,7 @@ export default function FilterTable({ usersData }: any) {
     const usersDataCopy = [...usersData];
     const descOrder = orderBy === "Decrescente";
     const ascOrder = orderBy === "Crescente";
-    switch (selectColumn) {
+    switch (selectColumnSortBy) {
       case "ID":
         if (descOrder) {
           return usersDataCopy.sort((a, b) => b.id - a.id);
@@ -56,6 +61,14 @@ export default function FilterTable({ usersData }: any) {
     return usersDataCopy;
   };
 
+  const filteredAndSortedUserData = sortedUserData().filter(
+    (user) =>
+      !searchParams.get(selectColumnFilter) ||
+      user.firstName
+        .toLowerCase()
+        .includes(searchParams.get(selectColumnFilter)!.toLowerCase()),
+  );
+
   return (
     <table className="mx-auto w-[80%] table-auto rounded-lg">
       <thead>
@@ -68,27 +81,21 @@ export default function FilterTable({ usersData }: any) {
         </tr>
       </thead>
       <tbody>
-        {sortedUserData()
-          // .filter((user) => user.firstName  arr.sort())
-          .map((user) => {
-            return (
-              <tr
-                className={`${theme === "dark" ? ": odd:bg-slate-500 even:bg-black" : "odd:bg-white even:bg-gray-200"}`}
-                key={user.id}
-              >
-                <td className="text-center ring-1 ring-black">{user.id}</td>
-                <td className="p-2 ring-1 ring-black">{user.firstName}</td>
-                <td className="p-2 text-center ring-1 ring-black">
-                  {user.age}
-                </td>
-                <td className="p-2 ring-1 ring-black">
-                  {getSexNameTranslated(user.gender)}
-                </td>
-                <td className="p-2 ring-1 ring-black">{user.email}</td>
-                <td className="p-2 ring-1 ring-black">{user.phone}</td>
-              </tr>
-            );
-          })}
+        {filteredAndSortedUserData.map((user) => (
+          <tr
+            className={`${theme === "dark" ? ": odd:bg-slate-500 even:bg-black" : "odd:bg-white even:bg-gray-200"}`}
+            key={user.id}
+          >
+            <td className="text-center ring-1 ring-black">{user.id}</td>
+            <td className="p-2 ring-1 ring-black">{user.firstName}</td>
+            <td className="p-2 text-center ring-1 ring-black">{user.age}</td>
+            <td className="p-2 ring-1 ring-black">
+              {getSexNameTranslated(user.gender)}
+            </td>
+            <td className="p-2 ring-1 ring-black">{user.email}</td>
+            <td className="p-2 ring-1 ring-black">{user.phone}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
