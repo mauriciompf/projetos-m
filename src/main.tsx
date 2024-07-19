@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeContextProvider } from "./context/ThemeContext.tsx";
 import { MenuContextProvider } from "./context/MenuContext.tsx";
 import { ToggleContextProvider } from "./context/ToggleContext.tsx";
+// import { FilterSearchProvider } from "./context/FilterSearchContext.tsx";
 
 const queryClient = new QueryClient();
 
