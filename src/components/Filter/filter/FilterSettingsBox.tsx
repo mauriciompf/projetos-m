@@ -5,7 +5,6 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import HeaderControl from "../../HeaderControl";
 import ListItem from "../../ListItem";
 import { useThemeContext } from "../../../context/ThemeContext";
-import { useSearchParams } from "react-router-dom";
 import useToggleDropDown from "../../../customHooks/useToggleDropDown";
 import { useFilterSearchContext } from "../../../context/FilterSearchContext";
 
@@ -34,16 +33,20 @@ export default function FilterSettingsBox({
     setStatusToggle(false);
   };
 
-  // #FIXME prevent undefined selectColumn
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    searchParams.set(selectColumn, val);
-    setSearchParams(searchParams);
+
+    if (selectColumn) {
+      searchParams.set("value", val);
+      setSearchParams(searchParams);
+    }
   };
 
   useEffect(() => {
-    searchParams.delete(selectColumn);
-    setSearchParams("");
+    if (!selectColumn) {
+      searchParams.delete("value");
+      setSearchParams("");
+    }
   }, [selectColumn]);
 
   return (
@@ -74,7 +77,7 @@ export default function FilterSettingsBox({
           type="text"
           className={`border ${theme === "dark" ? "border-white" : "border-black"} bg-transparent p-2 outline-none hover:ring-4`}
           placeholder="..."
-          value={searchParams.get(selectColumn) || ""}
+          value={searchParams.get("value") || ""}
           onChange={handleOnChange}
         />
       </div>
