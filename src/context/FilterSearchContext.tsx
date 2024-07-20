@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 
-const filterSearchContext = createContext<{
+const FilterSearchContext = createContext<{
   searchParams: URLSearchParams;
   setSearchParams: (val: any) => void;
 } | null>(null);
@@ -11,15 +11,15 @@ function FilterSearchProvider({ children }: { children: React.ReactNode }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <filterSearchContext.Provider value={{ searchParams, setSearchParams }}>
+    <FilterSearchContext.Provider value={{ searchParams, setSearchParams }}>
       {children}
-    </filterSearchContext.Provider>
+    </FilterSearchContext.Provider>
   );
 }
 
 const useFilterSearchContext = () =>
   useCustomHookContext(
-    filterSearchContext,
+    FilterSearchContext,
     "useFilterSearchContext",
     "FilterSearchProvider",
   );
