@@ -21,9 +21,7 @@ export default function FilterTable({ usersData }: any) {
   const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortByBox");
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
-
   const { searchParams } = useFilterSearchContext();
-  console.log(searchParams.get(selectColumnFilter));
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -61,13 +59,32 @@ export default function FilterTable({ usersData }: any) {
     return usersDataCopy;
   };
 
-  const filteredAndSortedUserData = sortedUserData().filter(
-    (user) =>
-      !searchParams.get(selectColumnFilter) ||
-      user.firstName
-        .toLowerCase()
-        .includes(searchParams.get(selectColumnFilter)!.toLowerCase()),
-  );
+  const filteredAndSortedUserData = () => {
+    let inputSearch = searchParams.get("value");
+
+    if (inputSearch) {
+      switch (selectColumnFilter) {
+        case "ID":
+          const isString = /[\D]/g;
+
+          // FIXME Validation
+          if (isString.test(inputSearch)) {
+            return sortedUserData();
+          }
+
+          // console.log("👌");
+          return sortedUserData().filter(
+            (user) => user.id === Number(inputSearch),
+          );
+        case "Nome":
+          return sortedUserData().filter((user) =>
+            user.firstName.toLowerCase().includes(inputSearch!.toLowerCase()),
+          );
+      }
+    }
+
+    return sortedUserData();
+  };
 
   return (
     <table className="mx-auto w-[80%] table-auto rounded-lg">
@@ -81,7 +98,7 @@ export default function FilterTable({ usersData }: any) {
         </tr>
       </thead>
       <tbody>
-        {filteredAndSortedUserData.map((user) => (
+        {filteredAndSortedUserData().map((user) => (
           <tr
             className={`${theme === "dark" ? ": odd:bg-slate-500 even:bg-black" : "odd:bg-white even:bg-gray-200"}`}
             key={user.id}
