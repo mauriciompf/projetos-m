@@ -38,7 +38,7 @@ export default function FilterSettings() {
         <Button
           refBtn={refSortByBtn}
           onClick={handleToggleSortBy}
-          className={`${theme === "dark" ? "bg-black" : "bg-slate-300"} rounded-md px-4 py-2 font-bold`}
+          className={`${theme === "dark" ? "bg-black" : "bg-slate-300"} select-none rounded-md px-4 py-2 font-bold`}
         >
           {sortIcon} ORGANIZAR
         </Button>
@@ -48,7 +48,7 @@ export default function FilterSettings() {
         <Button
           refBtn={refFilterBtn}
           onClick={handleToggleFilter}
-          className={`${theme === "dark" ? "bg-black" : "bg-slate-300"} rounded-md px-4 py-2 font-bold`}
+          className={`${theme === "dark" ? "bg-black" : "bg-slate-300"} select-none rounded-md px-4 py-2 font-bold`}
         >
           {filterIcon} FILTRO
         </Button>
