@@ -21,7 +21,7 @@ export default function FilterTable({ usersData }: any) {
   const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortByBox");
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
-  const { searchParams } = useFilterSearchContext();
+  const { searchParams, statusParams } = useFilterSearchContext();
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -58,29 +58,47 @@ export default function FilterTable({ usersData }: any) {
 
     return usersDataCopy;
   };
+  // console.log(statusParams.get("status"));
 
   const filteredAndSortedUserData = () => {
-    let inputSearch = searchParams.get("value");
+    const inputSearch = searchParams.get("value")?.trim();
+    const statusSearch = statusParams.get("status");
+    const isString = /[\D]/g;
 
-    if (inputSearch) {
-      switch (selectColumnFilter) {
-        case "ID":
-          const isString = /[\D]/g;
+    // FIXME Input error validation feedback
+    if (!statusSearch || !inputSearch) {
+      return sortedUserData();
+    }
 
-          // FIXME Validation
-          if (isString.test(inputSearch)) {
-            return sortedUserData();
-          }
+    switch (selectColumnFilter) {
+      case "ID":
+        // FIXME Validation
+        if (isString.test(inputSearch)) {
+          return sortedUserData();
+        }
 
+        if (statusSearch === "É") {
           // console.log("👌");
           return sortedUserData().filter(
             (user) => user.id === Number(inputSearch),
           );
-        case "Nome":
-          return sortedUserData().filter((user) =>
-            user.firstName.toLowerCase().includes(inputSearch!.toLowerCase()),
-          );
-      }
+        }
+
+        return sortedUserData().filter(
+          (user) => user.id !== Number(inputSearch),
+        );
+      case "Nome":
+        return sortedUserData().filter((user) =>
+          user.firstName.toLowerCase().includes(inputSearch!.toLowerCase()),
+        );
+      case "Idade":
+        if (isString.test(inputSearch)) {
+          return sortedUserData();
+        }
+
+        return sortedUserData().filter(
+          (user) => user.age === Number(inputSearch),
+        );
     }
 
     return sortedUserData();
