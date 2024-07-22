@@ -12,7 +12,7 @@ const removeButton = (
 type HeaderControlProps = {
   onClick: () => void;
   isDropDownOpen?: boolean;
-  headerLabel: string;
+  headerLabel: string | URLSearchParams | null;
   isRemoveButton?: any;
 };
 
