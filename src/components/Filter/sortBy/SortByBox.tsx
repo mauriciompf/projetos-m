@@ -16,11 +16,11 @@ export default function SortByBox({
   setToggleSortBy,
 }: SortByBoxProps) {
   const { orderBy } = useToggleContext();
-
   const refSortByBox = useRef<HTMLElement | null>(null);
   const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
   useClickOutside(refSortByBox, refSortByBtn, () => setToggleSortBy(false));
 
+  // HACK useSearchParams
   const { handleToggleOrderBy, handleSelectOrderBy, toggleOrderBy } =
     useToggleDropDown("sortByBox");
 
