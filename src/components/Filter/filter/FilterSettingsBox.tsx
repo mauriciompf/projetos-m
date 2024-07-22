@@ -17,20 +17,21 @@ export default function FilterSettingsBox({
   refFilterBtn,
   setToggleFilter,
 }: FilterSettingsBoxProps) {
-  const [statusDropdown, setStatusDropdown] = useState("");
   const [statusToggle, setStatusToggle] = useState(false);
   const refFilterBox = useRef<HTMLElement | null>(null);
   useClickOutside(refFilterBox, refFilterBtn, () => setToggleFilter(false));
   const { theme } = useThemeContext();
   const statusLabels = ["É", "Não É"];
   const { selectColumn } = useToggleDropDown("filter");
-  const { searchParams, setSearchParams } = useFilterSearchContext();
+  const { searchParams, setSearchParams, statusParams, setStatusParams } =
+    useFilterSearchContext();
 
   const handleStatusToggle = () => setStatusToggle((prev) => !prev);
 
   const handleStatusSelect = (status: string) => {
-    setStatusDropdown(status);
     setStatusToggle(false);
+    statusParams.set("status", status);
+    setStatusParams(statusParams);
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +55,19 @@ export default function FilterSettingsBox({
       <ColumnSelector keyName="filter" />
 
       <div>
-        <HeaderControl
-          headerLabel={statusDropdown || "É"}
-          onClick={handleStatusToggle}
-          isDropDownOpen={statusToggle}
-        />
+        {!statusToggle ? (
+          <HeaderControl
+            headerLabel={statusParams.get("status") || "Status"}
+            onClick={handleStatusToggle}
+            isDropDownOpen={statusToggle}
+          />
+        ) : (
+          <HeaderControl
+            headerLabel={statusParams.get("status")}
+            onClick={handleStatusToggle}
+            isDropDownOpen={statusToggle}
+          />
+        )}
 
         {statusToggle && (
           <ul>
@@ -76,7 +85,7 @@ export default function FilterSettingsBox({
         <input
           type="text"
           className={`border ${theme === "dark" ? "border-white" : "border-black"} bg-transparent p-2 outline-none hover:ring-4`}
-          placeholder="..."
+          placeholder="👌"
           value={searchParams.get("value") || ""}
           onChange={handleOnChange}
         />
