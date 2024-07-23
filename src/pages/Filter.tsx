@@ -15,7 +15,7 @@ const Filter = () => {
   return (
     <FilterSearchProvider>
       <ToggleContextProvider>
-        <WrapOutlet projectName="Filtro">
+        <WrapOutlet projectName="Ordenação e Filtro">
           {/* #HACK isLoading in all query components */}
           {isLoading && (
             <section className="mt-32 grid place-items-center">
