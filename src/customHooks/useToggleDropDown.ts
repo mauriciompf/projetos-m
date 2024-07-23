@@ -3,14 +3,18 @@ import { tableHeaders } from "../components/Filter/FilterTable";
 import { useToggleContext } from "../context/ToggleContext";
 
 const useToggleDropDown = (key: string) => {
-  const { setSelectColumn, selectColumnMap, setOrderBy } = useToggleContext();
+  const { setSelectColumn, selectColumnMap, setOrderByParams, orderByParams } =
+    useToggleContext();
   const [toggleSelectColumn, setToggleSelectColumn] = useState(false);
   const [toggleOrderBy, setToggleOrderBy] = useState(false);
-  const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
+  const orderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
   const removeSelectedColumn = (col: string) => {
     // Determine if col selected in dropdown is includes in tableHeaders array
-    if (tableHeaders.includes(col) || OrderByLabels.includes(col)) {
+    if (
+      tableHeaders.toString().toLowerCase().includes(col) ||
+      orderByLabels.toString().toLowerCase().includes(col)
+    ) {
       setSelectColumn(key, "");
     }
   };
@@ -18,12 +22,15 @@ const useToggleDropDown = (key: string) => {
   const handleToggleSelectColumn = () =>
     setToggleSelectColumn(!toggleSelectColumn);
 
-  const handleSelectColumn = (header: string) => setSelectColumn(key, header);
+  const handleSelectColumn = (header: string) =>
+    setSelectColumn(key, header.toLowerCase());
 
   const handleToggleOrderBy = () => setToggleOrderBy(!toggleOrderBy);
 
   const handleSelectOrderBy = (label: string) => {
-    setOrderBy(label);
+    orderByParams.set("orderby", label.toLowerCase());
+    setOrderByParams(orderByParams);
+
     setToggleOrderBy(false);
   };
 
