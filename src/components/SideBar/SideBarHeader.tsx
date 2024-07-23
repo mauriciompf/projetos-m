@@ -33,8 +33,8 @@ export default function SideBarHeader() {
           className={`${!isOpenMenu && "pointer-events-none"} flex items-center gap-2 hover:underline focus:underline`}
           to={"/"}
         >
-          <span className="cursor-pointer text-lg">{homeIcon}</span>
-          <span className="text-2xl">Meus Projetos</span>
+          <span className="cursor-pointer text-lg">🏠</span>
+          <span className="text-2xl">Projetos</span>
         </Link>
       </Heading>
       <span className="sr-only">Minimizar o menu</span>
