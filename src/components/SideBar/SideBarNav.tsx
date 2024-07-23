@@ -22,7 +22,7 @@ export default function SideBarNav() {
                         ? "hover:bg-white hover:text-black focus:bg-white focus:text-black"
                         : "hover:bg-black hover:text-white focus:bg-black focus:text-white"
                     }`,
-                "relative flex items-center gap-6 rounded-md",
+                "relative -left-1 flex items-center gap-3 rounded-md",
               )}
             >
               <span
