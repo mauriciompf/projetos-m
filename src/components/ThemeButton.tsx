@@ -32,7 +32,8 @@ export default function ThemeButton({
   useEffect(() => {
     const bodyClassList = document.body.classList;
     bodyClassList.remove(
-      `bg-[#282b30]`,
+      `bg-[#181a1b]`,
+      // `bg-[#282b30]`,
       "bg-white",
       "text-white",
       `text-black`,
@@ -40,7 +41,7 @@ export default function ThemeButton({
     bodyClassList.add("transition-colors", "duration-300", "ease-in-out");
 
     if (theme === "dark") {
-      bodyClassList.add(`bg-[#282b30]`, "text-white");
+      bodyClassList.add(`bg-[#181a1b]`, "text-white");
     } else {
       bodyClassList.add("bg-white", `text-black`);
     }
