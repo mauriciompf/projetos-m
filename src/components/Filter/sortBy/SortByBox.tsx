@@ -37,9 +37,7 @@ export default function SortByBox({
           <HeaderControl
             onClick={handleToggleOrderBy}
             isDropDownOpen={toggleOrderBy}
-            headerLabel={
-              toCapitalizeCase(orderByParams.get("orderby")) || "ordernar por"
-            }
+            headerLabel={toCapitalizeCase(orderByParams.get("orderby"))}
           />
         ) : (
           <HeaderControl
