@@ -30,7 +30,6 @@ const useToggleDropDown = (key: string) => {
   const handleSelectOrderBy = (label: string) => {
     orderByParams.set("orderby", label.toLowerCase());
     setOrderByParams(orderByParams);
-
     setToggleOrderBy(false);
   };
 
