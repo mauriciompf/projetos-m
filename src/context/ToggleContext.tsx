@@ -1,12 +1,20 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 
-// #FIXME type any
-const ToggleContext = createContext<any | null>(null);
+type ToggleContextValues = {
+  orderByParams: URLSearchParams;
+  setOrderByParams: (params: URLSearchParams) => void;
+  setSelectColumnMap: () => void;
+  selectColumnMap: { [key: string]: string };
+  setSelectColumn: (key: string, column: string) => void;
+};
+
+// #FIXME Type any
+const ToggleContext = createContext<ToggleContextValues | null>(null);
 
 function ToggleContextProvider({ children }: { children: React.ReactNode }) {
-  const [orderBy, setOrderBy] = useState("");
+  const [orderByParams, setOrderByParams] = useSearchParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const setSelectColumn = (key: string, column: string) => {
@@ -21,8 +29,8 @@ function ToggleContextProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToggleContext.Provider
       value={{
-        orderBy,
-        setOrderBy,
+        orderByParams,
+        setOrderByParams,
         setSelectColumnMap: setSearchParams,
         selectColumnMap,
         setSelectColumn,
