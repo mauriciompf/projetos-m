@@ -37,15 +37,15 @@ export default function FilterTable({ usersData }: FilterTableProps) {
 
   const sortedUserData = () => {
     const usersDataCopy = [...usersData];
-    const descOrder = orderByParams.get("orderby") === "Decrescente";
-    const ascOrder = orderByParams.get("orderby") === "Crescente";
+    const descOrder = orderByParams.get("orderby") === "decrescente";
+    const ascOrder = orderByParams.get("orderby") === "crescente";
     switch (selectColumnSortBy) {
-      case "ID":
+      case "id":
         if (descOrder) {
           return usersDataCopy.sort((a, b) => b.id - a.id);
         }
         break;
-      case "Nome":
+      case "nome":
         if (ascOrder) {
           return usersDataCopy.sort((a, b) =>
             a.firstName.localeCompare(b.firstName),
@@ -56,7 +56,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
           );
         }
         break;
-      case "Idade":
+      case "idade":
         if (ascOrder) {
           return usersDataCopy.sort((a, b) => a.age - b.age);
         } else if (descOrder) {
@@ -67,46 +67,50 @@ export default function FilterTable({ usersData }: FilterTableProps) {
 
     return usersDataCopy;
   };
-  // console.log(statusParams.get("status"));
 
   const filteredAndSortedUserData = () => {
     const inputSearch = searchParams.get("value")?.trim();
     const statusSearch = statusParams.get("status");
     const isString = /[\D]/g;
 
+    const filterUsers = (callback: (user: UsersData) => boolean) =>
+      sortedUserData().filter(callback);
+
     // FIXME Input error validation feedback
     if (!statusSearch || !inputSearch) {
       return sortedUserData();
     }
 
+    // console.log("👌");
+
     switch (selectColumnFilter) {
-      case "ID":
+      case "id":
         // FIXME Validation
-        if (isString.test(inputSearch)) {
-          return sortedUserData();
+        if (isString.test(inputSearch)) return sortedUserData();
+        if (statusSearch === "é") {
+          return filterUsers((user) => user.id === Number(inputSearch));
         }
-
-        if (statusSearch === "É") {
-          // console.log("👌");
-          return sortedUserData().filter(
-            (user) => user.id === Number(inputSearch),
-          );
-        }
-
-        return sortedUserData().filter(
-          (user) => user.id !== Number(inputSearch),
+        return filterUsers((user) => user.id !== Number(inputSearch));
+      case "nome":
+        return filterUsers((user) =>
+          user.firstName.toLowerCase().startsWith(inputSearch!.toLowerCase()),
         );
-      case "Nome":
-        return sortedUserData().filter((user) =>
-          user.firstName.toLowerCase().includes(inputSearch!.toLowerCase()),
-        );
-      case "Idade":
-        if (isString.test(inputSearch)) {
-          return sortedUserData();
-        }
+      case "idade":
+        if (isString.test(inputSearch)) return sortedUserData();
 
-        return sortedUserData().filter(
-          (user) => user.age === Number(inputSearch),
+        return filterUsers((user) => user.age === Number(inputSearch));
+      case "sexo":
+        return filterUsers(
+          (user) =>
+            getSexNameTranslated(user.gender).toLowerCase() === inputSearch,
+        );
+      case "email":
+        return filterUsers((user) =>
+          user.email.startsWith(inputSearch.toLowerCase()),
+        );
+      case "telefone":
+        return filterUsers((user) =>
+          user.phone.substring(1).startsWith(inputSearch),
         );
     }
 
