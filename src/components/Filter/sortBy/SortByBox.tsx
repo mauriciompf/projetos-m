@@ -6,6 +6,7 @@ import { useToggleContext } from "../../../context/ToggleContext";
 import useToggleDropDown from "../../../customHooks/useToggleDropDown";
 import useClickOutside from "../../../customHooks/useClickOutside";
 import ColumnSelector from "../../ColumnSelector";
+import toCapitalizeCase from "../../../utils/toCapitalizeCase";
 
 type SortByBoxProps = {
   refSortByBtn: RefObject<HTMLButtonElement>;
@@ -15,28 +16,30 @@ export default function SortByBox({
   refSortByBtn,
   setToggleSortBy,
 }: SortByBoxProps) {
-  const { orderBy } = useToggleContext();
+  const { orderByParams } = useToggleContext();
   const refSortByBox = useRef<HTMLElement | null>(null);
   const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
   useClickOutside(refSortByBox, refSortByBtn, () => setToggleSortBy(false));
 
   // HACK useSearchParams
   const { handleToggleOrderBy, handleSelectOrderBy, toggleOrderBy } =
-    useToggleDropDown("sortByBox");
+    useToggleDropDown("sortby");
 
   return (
     <WrapSettingsBox refElem={refSortByBox}>
       <ColumnSelector
-        keyName="sortByBox"
+        keyName="sortby"
         restrictedList={["Sexo", "Email", "Telefone"]}
       />
 
       <div>
-        {orderBy ? (
+        {orderByParams.has("orderby") ? (
           <HeaderControl
             onClick={handleToggleOrderBy}
             isDropDownOpen={toggleOrderBy}
-            headerLabel={orderBy}
+            headerLabel={
+              toCapitalizeCase(orderByParams.get("orderby")) || "ordernar por"
+            }
           />
         ) : (
           <HeaderControl
