@@ -12,13 +12,22 @@ export const tableHeaders = [
   "Telefone",
 ];
 
-type FilterTableProps = {
-  usersData: any;
+type UsersData = {
+  id: number;
+  firstName: string;
+  age: number;
+  gender: string;
+  email: string;
+  phone: string;
 };
 
-export default function FilterTable({ usersData }: any) {
-  const { orderBy } = useToggleContext();
-  const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortByBox");
+type FilterTableProps = {
+  usersData: UsersData[];
+};
+
+export default function FilterTable({ usersData }: FilterTableProps) {
+  const { orderByParams } = useToggleContext();
+  const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortby");
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
   const { searchParams, statusParams } = useFilterSearchContext();
@@ -28,8 +37,8 @@ export default function FilterTable({ usersData }: any) {
 
   const sortedUserData = () => {
     const usersDataCopy = [...usersData];
-    const descOrder = orderBy === "Decrescente";
-    const ascOrder = orderBy === "Crescente";
+    const descOrder = orderByParams.get("orderby") === "Decrescente";
+    const ascOrder = orderByParams.get("orderby") === "Crescente";
     switch (selectColumnSortBy) {
       case "ID":
         if (descOrder) {
@@ -116,21 +125,24 @@ export default function FilterTable({ usersData }: any) {
         </tr>
       </thead>
       <tbody>
-        {filteredAndSortedUserData().map((user) => (
-          <tr
-            className={`${theme === "dark" ? ": odd:bg-slate-500 even:bg-black" : "odd:bg-white even:bg-gray-200"}`}
-            key={user.id}
-          >
-            <td className="text-center ring-1 ring-black">{user.id}</td>
-            <td className="p-2 ring-1 ring-black">{user.firstName}</td>
-            <td className="p-2 text-center ring-1 ring-black">{user.age}</td>
-            <td className="p-2 ring-1 ring-black">
-              {getSexNameTranslated(user.gender)}
-            </td>
-            <td className="p-2 ring-1 ring-black">{user.email}</td>
-            <td className="p-2 ring-1 ring-black">{user.phone}</td>
-          </tr>
-        ))}
+        {filteredAndSortedUserData().map((user) => {
+          const { id, firstName, age, gender, email, phone } = user;
+          return (
+            <tr
+              className={`${theme === "dark" ? ": odd:bg-slate-500 even:bg-black" : "odd:bg-white even:bg-gray-200"}`}
+              key={user.id}
+            >
+              <td className="text-center ring-1 ring-black">{id}</td>
+              <td className="p-2 ring-1 ring-black">{firstName}</td>
+              <td className="p-2 text-center ring-1 ring-black">{age}</td>
+              <td className="p-2 ring-1 ring-black">
+                {getSexNameTranslated(gender)}
+              </td>
+              <td className="p-2 ring-1 ring-black">{email}</td>
+              <td className="p-2 ring-1 ring-black">{phone}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
