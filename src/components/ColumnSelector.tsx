@@ -2,6 +2,7 @@ import useToggleDropDown from "../customHooks/useToggleDropDown";
 import { tableHeaders } from "./Filter/FilterTable";
 import ListItem from "./ListItem";
 import HeaderControl from "./HeaderControl";
+import toCapitalizeCase from "../utils/toCapitalizeCase";
 
 type ColumnSelectorProps = {
   keyName: string;
@@ -25,7 +26,7 @@ export default function ColumnSelector({
       {selectColumn ? (
         <HeaderControl
           onClick={() => removeSelectedColumn(selectColumn)}
-          headerLabel={selectColumn}
+          headerLabel={toCapitalizeCase(selectColumn)}
           isRemoveButton={true}
         />
       ) : (
