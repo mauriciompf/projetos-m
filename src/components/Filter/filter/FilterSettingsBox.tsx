@@ -7,6 +7,7 @@ import ListItem from "../../ListItem";
 import { useThemeContext } from "../../../context/ThemeContext";
 import useToggleDropDown from "../../../customHooks/useToggleDropDown";
 import { useFilterSearchContext } from "../../../context/FilterSearchContext";
+import toCapitalizeCase from "../../../utils/toCapitalizeCase";
 
 type FilterSettingsBoxProps = {
   refFilterBtn: RefObject<HTMLButtonElement>;
@@ -30,7 +31,7 @@ export default function FilterSettingsBox({
 
   const handleStatusSelect = (status: string) => {
     setStatusToggle(false);
-    statusParams.set("status", status);
+    statusParams.set("status", status.toLowerCase());
     setStatusParams(statusParams);
   };
 
@@ -55,19 +56,15 @@ export default function FilterSettingsBox({
       <ColumnSelector keyName="filter" />
 
       <div>
-        {!statusToggle ? (
-          <HeaderControl
-            headerLabel={statusParams.get("status") || "Status"}
-            onClick={handleStatusToggle}
-            isDropDownOpen={statusToggle}
-          />
-        ) : (
-          <HeaderControl
-            headerLabel={statusParams.get("status")}
-            onClick={handleStatusToggle}
-            isDropDownOpen={statusToggle}
-          />
-        )}
+        <HeaderControl
+          headerLabel={
+            (statusParams.has("status") &&
+              toCapitalizeCase(statusParams.get("status"))) ||
+            "Status"
+          }
+          onClick={handleStatusToggle}
+          isDropDownOpen={statusToggle}
+        />
 
         {statusToggle && (
           <ul>
