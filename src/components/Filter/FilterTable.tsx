@@ -31,6 +31,8 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
   const { searchParams, statusParams } = useFilterSearchContext();
+  // console.log(selectColumnFilter);
+  // console.log(searchParams.get("value"));
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -76,8 +78,11 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     const filterUsers = (callback: (user: UsersData) => boolean) =>
       sortedUserData().filter(callback);
 
+    console.log("selectColumnFilter:", selectColumnFilter);
+    console.log("inputSearch:", inputSearch);
+
     // FIXME Input error validation feedback
-    if (!statusSearch || !inputSearch) {
+    if ((!statusSearch && inputSearch === "Masculino") || !inputSearch) {
       return sortedUserData();
     }
 
@@ -97,7 +102,6 @@ export default function FilterTable({ usersData }: FilterTableProps) {
         );
       case "idade":
         if (isString.test(inputSearch)) return sortedUserData();
-
         return filterUsers((user) => user.age === Number(inputSearch));
       case "sexo":
         return filterUsers(
@@ -118,11 +122,13 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   };
 
   return (
-    <table className="mx-auto w-[80%] table-auto rounded-lg">
+    <table className="relative mx-auto w-[80%] table-auto">
       <thead>
-        <tr className={`${theme === "dark" && "bg-slate-700"} `}>
+        <tr
+          className={`${theme === "dark" ? "bg-slate-700" : "bg-[#282A2D] text-white"} sticky top-0 z-10`}
+        >
           {tableHeaders.map((header) => (
-            <th className="p-2 ring-1 ring-black" key={header}>
+            <th className="p-2" key={header}>
               {header}
             </th>
           ))}
@@ -133,17 +139,17 @@ export default function FilterTable({ usersData }: FilterTableProps) {
           const { id, firstName, age, gender, email, phone } = user;
           return (
             <tr
-              className={`${theme === "dark" ? ": odd:bg-slate-500 even:bg-black" : "odd:bg-white even:bg-gray-200"}`}
+              className={`${theme === "dark" ? ": odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
               key={user.id}
             >
-              <td className="text-center ring-1 ring-black">{id}</td>
-              <td className="p-2 ring-1 ring-black">{firstName}</td>
-              <td className="p-2 text-center ring-1 ring-black">{age}</td>
-              <td className="p-2 ring-1 ring-black">
+              <td className="text-center">{id}</td>
+              <td className="p-2 text-center">{firstName}</td>
+              <td className="p-2 text-center">{age}</td>
+              <td className="p-2 text-center">
                 {getSexNameTranslated(gender)}
               </td>
-              <td className="p-2 ring-1 ring-black">{email}</td>
-              <td className="p-2 ring-1 ring-black">{phone}</td>
+              <td className="p-2">{email}</td>
+              <td className="p-2 text-center">{phone}</td>
             </tr>
           );
         })}
