@@ -5,19 +5,19 @@ import SortByBox from "./sortBy/SortByBox";
 
 import { useThemeContext } from "../../context/ThemeContext";
 import FilterSettingsBox from "./filter/FilterSettingsBox";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faFilter,
-  faSort,
+  // faFilter,
+  // faSort,
   faSortDown,
   faSortUp,
   faSquareXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faSortDown, faSortUp, faSquareXmark);
-const sortIcon = <FontAwesomeIcon icon={faSort} />;
-const filterIcon = <FontAwesomeIcon icon={faFilter} />;
+// const sortIcon = <FontAwesomeIcon icon={faSort} />;
+// const filterIcon = <FontAwesomeIcon icon={faFilter} />;
 
 export default function FilterSettings() {
   const { theme } = useThemeContext();
@@ -38,9 +38,10 @@ export default function FilterSettings() {
         <Button
           refBtn={refSortByBtn}
           onClick={handleToggleSortBy}
-          className={`${theme === "dark" ? "bg-black" : "bg-slate-300"} select-none rounded-md px-4 py-2 font-bold`}
+          className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} select-none rounded-md px-2 py-2 font-bold`}
         >
-          {sortIcon} ORGANIZAR
+          {/* {sortIcon} ORGANIZAR*/}
+          📂 ORGANIZAR
         </Button>
       </div>
 
@@ -48,9 +49,10 @@ export default function FilterSettings() {
         <Button
           refBtn={refFilterBtn}
           onClick={handleToggleFilter}
-          className={`${theme === "dark" ? "bg-black" : "bg-slate-300"} select-none rounded-md px-4 py-2 font-bold`}
+          className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} select-none rounded-md px-2 py-2 font-bold`}
         >
-          {filterIcon} FILTRO
+          {/* {filterIcon} FILTRO */}
+          🔍 FILTRO
         </Button>
       </div>
 
