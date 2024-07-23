@@ -3,8 +3,12 @@ const toCapitalizeCase = (str: string | null) => {
     .toLowerCase()
     .split(" ")
     .map((word) => {
+      if (word === "id") {
+        return "ID";
+      }
       return word.charAt(0).toUpperCase().concat(word.substring(1));
     });
+
   return splitStr.join(" ");
 };
 
