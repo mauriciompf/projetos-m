@@ -8,6 +8,7 @@ import { useThemeContext } from "../../../context/ThemeContext";
 import useToggleDropDown from "../../../customHooks/useToggleDropDown";
 import { useFilterSearchContext } from "../../../context/FilterSearchContext";
 import toCapitalizeCase from "../../../utils/toCapitalizeCase";
+import Button from "../../Button";
 
 type FilterSettingsBoxProps = {
   refFilterBtn: RefObject<HTMLButtonElement>;
@@ -22,10 +23,16 @@ export default function FilterSettingsBox({
   const refFilterBox = useRef<HTMLElement | null>(null);
   useClickOutside(refFilterBox, refFilterBtn, () => setToggleFilter(false));
   const { theme } = useThemeContext();
-  const statusLabels = ["É", "Não É"];
   const { selectColumn } = useToggleDropDown("filter");
   const { searchParams, setSearchParams, statusParams, setStatusParams } =
     useFilterSearchContext();
+  const statusLabels = ["É", "Não É"];
+  const sexLabels = ["Masculino", "Feminino"];
+
+  const handleSelectSex = (sex: string) => {
+    searchParams.set("value", sex);
+    setSearchParams(searchParams);
+  };
 
   const handleStatusToggle = () => setStatusToggle((prev) => !prev);
 
@@ -47,7 +54,8 @@ export default function FilterSettingsBox({
   useEffect(() => {
     if (!selectColumn) {
       searchParams.delete("value");
-      setSearchParams("");
+      setSearchParams(searchParams);
+      // setSearchParams("");
     }
   }, [selectColumn]);
 
@@ -55,37 +63,54 @@ export default function FilterSettingsBox({
     <WrapSettingsBox refElem={refFilterBox}>
       <ColumnSelector keyName="filter" />
 
-      <div>
-        <HeaderControl
-          headerLabel={
-            (statusParams.has("status") &&
-              toCapitalizeCase(statusParams.get("status"))) ||
-            "Status"
-          }
-          onClick={handleStatusToggle}
-          isDropDownOpen={statusToggle}
-        />
+      {selectColumn !== "sexo" && (
+        <div>
+          <HeaderControl
+            headerLabel={
+              (statusParams.has("status") &&
+                toCapitalizeCase(statusParams.get("status"))) ||
+              "Status"
+            }
+            onClick={handleStatusToggle}
+            isDropDownOpen={statusToggle}
+          />
 
-        {statusToggle && (
-          <ul>
-            {statusLabels.map((label) => (
-              <ListItem
-                list={label}
-                key={label}
-                handleClick={() => handleStatusSelect(label)}
-              />
-            ))}
-          </ul>
-        )}
-      </div>
+          {statusToggle && (
+            <ul>
+              {statusLabels.map((label) => (
+                <ListItem
+                  list={label}
+                  key={label}
+                  handleClick={() => handleStatusSelect(label)}
+                />
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
       <div>
-        <input
-          type="text"
-          className={`border ${theme === "dark" ? "border-white" : "border-black"} bg-transparent p-2 outline-none hover:ring-4`}
-          placeholder="👌"
-          value={searchParams.get("value") || ""}
-          onChange={handleOnChange}
-        />
+        {selectColumn === "sexo" ? (
+          <div className="flex gap-1">
+            {sexLabels.map((label) => (
+              <Button
+                key={label}
+                onClick={() => handleSelectSex(label.toLowerCase())}
+                className={`border p-2 ${theme === "dark" ? "border-white" : "border-black"}`}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+        ) : (
+          <input
+            type="text"
+            className={`border ${theme === "dark" ? "border-white" : "border-black"} bg-transparent p-2 outline-none hover:ring-4`}
+            placeholder="👌"
+            value={searchParams.get("value") || ""}
+            onChange={handleOnChange}
+          />
+        )}
       </div>
     </WrapSettingsBox>
   );
