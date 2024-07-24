@@ -6,11 +6,16 @@ import { FilterSearchProvider } from "../context/FilterSearchContext";
 import { ToggleContextProvider } from "../context/ToggleContext";
 
 const Filter = () => {
+  const tableLength = 50;
   const {
     data: usersData,
     isLoading,
     isError,
-  } = useFetch("https://dummyjson.com/users", "users", "users");
+  } = useFetch(
+    `https://dummyjson.com/users?limit=${tableLength}`,
+    "users",
+    "users",
+  );
 
   return (
     <FilterSearchProvider>
@@ -30,7 +35,7 @@ const Filter = () => {
           {!isLoading && !isError && usersData && <p>Error...</p> && (
             <>
               <section className="my-10 text-lg">
-                <FilterSettings />
+                <FilterSettings tableLength={tableLength} />
                 <FilterTable usersData={usersData} />
               </section>
             </>
