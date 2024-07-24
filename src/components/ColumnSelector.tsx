@@ -1,5 +1,5 @@
 import useToggleDropDown from "../customHooks/useToggleDropDown";
-import { tableHeaders } from "./Filter/FilterTable";
+import tableHeaders from "../utils/tableHeaders";
 import ListItem from "./ListItem";
 import HeaderControl from "./HeaderControl";
 import toCapitalizeCase from "../utils/toCapitalizeCase";
