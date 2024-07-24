@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { tableHeaders } from "../components/Filter/FilterTable";
+
 import { useToggleContext } from "../context/ToggleContext";
+import tableHeaders from "../utils/tableHeaders";
 
 const useToggleDropDown = (key: string) => {
   const { setSelectColumn, selectColumnMap, setOrderByParams, orderByParams } =
