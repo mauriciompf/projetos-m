@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import { useToggleContext } from "../../context/ToggleContext";
@@ -30,9 +31,14 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortby");
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
-  const { searchParams, statusParams } = useFilterSearchContext();
+  const { searchParams, statusParams, setCurrentTableLength } =
+    useFilterSearchContext();
   // console.log(selectColumnFilter);
   // console.log(searchParams.get("value"));
+
+  useEffect(() => {
+    setCurrentTableLength(filteredAndSortedUserData().length);
+  }, []);
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -74,12 +80,11 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     const inputSearch = searchParams.get("value")?.trim();
     const statusSearch = statusParams.get("status");
     const isString = /[\D]/g;
-
     const filterUsers = (callback: (user: UsersData) => boolean) =>
       sortedUserData().filter(callback);
 
-    console.log("selectColumnFilter:", selectColumnFilter);
-    console.log("inputSearch:", inputSearch);
+    // console.log("selectColumnFilter:", selectColumnFilter);
+    // console.log("inputSearch:", inputSearch);
 
     // FIXME Input error validation feedback
     if ((!statusSearch && inputSearch === "Masculino") || !inputSearch) {
@@ -139,7 +144,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
           const { id, firstName, age, gender, email, phone } = user;
           return (
             <tr
-              className={`${theme === "dark" ? ": odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
+              className={`${theme === "dark" ? "odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
               key={user.id}
             >
               <td className="text-center">{id}</td>
