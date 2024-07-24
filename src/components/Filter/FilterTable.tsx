@@ -3,15 +3,7 @@ import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import { useToggleContext } from "../../context/ToggleContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
-
-export const tableHeaders = [
-  "ID",
-  "Nome",
-  "Idade",
-  "Sexo",
-  "Email",
-  "Telefone",
-];
+import tableHeaders from "../../utils/tableHeaders";
 
 type UsersData = {
   id: number;
@@ -31,14 +23,10 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortby");
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
-  const { searchParams, statusParams, setCurrentTableLength } =
+  const { searchParams, statusParams, setFiltedTableLength } =
     useFilterSearchContext();
   // console.log(selectColumnFilter);
   // console.log(searchParams.get("value"));
-
-  useEffect(() => {
-    setCurrentTableLength(filteredAndSortedUserData().length);
-  }, []);
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -79,7 +67,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const filteredAndSortedUserData = () => {
     const inputSearch = searchParams.get("value")?.trim();
     const statusSearch = statusParams.get("status");
-    const isString = /[\D]/g;
+    const isNumber = /^[0-9]+$/;
     const filterUsers = (callback: (user: UsersData) => boolean) =>
       sortedUserData().filter(callback);
 
@@ -96,17 +84,21 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     switch (selectColumnFilter) {
       case "id":
         // FIXME Validation
-        if (isString.test(inputSearch)) return sortedUserData();
-        if (statusSearch === "é") {
+        if (!isNumber.test(inputSearch)) return sortedUserData();
+
+        if (statusSearch === "é")
           return filterUsers((user) => user.id === Number(inputSearch));
-        }
+
         return filterUsers((user) => user.id !== Number(inputSearch));
       case "nome":
+        if (isNumber.test(inputSearch)) return sortedUserData();
+
         return filterUsers((user) =>
           user.firstName.toLowerCase().startsWith(inputSearch!.toLowerCase()),
         );
       case "idade":
-        if (isString.test(inputSearch)) return sortedUserData();
+        if (!isNumber.test(inputSearch)) return sortedUserData();
+
         return filterUsers((user) => user.age === Number(inputSearch));
       case "sexo":
         return filterUsers(
@@ -118,6 +110,8 @@ export default function FilterTable({ usersData }: FilterTableProps) {
           user.email.startsWith(inputSearch.toLowerCase()),
         );
       case "telefone":
+        if (/[^\d]/.test(inputSearch)) return sortedUserData();
+
         return filterUsers((user) =>
           user.phone.substring(1).startsWith(inputSearch),
         );
@@ -126,17 +120,23 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     return sortedUserData();
   };
 
+  useEffect(() => {
+    setFiltedTableLength(filteredAndSortedUserData().length);
+  }, [filteredAndSortedUserData().length]);
+
   return (
     <table className="relative mx-auto w-[80%] table-auto">
       <thead>
         <tr
           className={`${theme === "dark" ? "bg-slate-700" : "bg-[#282A2D] text-white"} sticky top-0 z-10`}
         >
-          {tableHeaders.map((header) => (
-            <th className="p-2" key={header}>
-              {header}
-            </th>
-          ))}
+          {tableHeaders.map((header) => {
+            return (
+              <th className={`p-2`} key={header}>
+                {header}
+              </th>
+            );
+          })}
         </tr>
       </thead>
       <tbody>
