@@ -15,6 +15,7 @@ import {
   faSquareXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useFilterSearchContext } from "../../context/FilterSearchContext";
+import toCapitalizeCase from "../../utils/toCapitalizeCase";
 
 library.add(faSortDown, faSortUp, faSquareXmark);
 // const sortIcon = <FontAwesomeIcon icon={faSort} />;
@@ -33,15 +34,20 @@ export default function FilterSettings({
   const refWrapSortBy = useRef<HTMLDivElement | null>(null);
   const refWrapFilter = useRef(null);
   const refFilterBtn = useRef(null);
-  const { currentTableLength, searchParams } = useFilterSearchContext();
+  const { filtedTableLength, searchParams } = useFilterSearchContext();
 
   const handleToggleSortBy = () => setToggleSortBy((prev) => !prev);
   const handleToggleFilter = () => setToggleFilter((prev) => !prev);
-  // console.log(searchParams.get("filter"));
+  // console.log(searchParams.get("sortby"));
+  // console.log(filtedTableLength);
+
+  const isSortBy = searchParams.get("sortby") && searchParams.get("orderby");
+  const isFilter =
+    searchParams.has("value") && searchParams.get("value") !== "";
 
   return (
-    <div className="relative mx-auto mb-6 flex w-[80%] items-center justify-between">
-      <div className="flex gap-4">
+    <div className="relative mx-auto mb-4 flex w-[80%] items-center justify-between">
+      <div className="flex items-center gap-4">
         <div ref={refWrapSortBy} className="relative">
           <Button
             refBtn={refSortByBtn}
@@ -49,11 +55,18 @@ export default function FilterSettings({
             className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} select-none rounded-md px-2 py-2 font-bold`}
           >
             {/* {sortIcon} ORGANIZAR*/}
-            {searchParams.has("sortby") && (
+            {isSortBy && (
               <span className="absolute -right-1 -top-1 size-3 animate-pulse rounded-full bg-green-400"></span>
             )}
             📂 ORGANIZAR
           </Button>
+
+          {toggleSortBy && (
+            <SortByBox
+              refSortByBtn={refSortByBtn}
+              setToggleSortBy={setToggleSortBy}
+            />
+          )}
         </div>
 
         <div ref={refWrapFilter} className="relative">
@@ -63,36 +76,45 @@ export default function FilterSettings({
             className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} relative select-none rounded-md px-2 py-2 font-bold`}
           >
             {/* {filterIcon} FILTRO */}
-            {searchParams.has("value") && searchParams.get("value") !== "" && (
+            {isFilter && (
               <span className="absolute -right-1 -top-1 size-3 animate-pulse rounded-full bg-green-400"></span>
             )}
             🔍 FILTRO
           </Button>
+
+          {toggleFilter && (
+            <FilterSettingsBox
+              refFilterBtn={refFilterBtn}
+              setToggleFilter={setToggleFilter}
+            />
+          )}
+        </div>
+
+        <div className="grid text-base">
+          {isSortBy && (
+            <span>
+              Ordenado por{" "}
+              <strong>{toCapitalizeCase(searchParams.get("sortby"))}</strong> em
+              Ordem{" "}
+              <strong>{toCapitalizeCase(searchParams.get("orderby"))}</strong>
+            </span>
+          )}
+
+          {isFilter && (
+            <span>
+              Filtrado por{" "}
+              <strong>{toCapitalizeCase(searchParams.get("filter"))}</strong>:{" "}
+              <strong>{toCapitalizeCase(searchParams.get("value"))}</strong>
+            </span>
+          )}
         </div>
       </div>
 
       <p>
         <em className="opacity-50">
-          Exibindo {currentTableLength} de {tableLength} Resultados
+          Exibindo {filtedTableLength} de {tableLength} Resultados
         </em>
       </p>
-      {toggleSortBy &&
-        createPortal(
-          <SortByBox
-            refSortByBtn={refSortByBtn}
-            setToggleSortBy={setToggleSortBy}
-          />,
-          refWrapSortBy.current!,
-        )}
-
-      {toggleFilter &&
-        createPortal(
-          <FilterSettingsBox
-            refFilterBtn={refFilterBtn}
-            setToggleFilter={setToggleFilter}
-          />,
-          refWrapFilter.current!,
-        )}
     </div>
   );
 }
