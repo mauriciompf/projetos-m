@@ -7,14 +7,14 @@ const FilterSearchContext = createContext<{
   setSearchParams: (val: any) => void;
   statusParams: URLSearchParams;
   setStatusParams: (val: any) => void;
-  currentTableLength: number;
-  setCurrentTableLength: Dispatch<SetStateAction<number>>;
+  filtedTableLength: number;
+  setFiltedTableLength: Dispatch<SetStateAction<number>>;
 } | null>(null);
 
 function FilterSearchProvider({ children }: { children: React.ReactNode }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [statusParams, setStatusParams] = useSearchParams();
-  const [currentTableLength, setCurrentTableLength] = useState(0);
+  const [filtedTableLength, setFiltedTableLength] = useState(0);
 
   return (
     <FilterSearchContext.Provider
@@ -23,8 +23,8 @@ function FilterSearchProvider({ children }: { children: React.ReactNode }) {
         setSearchParams,
         statusParams,
         setStatusParams,
-        currentTableLength,
-        setCurrentTableLength,
+        filtedTableLength,
+        setFiltedTableLength,
       }}
     >
       {children}
