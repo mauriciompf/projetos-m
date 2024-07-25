@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { createPortal } from "react-dom";
+// import { createPortal } from "react-dom";
 import Button from "../Button";
 import SortByBox from "./sortBy/SortByBox";
 
@@ -46,7 +46,7 @@ export default function FilterSettings({
     searchParams.has("value") && searchParams.get("value") !== "";
 
   return (
-    <div className="relative mx-auto mb-4 flex w-[80%] items-center justify-between">
+    <div className="relative mx-auto mb-4 flex w-[80%] items-center justify-between max-2xl:w-[96%]">
       <div className="flex items-center gap-4">
         <div ref={refWrapSortBy} className="relative">
           <Button
@@ -110,7 +110,7 @@ export default function FilterSettings({
         </div>
       </div>
 
-      <p>
+      <p className="text-right">
         <em className="opacity-50">
           Exibindo {filtedTableLength} de {tableLength} Resultados
         </em>
