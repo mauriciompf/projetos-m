@@ -4,6 +4,7 @@ import { useThemeContext } from "../../context/ThemeContext";
 import { useToggleContext } from "../../context/ToggleContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import tableHeaders from "../../utils/tableHeaders";
+import highlightText from "../../utils/highlightText";
 
 type UsersData = {
   id: number;
@@ -26,7 +27,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { searchParams, statusParams, setFiltedTableLength } =
     useFilterSearchContext();
   // console.log(selectColumnFilter);
-  // console.log(searchParams.get("value"));
+  console.log(searchParams.get("value"));
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -142,19 +143,42 @@ export default function FilterTable({ usersData }: FilterTableProps) {
       <tbody>
         {filteredAndSortedUserData().map((user) => {
           const { id, firstName, age, gender, email, phone } = user;
+          const searchTerm = searchParams.get("value") || "";
           return (
             <tr
               className={`${theme === "dark" ? "odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
               key={user.id}
             >
-              <td className="text-center">{id}</td>
-              <td className="p-2 text-center">{firstName}</td>
-              <td className="p-2 text-center">{age}</td>
-              <td className="p-2 text-center">
-                {getSexNameTranslated(gender)}
+              <td className="text-center">
+                {selectColumnFilter === "id"
+                  ? highlightText(id.toString(), searchTerm)
+                  : id}
               </td>
-              <td className="p-2">{email}</td>
-              <td className="p-2 text-center">{phone}</td>
+              <td className="p-2 text-center">
+                {selectColumnFilter === "nome"
+                  ? highlightText(firstName, searchTerm)
+                  : firstName}
+              </td>
+              <td className="p-2 text-center">
+                {selectColumnFilter === "idade"
+                  ? highlightText(age.toString(), searchTerm)
+                  : age}
+              </td>
+              <td className="p-2 text-center">
+                {selectColumnFilter === "sexo"
+                  ? highlightText(getSexNameTranslated(gender), searchTerm)
+                  : gender}
+              </td>
+              <td className="p-2">
+                {selectColumnFilter === "email"
+                  ? highlightText(email, searchTerm)
+                  : email}
+              </td>
+              <td className="p-2 text-center">
+                {selectColumnFilter === "telefone"
+                  ? highlightText(phone, searchTerm)
+                  : phone}
+              </td>
             </tr>
           );
         })}
