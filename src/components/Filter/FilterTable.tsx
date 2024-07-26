@@ -27,7 +27,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { searchParams, statusParams, setFiltedTableLength } =
     useFilterSearchContext();
   // console.log(selectColumnFilter);
-  console.log(searchParams.get("value"));
+  // console.log(searchParams.get("value"));
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -114,6 +114,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
         if (/[^\d]/.test(inputSearch)) return sortedUserData();
 
         return filterUsers((user) =>
+          // FIXME Not correcty filted
           user.phone.substring(1).startsWith(inputSearch),
         );
     }
