@@ -7,6 +7,9 @@ import useToggleDropDown from "../../../customHooks/useToggleDropDown";
 import useClickOutside from "../../../customHooks/useClickOutside";
 import ColumnSelector from "../../ColumnSelector";
 import toCapitalizeCase from "../../../utils/toCapitalizeCase";
+import { useFilterSearchContext } from "../../../context/FilterSearchContext";
+import Button from "../../Button";
+import ResetParams from "../../../utils/ResetParams";
 
 type SortByBoxProps = {
   refSortByBtn: RefObject<HTMLButtonElement>;
@@ -25,39 +28,48 @@ export default function SortByBox({
   const { handleToggleOrderBy, handleSelectOrderBy, toggleOrderBy } =
     useToggleDropDown("sortby");
 
+  const { searchParams } = useFilterSearchContext();
+
   return (
-    <WrapSettingsBox refElem={refSortByBox}>
-      <ColumnSelector
-        keyName="sortby"
-        restrictedList={["Sexo", "Email", "Telefone"]}
-      />
+    <WrapSettingsBox
+      refElem={refSortByBox}
+      className={`grid ${searchParams.has("sortby") && searchParams.has("orderby") && "pt-2"} `}
+    >
+      <ResetParams valueOne={"sortby"} valueTwo={"orderby"} />
 
-      <div>
-        {orderByParams.has("orderby") ? (
-          <HeaderControl
-            onClick={handleToggleOrderBy}
-            isDropDownOpen={toggleOrderBy}
-            headerLabel={toCapitalizeCase(orderByParams.get("orderby"))}
-          />
-        ) : (
-          <HeaderControl
-            onClick={handleToggleOrderBy}
-            isDropDownOpen={toggleOrderBy}
-            headerLabel={"Ordernar por"}
-          />
-        )}
+      <div className="flex gap-2">
+        <ColumnSelector
+          keyName="sortby"
+          restrictedList={["Sexo", "Email", "Telefone"]}
+        />
 
-        {toggleOrderBy && (
-          <ul>
-            {OrderByLabels.map((label) => (
-              <ListItem
-                list={label}
-                key={label}
-                handleClick={() => handleSelectOrderBy(label)}
-              />
-            ))}
-          </ul>
-        )}
+        <div>
+          {orderByParams.has("orderby") ? (
+            <HeaderControl
+              onClick={handleToggleOrderBy}
+              isDropDownOpen={toggleOrderBy}
+              headerLabel={toCapitalizeCase(orderByParams.get("orderby"))}
+            />
+          ) : (
+            <HeaderControl
+              onClick={handleToggleOrderBy}
+              isDropDownOpen={toggleOrderBy}
+              headerLabel={"Ordernar por"}
+            />
+          )}
+
+          {toggleOrderBy && (
+            <ul>
+              {OrderByLabels.map((label) => (
+                <ListItem
+                  list={label}
+                  key={label}
+                  handleClick={() => handleSelectOrderBy(label)}
+                />
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </WrapSettingsBox>
   );
