@@ -4,7 +4,7 @@ import Button from "../Button";
 import SortByBox from "./sortBy/SortByBox";
 
 import { useThemeContext } from "../../context/ThemeContext";
-import FilterSettingsBox from "./filter/FilterSettingsBox";
+import FilterBox from "./filter/FilterBox";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -83,7 +83,7 @@ export default function FilterSettings({
           </Button>
 
           {toggleFilter && (
-            <FilterSettingsBox
+            <FilterBox
               refFilterBtn={refFilterBtn}
               setToggleFilter={setToggleFilter}
             />
