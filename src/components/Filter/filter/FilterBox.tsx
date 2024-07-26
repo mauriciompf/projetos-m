@@ -10,6 +10,7 @@ import { useFilterSearchContext } from "../../../context/FilterSearchContext";
 import toCapitalizeCase from "../../../utils/toCapitalizeCase";
 import Button from "../../Button";
 import ResetParams from "../../../utils/ResetParams";
+import { useNavigate } from "react-router-dom";
 
 type FilterBoxProps = {
   refFilterBtn: RefObject<HTMLButtonElement>;
@@ -30,6 +31,12 @@ export default function FilterBox({
   const statusLabels = ["É", "Não É"];
   const sexLabels = ["Masculino", "Feminino"];
 
+  const navigate = useNavigate();
+
+  window.onpopstate = () => {
+    navigate("/");
+  };
+
   const handleSelectSex = (sex: string) => {
     searchParams.set("value", sex);
     setSearchParams(searchParams);
@@ -37,14 +44,32 @@ export default function FilterBox({
 
   const handleStatusToggle = () => setStatusToggle((prev) => !prev);
 
+  const updateUrl = () => {
+    const newSearchParams = new URLSearchParams(window.location.search);
+
+    for (let [key, value] of statusParams.entries()) {
+      newSearchParams.set(key, decodeURIComponent(value));
+    }
+
+    navigate(
+      {
+        pathname: window.location.pathname,
+        search: newSearchParams.toString(),
+      },
+      { replace: true },
+    );
+  };
+
   const handleStatusSelect = (status: string) => {
     setStatusToggle(false);
-    statusParams.set("status", status.toLowerCase());
+    statusParams.set("status", encodeURIComponent(status.toLowerCase()));
     setStatusParams(statusParams);
+    updateUrl();
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+    const regex = new RegExp("[^a-zA-Z0-9]", "g");
+    const val = e.target.value.replace(regex, "");
 
     if (selectColumn) {
       searchParams.set("value", val);
@@ -56,7 +81,6 @@ export default function FilterBox({
     if (!selectColumn) {
       searchParams.delete("value");
       setSearchParams(searchParams);
-      // setSearchParams("");
     }
   }, [selectColumn]);
 
@@ -74,7 +98,9 @@ export default function FilterBox({
             <HeaderControl
               headerLabel={
                 (statusParams.has("status") &&
-                  toCapitalizeCase(statusParams.get("status"))) ||
+                  toCapitalizeCase(
+                    decodeURIComponent(statusParams.get("status")!),
+                  )) ||
                 "Status"
               }
               onClick={handleStatusToggle}
@@ -111,7 +137,11 @@ export default function FilterBox({
               type="text"
               className={`border ${theme === "dark" ? "border-white" : "border-black"} bg-transparent p-2 outline-none hover:ring-4`}
               placeholder="👌"
-              value={searchParams.get("value") || ""}
+              value={
+                searchParams.has("value")
+                  ? decodeURIComponent(searchParams.get("value")!)
+                  : ""
+              }
               onChange={handleOnChange}
             />
           )}
