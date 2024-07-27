@@ -34,7 +34,7 @@ const Filter = () => {
           {isError && <p>Error...</p>}
           {!isLoading && !isError && usersData && <p>Error...</p> && (
             <>
-              <section className="my-10 text-lg">
+              <section className="mx-auto my-10 w-[min(850px,_100%)] text-lg">
                 <FilterSettings tableLength={tableLength} />
                 <FilterTable usersData={usersData} />
               </section>
