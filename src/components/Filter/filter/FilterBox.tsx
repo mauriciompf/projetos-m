@@ -71,6 +71,8 @@ export default function FilterBox({
     const regex = new RegExp("[^a-zA-Z0-9]", "g");
     const val = e.target.value.replace(regex, "");
 
+    if (!statusParams.has("status")) return;
+
     if (selectColumn) {
       searchParams.set("value", val);
       setSearchParams(searchParams);
