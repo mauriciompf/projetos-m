@@ -108,7 +108,9 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     }
 
     return filterUsers(
-      statusLabel === "é" ? searchCondition : (user) => !searchCondition(user),
+      statusLabel === "é" || statusLabel !== "não é"
+        ? searchCondition
+        : (user) => !searchCondition(user),
     );
   };
 
@@ -117,7 +119,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   }, [filteredAndSortedUserData().length]);
 
   return (
-    <table className="relative mx-auto w-[80%] table-auto">
+    <table className="relative w-full table-auto">
       <thead>
         <tr
           className={`${theme === "dark" ? "bg-slate-700" : "bg-[#282A2D] text-white"} sticky top-0 z-10`}
