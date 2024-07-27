@@ -1,15 +1,11 @@
 import { useRef, useState } from "react";
-// import { createPortal } from "react-dom";
 import Button from "../Button";
 import SortByBox from "./sortBy/SortByBox";
 
 import { useThemeContext } from "../../context/ThemeContext";
 import FilterBox from "./filter/FilterBox";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  // faFilter,
-  // faSort,
   faSortDown,
   faSortUp,
   faSquareXmark,
@@ -18,8 +14,6 @@ import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 
 library.add(faSortDown, faSortUp, faSquareXmark);
-// const sortIcon = <FontAwesomeIcon icon={faSort} />;
-// const filterIcon = <FontAwesomeIcon icon={faFilter} />;
 
 export default function FilterSettings({
   tableLength,
@@ -34,12 +28,11 @@ export default function FilterSettings({
   const refWrapSortBy = useRef<HTMLDivElement | null>(null);
   const refWrapFilter = useRef(null);
   const refFilterBtn = useRef(null);
-  const { filtedTableLength, searchParams } = useFilterSearchContext();
+  const { filtedTableLength, searchParams, statusParams } =
+    useFilterSearchContext();
 
   const handleToggleSortBy = () => setToggleSortBy((prev) => !prev);
   const handleToggleFilter = () => setToggleFilter((prev) => !prev);
-  // console.log(searchParams.get("sortby"));
-  // console.log(filtedTableLength);
 
   const isSortBy = searchParams.get("sortby") && searchParams.get("orderby");
   const isFilter =
@@ -54,7 +47,6 @@ export default function FilterSettings({
             onClick={handleToggleSortBy}
             className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} select-none rounded-md px-2 py-2 font-bold`}
           >
-            {/* {sortIcon} ORGANIZAR*/}
             {isSortBy && (
               <span className="absolute -right-1 -top-1 size-3 animate-pulse rounded-full bg-green-400"></span>
             )}
@@ -75,7 +67,6 @@ export default function FilterSettings({
             onClick={handleToggleFilter}
             className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} relative select-none rounded-md px-2 py-2 font-bold`}
           >
-            {/* {filterIcon} FILTRO */}
             {isFilter && (
               <span className="absolute -right-1 -top-1 size-3 animate-pulse rounded-full bg-green-400"></span>
             )}
@@ -103,7 +94,10 @@ export default function FilterSettings({
           {isFilter && (
             <span>
               Filtrado por{" "}
-              <strong>{toCapitalizeCase(searchParams.get("filter"))}</strong>:{" "}
+              <strong>{toCapitalizeCase(searchParams.get("filter"))}</strong>
+              {statusParams.has("status")
+                ? `(${statusParams.get("status")})`
+                : ":"}{" "}
               <strong>{toCapitalizeCase(searchParams.get("value"))}</strong>
             </span>
           )}
