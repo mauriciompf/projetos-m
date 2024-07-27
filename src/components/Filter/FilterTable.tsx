@@ -26,8 +26,6 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { theme } = useThemeContext();
   const { searchParams, statusParams, setFiltedTableLength } =
     useFilterSearchContext();
-  // console.log(selectColumnFilter);
-  // console.log(searchParams.get("value"));
 
   const getSexNameTranslated = (sex: string) =>
     sex === "female" ? "Feminino" : "Masculino";
@@ -67,59 +65,51 @@ export default function FilterTable({ usersData }: FilterTableProps) {
 
   const filteredAndSortedUserData = () => {
     const inputSearch = searchParams.get("value")?.trim();
-    const statusSearch = statusParams.get("status");
+    const statusLabel = statusParams.get("status");
     const isNumber = /^[0-9]+$/;
     const filterUsers = (callback: (user: UsersData) => boolean) =>
       sortedUserData().filter(callback);
 
-    // console.log("selectColumnFilter:", selectColumnFilter);
-    // console.log("inputSearch:", inputSearch);
+    const getSearchCondition = () => {
+      if ((!statusLabel && inputSearch === "Masculino") || !inputSearch) {
+        return;
+      }
 
-    // FIXME Input error validation feedback
-    if ((!statusSearch && inputSearch === "Masculino") || !inputSearch) {
+      switch (selectColumnFilter) {
+        case "id":
+          if (!isNumber.test(inputSearch)) return;
+          return (user: UsersData) => user.id === Number(inputSearch);
+        case "nome":
+          return (user: UsersData) =>
+            user.firstName.toLowerCase().startsWith(inputSearch.toLowerCase());
+        case "idade":
+          if (!isNumber.test(inputSearch)) return;
+          return (user: UsersData) => user.age === Number(inputSearch);
+        case "sexo":
+          return (user: UsersData) =>
+            getSexNameTranslated(user.gender).toLowerCase() === inputSearch;
+        case "email":
+          return (user: UsersData) =>
+            user.email.toLowerCase().startsWith(inputSearch!.toLowerCase());
+        case "telefone":
+          if (/[^\d]/.test(inputSearch)) return;
+          return (user: UsersData) =>
+            user.phone.substring(1).startsWith(inputSearch!);
+        default:
+          console.error("Default case");
+          return;
+      }
+    };
+
+    const searchCondition = getSearchCondition();
+
+    if (!searchCondition) {
       return sortedUserData();
     }
 
-    // console.log("👌");
-
-    switch (selectColumnFilter) {
-      case "id":
-        // FIXME Validation
-        if (!isNumber.test(inputSearch)) return sortedUserData();
-
-        if (statusSearch === "é")
-          return filterUsers((user) => user.id === Number(inputSearch));
-
-        return filterUsers((user) => user.id !== Number(inputSearch));
-      case "nome":
-        if (isNumber.test(inputSearch)) return sortedUserData();
-
-        return filterUsers((user) =>
-          user.firstName.toLowerCase().startsWith(inputSearch!.toLowerCase()),
-        );
-      case "idade":
-        if (!isNumber.test(inputSearch)) return sortedUserData();
-
-        return filterUsers((user) => user.age === Number(inputSearch));
-      case "sexo":
-        return filterUsers(
-          (user) =>
-            getSexNameTranslated(user.gender).toLowerCase() === inputSearch,
-        );
-      case "email":
-        return filterUsers((user) =>
-          user.email.startsWith(inputSearch.toLowerCase()),
-        );
-      case "telefone":
-        if (/[^\d]/.test(inputSearch)) return sortedUserData();
-
-        return filterUsers((user) =>
-          // FIXME Not correcty filted
-          user.phone.substring(1).startsWith(inputSearch),
-        );
-    }
-
-    return sortedUserData();
+    return filterUsers(
+      statusLabel === "é" ? searchCondition : (user) => !searchCondition(user),
+    );
   };
 
   useEffect(() => {
@@ -166,9 +156,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
                   : age}
               </td>
               <td className="p-2 text-center">
-                {selectColumnFilter === "sexo"
-                  ? highlightText(getSexNameTranslated(gender), searchTerm)
-                  : gender}
+                {getSexNameTranslated(gender)}
               </td>
               <td className="p-2">
                 {selectColumnFilter === "email"
