@@ -39,7 +39,7 @@ export default function FilterSettings({
     searchParams.has("value") && searchParams.get("value") !== "";
 
   return (
-    <div className="relative mx-auto mb-4 flex w-[80%] items-center justify-between max-2xl:w-[96%]">
+    <div className="relative mb-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
         <div ref={refWrapSortBy} className="relative">
           <Button
@@ -48,9 +48,11 @@ export default function FilterSettings({
             className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} select-none rounded-md px-2 py-2 font-bold`}
           >
             {isSortBy && (
-              <span className="absolute -right-1 -top-1 size-3 animate-pulse rounded-full bg-green-400"></span>
+              <span
+                className={`absolute -right-1 -top-1 size-3 ${toggleSortBy && "animate-pulse"} rounded-full bg-green-400`}
+              ></span>
             )}
-            📂 ORGANIZAR
+            {toggleSortBy ? "📂" : "📁"} ORGANIZAR
           </Button>
 
           {toggleSortBy && (
@@ -68,7 +70,9 @@ export default function FilterSettings({
             className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} relative select-none rounded-md px-2 py-2 font-bold`}
           >
             {isFilter && (
-              <span className="absolute -right-1 -top-1 size-3 animate-pulse rounded-full bg-green-400"></span>
+              <span
+                className={`absolute -right-1 -top-1 size-3 ${toggleFilter && "animate-pulse"} rounded-full bg-green-400`}
+              ></span>
             )}
             🔍 FILTRO
           </Button>
@@ -96,7 +100,7 @@ export default function FilterSettings({
               Filtrado por{" "}
               <strong>{toCapitalizeCase(searchParams.get("filter"))}</strong>
               {statusParams.has("status")
-                ? `(${statusParams.get("status")})`
+                ? ` (${statusParams.get("status")})`
                 : ":"}{" "}
               <strong>{toCapitalizeCase(searchParams.get("value"))}</strong>
             </span>
