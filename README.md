@@ -1,6 +1,6 @@
 # Visão Geral
 
-> Desenvolvido por Maurício Farias
+> Desenvolvido por **Maurício Farias**.
 
 (ノ#-_-)ノ ミ┴┴
 
