@@ -70,11 +70,11 @@ Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor 
   - Adição de comentários detalhados no código para melhorar o entendimento.
   - Inclusão de documentação específica sobre as funcionalidades de ordenação e filtro.
   - Adição de exemplos de código na documentação para ilustrar funcionalidades e uso.
-  - Documentação detalhada sobre a adição e uso de data de nascimento.
 - **Funcionalidade**
-  - Implementação do hook useReducer para melhor gerenciamento de estado.
+  - Implementação do hook useReducer() para melhor gerenciamento de estado.
   - Adição de um botão para remover as caixas, permitindo maior controle do usuário sobre os elementos exibidos além do clicar fora da caixa.
   - Adição da funcionalidade de não alternar elementos ao redefinir parâmetros.
+  - Adição da coluna data de nascimento.
 - **Interface e Design**:
   - Mudança do fundo das caixas para um design mais atrativo.
   - Alteração do gif de carregamento para algo mais moderno e menos intrusivo.
