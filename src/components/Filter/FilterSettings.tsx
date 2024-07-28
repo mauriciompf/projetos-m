@@ -52,7 +52,7 @@ export default function FilterSettings({
                 className={`absolute -right-1 -top-1 size-3 ${toggleSortBy && "animate-pulse"} rounded-full bg-green-400`}
               ></span>
             )}
-            {toggleSortBy ? "📂" : "📁"} ORGANIZAR
+            {toggleSortBy ? "📂" : "📁"} Organizar
           </Button>
 
           {toggleSortBy && (
@@ -74,7 +74,7 @@ export default function FilterSettings({
                 className={`absolute -right-1 -top-1 size-3 ${toggleFilter && "animate-pulse"} rounded-full bg-green-400`}
               ></span>
             )}
-            🔍 FILTRO
+            🔍 Filtrar
           </Button>
 
           {toggleFilter && (
