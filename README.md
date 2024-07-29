@@ -50,14 +50,13 @@ Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor 
 - **Design e Estética:**
   - Ajuste no espaço entre ícones e texto na página inicial para melhorar a clareza visual.
   - Alteração da paleta de cores dos projetos na página inicial para uma aparência mais harmoniosa.
-  - Exibi os projetos já iniciados na página inicial, com um projeto em construção destacado.
 - **Acessibilidade e Feedback:**
   - Adição de uma página de erro 404 para informar ao usuário quando uma página não é encontrada.
   - Implementação de uma interface de usuário de carregamento pendente em caso de carregamento lento.
   - Mudança na posição do *toggle* do menu lateral, melhorando a experiência de navegação.
 - **Melhorias Técnicas:**
   - Correções de bugs e melhorias gerais na interface do usuário.
-  - Adição de comentários no código para facilitar o entendimento e manutenção.
+  - Atualização de Nomes e Estrutura: Renomear diretórios e arquivos para melhorar a clareza e organização do projeto.
   - Inclusão de exemplos de código na documentação para ilustrar funcionalidades e uso.
   - Adição de uma seção detalhada de instalação e configuração na documentação.
   - Implementação de testes unitários utilizando [jest](https://jestjs.io) para garantir a estabilidade e qualidade do código.
@@ -67,11 +66,9 @@ Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor 
 ### Projeto 1
 
 - **Documentação e Compreensão:**
-  - Adição de comentários detalhados no código para melhorar o entendimento.
   - Inclusão de documentação específica sobre as funcionalidades de ordenação e filtro.
   - Adição de exemplos de código na documentação para ilustrar funcionalidades e uso.
 - **Funcionalidade**
-  - Implementação do hook useReducer() para melhor gerenciamento de estado.
   - Adição de um botão para remover as caixas, permitindo maior controle do usuário sobre os elementos exibidos além do clicar fora da caixa.
   - Adição da funcionalidade de não alternar elementos ao redefinir parâmetros.
   - Adição da coluna data de nascimento.
@@ -80,7 +77,6 @@ Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor 
   - Alteração do gif de carregamento para algo mais moderno e menos intrusivo.
   - Melhoria na responsividade da interface para dispositivos móveis.
 - **Acessibilidade e Feedback:**
-  - Adição de um texto indicativo quando a tabela estiver vazia.
   - Limitação do número de caracteres nos campos de entrada para evitar erros de digitação.
   - Melhoria na acessibilidade para garantir que todos os usuários possam interagir com a aplicação sem barreiras.
 
