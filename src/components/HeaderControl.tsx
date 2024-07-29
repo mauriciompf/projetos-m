@@ -8,12 +8,11 @@ const removeButton = (
   <FontAwesomeIcon icon={"fa-solid fa-square-xmark" as IconProp} />
 );
 
-// FIXME any type
 type HeaderControlProps = {
   onClick: () => void;
   isDropDownOpen?: boolean;
   headerLabel: string | URLSearchParams | null;
-  isRemoveButton?: any;
+  isRemoveButton?: boolean;
 };
 
 export default function HeaderControl({
