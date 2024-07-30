@@ -1,19 +1,21 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-type useLocalStorageParams = {
+type useLocalStorageParams<T> = {
   key: string;
-  initialState: unknown | unknown[];
+  initialState: T;
 };
 
-const useLocalStorage = ({ key, initialState }: useLocalStorageParams) => {
-  const [storedValue, setStoredValue] = useState(() => {
+const useLocalStorage = <T>({
+  key,
+  initialState,
+}: useLocalStorageParams<T>): [T, React.Dispatch<React.SetStateAction<T>>] => {
+  const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = localStorage.getItem(key);
-
-      return item ? JSON.parse(item) : initialState;
+      return item ? (JSON.parse(item) as T) : initialState;
     } catch (error) {
-      console.error(error);
-      setStoredValue(initialState);
+      console.error("Failed to get item from localStorage", error);
+      return initialState;
     }
   });
 
@@ -24,4 +26,4 @@ const useLocalStorage = ({ key, initialState }: useLocalStorageParams) => {
   return [storedValue, setStoredValue];
 };
 
-export default useLocalStorage;
+export { useLocalStorage };
