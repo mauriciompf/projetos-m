@@ -13,5 +13,5 @@ export default function useCustomHookContext<T>(
     throw new Error(`${hookName} must be used within a ${providerName}`);
   }
 
-  return contextValue;
+  return contextValue as T;
 }
