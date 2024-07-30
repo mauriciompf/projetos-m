@@ -14,11 +14,14 @@ export default function ResetParams({
 }: ResetParamsProps) {
   const { searchParams, setSearchParams } = useFilterSearchContext();
 
+  // Delete specified search params and update context
   const handleOnClick = () => {
     searchParams.delete(valueOne);
     searchParams.delete(valueTwo);
-    if (valueThree) searchParams.delete(valueThree);
-    setSearchParams(searchParams);
+    if (valueThree) {
+      searchParams.delete(valueThree);
+    }
+    setSearchParams(new URLSearchParams(searchParams));
   };
 
   return (
