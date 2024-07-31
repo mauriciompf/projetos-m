@@ -10,7 +10,6 @@ type ToggleContextValues = {
   setSelectColumn: (key: string, column: string) => void;
 };
 
-// #FIXME Type any
 const ToggleContext = createContext<ToggleContextValues | null>(null);
 
 function ToggleContextProvider({ children }: { children: React.ReactNode }) {
@@ -18,20 +17,19 @@ function ToggleContextProvider({ children }: { children: React.ReactNode }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const setSelectColumn = (key: string, column: string) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set(key, column);
+    const newSearchParams = new URLSearchParams(searchParams); // Get a new URLSearchParams instance with the current params
+    newSearchParams.set(key, column); // Set the column value for the given key
     setSearchParams(newSearchParams);
   };
 
-  // Convert searchParams to an object
-  const selectColumnMap = Object.fromEntries(searchParams.entries());
+  const selectColumnMap = Object.fromEntries(searchParams.entries()); // Convert searchParams to an object
 
   return (
     <ToggleContext.Provider
       value={{
         orderByParams,
         setOrderByParams,
-        setSelectColumnMap: setSearchParams,
+        setSelectColumnMap: setSearchParams, // Set the search params directly as the select column map
         selectColumnMap,
         setSelectColumn,
       }}
