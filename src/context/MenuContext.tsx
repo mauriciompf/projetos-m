@@ -1,10 +1,6 @@
 import { createContext } from "react";
-import useLocalStorage from "../customHooks/useLocalStorage";
+import { useLocalStorage } from "../customHooks/useLocalStorage";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
-
-type MenuContextProps = {
-  children: React.ReactNode;
-};
 
 type MenuContextValues = {
   isOpenMenu: boolean;
@@ -13,13 +9,17 @@ type MenuContextValues = {
 
 const MenuContext = createContext<MenuContextValues | null>(null);
 
-function MenuContextProvider({ children }: MenuContextProps) {
-  const [isOpenMenu, setIsOpenMenu] = useLocalStorage({
+export default function MenuContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [isOpenMenu, setIsOpenMenu] = useLocalStorage<boolean>({
     key: "isOpenMenu",
     initialState: true,
   });
 
-  const handleToggleMenu = () => setIsOpenMenu(!isOpenMenu);
+  const handleToggleMenu = () => setIsOpenMenu((prev) => !prev);
 
   return (
     <MenuContext.Provider value={{ isOpenMenu, handleToggleMenu }}>
@@ -31,4 +31,4 @@ function MenuContextProvider({ children }: MenuContextProps) {
 const useMenuContext = () =>
   useCustomHookContext(MenuContext, "useMenuContext", "MenuContextProvider");
 
-export { MenuContextProvider, useMenuContext };
+export { useMenuContext };
