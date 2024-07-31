@@ -1,29 +1,27 @@
 import { useMenuContext } from "../../context/MenuContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import projectList from "../../utils/projectList";
-import toggleThemeClasses from "../../utils/toggleThemeClasses";
 
 export default function SideBarNav() {
   const { isOpenMenu } = useMenuContext();
   const { theme } = useThemeContext();
 
   return (
-    <section className={toggleThemeClasses(isOpenMenu && "ml-5")}>
+    <section className={`isOpenMenu && "ml-5"`}>
       <nav>
         <ul className={`grid gap-y-4 text-xl`}>
           {projectList.map((listItem) => (
             <li
               key={listItem.label}
-              className={toggleThemeClasses(
+              className={` ${
                 !isOpenMenu
                   ? "w-min -translate-x-1"
                   : `cursor-pointer ${
                       theme === "dark"
                         ? "hover:bg-white hover:text-black focus:bg-white focus:text-black"
                         : "hover:bg-black hover:text-white focus:bg-black focus:text-white"
-                    }`,
-                "relative -left-1 flex items-center gap-3 rounded-md",
-              )}
+                    }`
+              } relative -left-1 flex items-center gap-3 rounded-md`}
             >
               <span
                 className={`${
