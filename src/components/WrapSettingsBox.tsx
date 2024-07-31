@@ -22,7 +22,7 @@ export default function WrapSettingsBox({
         className,
       )}
     >
-      <div>{children}</div>
+      {children}
     </article>
   );
 }
