@@ -6,11 +6,15 @@
 
 ## Introdução
 
-Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web, combinando três projetos distintos em uma plataforma interativa e acessível. Desenvolvido com React e Tailwind CSS, este site reflete meu aprendizado e domínio dessas ferramentas, com ênfase especial em React. Esta demonstração destaca minha capacidade de criar interfaces de usuário responsivas e de implementar uma navegação eficiente e funcional.
+O projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web, contendo três projetos distintos em uma pequena plataforma interativa e acessível. Desenvolvido com [React](https://react.dev) e [Tailwind CSS](https://tailwindcss.com), este website reflete meu aprendizado e domínio dessas ferramentas, com ênfase especial em React. Esta demonstração destaca minha capacidade de criar interfaces de usuário responsivas e de implementar uma navegação eficiente e funcional.
+
+## Projeto 1 - Ordenação e Filtro
+
+Uma aplicação que demonstra a capacidade de filtrar e organizar de forma básica dados provenientes da API gratuita [DummyJSON](https://dummyjson.com/docs/users). O objetivo foi criar uma interface que permite aos usuários gerenciar e visualizar dados de forma eficiente. A aplicação utiliza uma tabela para exibir informações de usuários, oferecendo funcionalidades de ordenação e filtragem para facilitar a análise dos dados.
 
 ## Funcionalidades
 
-### **Página Inicial**
+### **Página Principal**
 
 - Botões para alternar entre temas claro e escuro, permitindo que o usuário escolha o estilo visual que prefere.
 
@@ -31,33 +35,44 @@ Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor 
   
   - Linhas horizontais entre os elementos do menu para uma organização visual clara e ordenada.
 
+### **Ordenação e Filtro**
+
+- **Configuração de Parâmetros:**
+  - Botão "Organizar": Ao clicar, uma caixa flutuante é exibido, permitindo ao usuário definir a coluna para ordenação e escolher entre crescente, decrescente ou padrão.
+  
+  - Botão "Filtrar": Semelhante ao botão de organizar, este botão abre uma interface para definir critérios de filtragem. Inclui um dropdown para selecionar a coluna e um filtro de status com opções "é" ou "não é", além de uma barra de busca dependendo da coluna selecionada.
+  
+- **Indicador de Resultados:**
+  - Exibe a quantidade de resultados filtrados na tabela, atualizando dinamicamente conforme os parâmetros de filtragem são aplicados.
+
 ## Tecnologias Utilizadas
 
 - **React**: Para construção da interface do usuário.
-- **TypeScript**: Para segurança de tipos e melhor experiência de desenvolvimento.
+- **[TypeScript](https://www.typescriptlang.org)**: Para segurança de tipos e melhor experiência de desenvolvimento.
 - **Tailwind CSS**: Para estilização da aplicação.
-- **Vite**: Para desenvolvimento rápido e ferramenta de build.
-- **React Router**: Para navegação entre diferentes visualizações.
+- **[Vite](https://vitejs.dev)**: Para desenvolvimento rápido e ferramenta de build.
+- **[React Router](https://reactrouter.com/en/main)**: Para navegação entre diferentes visualizações e  useSearchParams() para gerenciar parâmetros de consulta na URL.
+- **[tailwind-merge](https://www.npmjs.com/package/tailwind-merge)**: Para evitar duplicação de classes utilizando Tailwind CSS
 
-## Notas de Atualização
+## Atualizações
 
 ### Geral
 
 - **Melhorias de Usabilidade:**
+  - Adição de treclas de atalho para uma melhor navegação.
+  - Adicão de uma fonte diferente.
   - Exibir um pop-up no menu lateral para facilitar o retorno aos projetos.
   - Implementação de teclas de atalho para navegação rápida entre as páginas.
   - Sincronização do tempo de duração das transições para uma experiência de usuário mais fluida.
 - **Design e Estética:**
   - Ajuste no espaço entre ícones e texto na página inicial para melhorar a clareza visual.
   - Alteração da paleta de cores dos projetos na página inicial para uma aparência mais harmoniosa.
-  - Exibi os projetos já iniciados na página inicial, com um projeto em construção destacado.
 - **Acessibilidade e Feedback:**
   - Adição de uma página de erro 404 para informar ao usuário quando uma página não é encontrada.
   - Implementação de uma interface de usuário de carregamento pendente em caso de carregamento lento.
   - Mudança na posição do *toggle* do menu lateral, melhorando a experiência de navegação.
 - **Melhorias Técnicas:**
   - Correções de bugs e melhorias gerais na interface do usuário.
-  - Adição de comentários no código para facilitar o entendimento e manutenção.
   - Inclusão de exemplos de código na documentação para ilustrar funcionalidades e uso.
   - Adição de uma seção detalhada de instalação e configuração na documentação.
   - Implementação de testes unitários utilizando [jest](https://jestjs.io) para garantir a estabilidade e qualidade do código.
@@ -67,11 +82,8 @@ Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor 
 ### Projeto 1
 
 - **Documentação e Compreensão:**
-  - Adição de comentários detalhados no código para melhorar o entendimento.
-  - Inclusão de documentação específica sobre as funcionalidades de ordenação e filtro.
   - Adição de exemplos de código na documentação para ilustrar funcionalidades e uso.
 - **Funcionalidade**
-  - Implementação do hook useReducer() para melhor gerenciamento de estado.
   - Adição de um botão para remover as caixas, permitindo maior controle do usuário sobre os elementos exibidos além do clicar fora da caixa.
   - Adição da funcionalidade de não alternar elementos ao redefinir parâmetros.
   - Adição da coluna data de nascimento.
@@ -80,9 +92,9 @@ Este projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor 
   - Alteração do gif de carregamento para algo mais moderno e menos intrusivo.
   - Melhoria na responsividade da interface para dispositivos móveis.
 - **Acessibilidade e Feedback:**
-  - Adição de um texto indicativo quando a tabela estiver vazia.
   - Limitação do número de caracteres nos campos de entrada para evitar erros de digitação.
   - Melhoria na acessibilidade para garantir que todos os usuários possam interagir com a aplicação sem barreiras.
+  - Correção do filtro de telefone para permitir a adição de espaços.
 
 ### Projeto 2
 
