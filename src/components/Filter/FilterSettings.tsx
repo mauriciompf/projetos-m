@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Button from "../Button";
 import SortByBox from "./sortBy/SortByBox";
-
 import { useThemeContext } from "../../context/ThemeContext";
 import FilterBox from "./filter/FilterBox";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -12,35 +11,37 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
+import { tableLength } from "../../pages/Filter";
+import useFilterSettings from "../../customHooks/useFilterSettings";
 
+// FontAwesome library
 library.add(faSortDown, faSortUp, faSquareXmark);
 
-export default function FilterSettings({
-  tableLength,
-}: {
-  tableLength: number;
-}) {
+export default function FilterSettings() {
   const { theme } = useThemeContext();
-  // HACK Custom hook
-  const [toggleSortBy, setToggleSortBy] = useState(false);
-  const [toggleFilter, setToggleFilter] = useState(false);
-  const refSortByBtn = useRef<HTMLButtonElement | null>(null);
-  const refWrapSortBy = useRef<HTMLDivElement | null>(null);
-  const refWrapFilter = useRef(null);
-  const refFilterBtn = useRef(null);
   const { filtedTableLength, searchParams, statusParams } =
     useFilterSearchContext();
+  const {
+    toggleFilter,
+    toggleSortBy,
+    handleToggleSortBy,
+    handleToggleFilter,
+    isSortBy,
+    isFilter,
+    setToggleSortBy,
+    setToggleFilter,
+  } = useFilterSettings();
 
-  const handleToggleSortBy = () => setToggleSortBy((prev) => !prev);
-  const handleToggleFilter = () => setToggleFilter((prev) => !prev);
-
-  const isSortBy = searchParams.get("sortby") && searchParams.get("orderby");
-  const isFilter =
-    searchParams.has("value") && searchParams.get("value") !== "";
+  // Define refs for buttons and wrapper divs
+  const refSortByBtn = useRef<HTMLButtonElement | null>(null);
+  const refWrapSortBy = useRef<HTMLDivElement | null>(null);
+  const refWrapFilter = useRef<HTMLDivElement | null>(null);
+  const refFilterBtn = useRef<HTMLButtonElement | null>(null);
 
   return (
     <div className="relative mb-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
+        {/* Sort By Button and Box */}
         <div ref={refWrapSortBy} className="relative">
           <Button
             refBtn={refSortByBtn}
@@ -63,6 +64,7 @@ export default function FilterSettings({
           )}
         </div>
 
+        {/* Filter Button and Box */}
         <div ref={refWrapFilter} className="relative">
           <Button
             refBtn={refFilterBtn}
@@ -85,6 +87,7 @@ export default function FilterSettings({
           )}
         </div>
 
+        {/* Sorting and Filtering Info */}
         <div className="grid text-base">
           {isSortBy && (
             <span>
@@ -108,6 +111,7 @@ export default function FilterSettings({
         </div>
       </div>
 
+      {/* Results Info */}
       <p className="text-right">
         <em className="opacity-50">
           Exibindo {filtedTableLength} de {tableLength} Resultados
