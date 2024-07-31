@@ -51,9 +51,7 @@ export default function ThemeButton({
       <Button
         onClick={handleThemeNameChange}
         className={twMerge(
-          theme === "dark" ? "bg-white text-black" : "bg-black text-white",
-          !isHomePage && isOpenMenu && "gap-0",
-          "flex select-none gap-2 shadow-sm",
+          ` ${theme === "dark" ? "bg-white text-black" : "bg-black text-white"} flex select-none gap-2 shadow-sm`,
           className,
         )}
         aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
