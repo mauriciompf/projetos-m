@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import { useToggleContext } from "../../context/ToggleContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import tableHeaders from "../../utils/tableHeaders";
-import highlightText from "../../utils/highlightText";
+import { highlightText } from "../../utils/highlightText";
+import getSexNameTranslated from "../../utils/getSexNameTranslated";
 
 type UsersData = {
   id: number;
@@ -24,13 +25,14 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortby");
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
-  const { searchParams, statusParams, setFiltedTableLength } =
-    useFilterSearchContext();
+  const {
+    searchParams,
+    statusParams,
+    setFiltedTableLength,
+    filtedTableLength,
+  } = useFilterSearchContext();
 
-  const getSexNameTranslated = (sex: string) =>
-    sex === "female" ? "Feminino" : "Masculino";
-
-  const sortedUserData = () => {
+  const sortedUserData = useMemo(() => {
     const usersDataCopy = [...usersData];
     const descOrder = orderByParams.get("orderby") === "decrescente";
     const ascOrder = orderByParams.get("orderby") === "crescente";
@@ -61,14 +63,14 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     }
 
     return usersDataCopy;
-  };
+  }, [usersData, orderByParams, selectColumnSortBy]);
 
-  const filteredAndSortedUserData = () => {
+  const filteredAndSortedUserData = useMemo(() => {
     const inputSearch = searchParams.get("value")?.trim();
     const statusLabel = statusParams.get("status");
     const isNumber = /^[0-9]+$/;
     const filterUsers = (callback: (user: UsersData) => boolean) =>
-      sortedUserData().filter(callback);
+      sortedUserData.filter(callback);
 
     const getSearchCondition = () => {
       if ((!statusLabel && inputSearch === "Masculino") || !inputSearch) {
@@ -104,7 +106,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     const searchCondition = getSearchCondition();
 
     if (!searchCondition) {
-      return sortedUserData();
+      return sortedUserData;
     }
 
     return filterUsers(
@@ -112,68 +114,82 @@ export default function FilterTable({ usersData }: FilterTableProps) {
         ? searchCondition
         : (user) => !searchCondition(user),
     );
-  };
+  }, [sortedUserData, searchParams, statusParams, selectColumnFilter]);
 
+  // Update the length of the filtered table data whenever it changes
   useEffect(() => {
-    setFiltedTableLength(filteredAndSortedUserData().length);
-  }, [filteredAndSortedUserData().length]);
+    setFiltedTableLength(filteredAndSortedUserData.length);
+
+    if (filteredAndSortedUserData.length === 0) {
+    }
+  }, [filteredAndSortedUserData.length]);
 
   return (
-    <table className="relative w-full table-auto">
-      <thead>
-        <tr
-          className={`${theme === "dark" ? "bg-slate-700" : "bg-[#282A2D] text-white"} sticky top-0 z-10`}
-        >
-          {tableHeaders.map((header) => {
+    <>
+      <table className="relative w-full table-auto">
+        <thead>
+          <tr
+            className={`${theme === "dark" ? "bg-slate-700" : "bg-[#282A2D] text-white"} sticky top-0 z-10`}
+          >
+            {tableHeaders.map((header) => {
+              return (
+                <th className={`p-2`} key={header}>
+                  {header}
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {filteredAndSortedUserData.map((user) => {
+            const { id, firstName, age, gender, email, phone } = user;
+            const searchTerm = searchParams.get("value") || "";
             return (
-              <th className={`p-2`} key={header}>
-                {header}
-              </th>
+              <tr
+                className={`${theme === "dark" ? "odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
+                key={user.id}
+              >
+                <td className="text-center">
+                  {selectColumnFilter === "id"
+                    ? highlightText(id.toString(), searchTerm)
+                    : id}
+                </td>
+                <td className="p-2 text-center">
+                  {selectColumnFilter === "nome"
+                    ? highlightText(firstName, searchTerm)
+                    : firstName}
+                </td>
+                <td className="p-2 text-center">
+                  {selectColumnFilter === "idade"
+                    ? highlightText(age.toString(), searchTerm)
+                    : age}
+                </td>
+                <td className="p-2 text-center">
+                  {getSexNameTranslated(gender)}
+                </td>
+                <td className="p-2">
+                  {selectColumnFilter === "email"
+                    ? highlightText(email, searchTerm)
+                    : email}
+                </td>
+                <td className="p-2 text-center">
+                  {selectColumnFilter === "telefone"
+                    ? highlightText(phone, searchTerm)
+                    : phone}
+                </td>
+              </tr>
             );
           })}
-        </tr>
-      </thead>
-      <tbody>
-        {filteredAndSortedUserData().map((user) => {
-          const { id, firstName, age, gender, email, phone } = user;
-          const searchTerm = searchParams.get("value") || "";
-          return (
-            <tr
-              className={`${theme === "dark" ? "odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
-              key={user.id}
-            >
-              <td className="text-center">
-                {selectColumnFilter === "id"
-                  ? highlightText(id.toString(), searchTerm)
-                  : id}
-              </td>
-              <td className="p-2 text-center">
-                {selectColumnFilter === "nome"
-                  ? highlightText(firstName, searchTerm)
-                  : firstName}
-              </td>
-              <td className="p-2 text-center">
-                {selectColumnFilter === "idade"
-                  ? highlightText(age.toString(), searchTerm)
-                  : age}
-              </td>
-              <td className="p-2 text-center">
-                {getSexNameTranslated(gender)}
-              </td>
-              <td className="p-2">
-                {selectColumnFilter === "email"
-                  ? highlightText(email, searchTerm)
-                  : email}
-              </td>
-              <td className="p-2 text-center">
-                {selectColumnFilter === "telefone"
-                  ? highlightText(phone, searchTerm)
-                  : phone}
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+      {filtedTableLength === 0 && (
+        <div className="mt-10 grid select-none place-items-center gap-4 text-2xl">
+          <p>
+            <em>-- Sem valores --</em>
+          </p>
+          <p> (ノ#-_-)ノ ミ┴┴</p>
+        </div>
+      )}
+    </>
   );
 }
