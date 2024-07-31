@@ -1,20 +1,16 @@
 import { createContext } from "react";
-import useLocalStorage from "../customHooks/useLocalStorage";
+import { useLocalStorage } from "../customHooks/useLocalStorage";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 
-export interface ThemeValues {
+interface ThemeValues {
   theme: string;
   setLight: () => void;
   setDark: () => void;
 }
 
-type ThemeContextProviderProps = {
-  children: React.ReactNode;
-};
-
 const ThemeContext = createContext<ThemeValues | null>(null);
 
-function ThemeContextProvider({ children }: ThemeContextProviderProps) {
+function ThemeContextProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useLocalStorage({
     key: "theme",
     initialState: "dark",

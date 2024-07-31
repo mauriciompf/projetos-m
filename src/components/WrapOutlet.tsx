@@ -1,5 +1,4 @@
 import { useMenuContext } from "../context/MenuContext";
-import toggleThemeClasses from "../utils/toggleThemeClasses";
 import Heading from "./Heading";
 
 type WrapOutletProps = {
@@ -12,10 +11,7 @@ export default function WrapOutlet({ children, projectName }: WrapOutletProps) {
 
   return (
     <main
-      className={toggleThemeClasses(
-        isOpenMenu ? "ml-[300px]" : "ml-[60px]",
-        "mx-auto transition-all duration-500 ease-in-out",
-      )}
+      className={`${isOpenMenu ? "ml-[300px]" : "ml-[60px]"} ease-in-out" mx-auto transition-all duration-500`}
     >
       <section>
         <Heading className="pt-12 text-center tracking-wide" as={"h2"}>

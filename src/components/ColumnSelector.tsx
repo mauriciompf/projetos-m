@@ -3,6 +3,7 @@ import tableHeaders from "../utils/tableHeaders";
 import ListItem from "./ListItem";
 import HeaderControl from "./HeaderControl";
 import toCapitalizeCase from "../utils/toCapitalizeCase";
+import useSortByHandlers from "../customHooks/useSortByHandlers";
 
 type ColumnSelectorProps = {
   keyName: string;
@@ -14,12 +15,14 @@ export default function ColumnSelector({
   restrictedList,
 }: ColumnSelectorProps) {
   const {
+    selectColumnToggle,
+    handleSelectColumnToggle,
     removeSelectedColumn,
-    handleToggleSelectColumn,
     handleSelectColumn,
-    toggleSelectColumn,
     selectColumn,
   } = useToggleDropDown(keyName);
+
+  const { orderByToggle } = useSortByHandlers();
 
   return (
     <div>
@@ -31,13 +34,13 @@ export default function ColumnSelector({
         />
       ) : (
         <HeaderControl
-          onClick={handleToggleSelectColumn}
-          isDropDownOpen={toggleSelectColumn}
+          onClick={handleSelectColumnToggle}
+          isDropDownOpen={orderByToggle}
           headerLabel={"Selecione uma coluna"}
         />
       )}
 
-      {!selectColumn && toggleSelectColumn && (
+      {!selectColumn && selectColumnToggle && (
         <ul>
           {tableHeaders
             .filter(

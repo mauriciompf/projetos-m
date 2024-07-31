@@ -1,7 +1,7 @@
 import WrapSettingsBox from "../../WrapSettingsBox";
 import ColumnSelector from "../../ColumnSelector";
 import useClickOutside from "../../../customHooks/useClickOutside";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useRef } from "react";
 import HeaderControl from "../../HeaderControl";
 import ListItem from "../../ListItem";
 import { useThemeContext } from "../../../context/ThemeContext";
@@ -11,6 +11,7 @@ import toCapitalizeCase from "../../../utils/toCapitalizeCase";
 import Button from "../../Button";
 import ResetParams from "../../../utils/ResetParams";
 import { useNavigate } from "react-router-dom";
+import useFilterHandlers from "../../../customHooks/useFilterHandlers";
 
 type FilterBoxProps = {
   refFilterBtn: RefObject<HTMLButtonElement>;
@@ -21,70 +22,28 @@ export default function FilterBox({
   refFilterBtn,
   setToggleFilter,
 }: FilterBoxProps) {
-  const [statusToggle, setStatusToggle] = useState(false);
-  const refFilterBox = useRef<HTMLElement | null>(null);
-  useClickOutside(refFilterBox, refFilterBtn, () => setToggleFilter(false));
-  const { theme } = useThemeContext();
-  const { selectColumn } = useToggleDropDown("filter");
-  const { searchParams, setSearchParams, statusParams, setStatusParams } =
-    useFilterSearchContext();
   const statusLabels = ["É", "Não É"];
   const sexLabels = ["Masculino", "Feminino"];
+  const refFilterBox = useRef<HTMLElement | null>(null);
+  const { theme } = useThemeContext();
+  const { selectColumn } = useToggleDropDown("filter");
+  const { searchParams, statusParams } = useFilterSearchContext();
 
+  useClickOutside(refFilterBox, refFilterBtn, () => setToggleFilter(false));
   const navigate = useNavigate();
 
+  const {
+    statusToggle,
+    handleSelectSex,
+    handleStatusToggle,
+    handleStatusSelect,
+    handleOnChange,
+  } = useFilterHandlers();
+
+  // Redirect to the homepage when the back button is clicked
   window.onpopstate = () => {
     navigate("/");
   };
-
-  const handleSelectSex = (sex: string) => {
-    searchParams.set("value", sex);
-    setSearchParams(searchParams);
-  };
-
-  const handleStatusToggle = () => setStatusToggle((prev) => !prev);
-
-  const updateUrl = () => {
-    const newSearchParams = new URLSearchParams(window.location.search);
-
-    for (let [key, value] of statusParams.entries()) {
-      newSearchParams.set(key, decodeURIComponent(value));
-    }
-
-    navigate(
-      {
-        pathname: window.location.pathname,
-        search: newSearchParams.toString(),
-      },
-      { replace: true },
-    );
-  };
-
-  const handleStatusSelect = (status: string) => {
-    setStatusToggle(false);
-    statusParams.set("status", encodeURIComponent(status.toLowerCase()));
-    setStatusParams(statusParams);
-    updateUrl();
-  };
-
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = new RegExp("[^a-zA-Z0-9]", "g");
-    const val = e.target.value.replace(regex, "");
-
-    if (!statusParams.has("status")) return;
-
-    if (selectColumn) {
-      searchParams.set("value", val);
-      setSearchParams(searchParams);
-    }
-  };
-
-  useEffect(() => {
-    if (!selectColumn) {
-      searchParams.delete("value");
-      setSearchParams(searchParams);
-    }
-  }, [selectColumn]);
 
   return (
     <WrapSettingsBox

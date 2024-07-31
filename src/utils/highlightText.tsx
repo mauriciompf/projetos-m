@@ -1,13 +1,14 @@
 import { useThemeContext } from "../context/ThemeContext";
 
-const highlightText = (text: string, highlight: string) => {
-  const regex = new RegExp(`(${highlight})`, "gi");
-  const parts = text.split(regex);
+const highlightText = (str: string, highlight: string) => {
   const { theme } = useThemeContext();
+  const regex = new RegExp(`(${highlight})`, "gi");
+  const parts = str.split(regex);
 
   return (
     <>
       {parts.filter(String).map((part, index) =>
+        // Check if the current part matches the highlight letter
         part.toLowerCase() === highlight.toLowerCase() ? (
           <span
             key={index}
@@ -23,4 +24,4 @@ const highlightText = (text: string, highlight: string) => {
   );
 };
 
-export default highlightText;
+export { highlightText };
