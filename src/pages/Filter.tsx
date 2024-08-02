@@ -23,7 +23,7 @@ export default function Filter() {
           {isError && <p>Error...</p>}
           {usersData && (
             <>
-              <section className="mx-auto my-10 w-[min(850px,_100%)] text-lg">
+              <section className="mx-auto my-10 w-[min(950px,_100%)] text-lg">
                 <FilterSettings />
                 <FilterTable usersData={usersData} />
               </section>
