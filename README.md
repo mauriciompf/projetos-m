@@ -73,6 +73,7 @@ Uma aplicação que demonstra a capacidade de filtrar e organizar de forma bási
   - Mudança na posição do *toggle* do menu lateral, melhorando a experiência de navegação.
 - **Melhorias Técnicas:**
   - Correções de bugs e melhorias gerais na interface do usuário.
+  - Atualização de Nomes e Estrutura: Renomear diretórios e arquivos para melhorar a clareza e organização do projeto.
   - Inclusão de exemplos de código na documentação para ilustrar funcionalidades e uso.
   - Adição de uma seção detalhada de instalação e configuração na documentação.
   - Implementação de testes unitários utilizando [jest](https://jestjs.io) para garantir a estabilidade e qualidade do código.
