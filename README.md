@@ -10,7 +10,7 @@ O projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web
 
 ## Projeto 1 - Ordenação e Filtro
 
-Uma aplicação que demonstra a capacidade de filtrar e organizar de forma básica dados provenientes da API gratuita [DummyJSON](https://dummyjson.com/docs/users). O objetivo foi criar uma interface que permite aos usuários gerenciar e visualizar dados de forma eficiente. A aplicação utiliza uma tabela para exibir informações de usuários, oferecendo funcionalidades de ordenação e filtragem para facilitar a análise dos dados.
+Uma aplicação que demonstra a capacidade de filtrar e organizar de forma básica dados provenientes da API gratuita [DummyJSON](https://dummyjson.com/docs/users). O objetivo foi criar uma interface que permite aos usuários gerenciar e visualizar dados em uma tabela de forma eficiente. A aplicação utiliza uma tabela para exibir informações de usuários, oferecendo funcionalidades de ordenação e filtragem para facilitar a análise dos dados.
 
 ## Funcionalidades
 
