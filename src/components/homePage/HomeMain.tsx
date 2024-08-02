@@ -5,7 +5,7 @@ export default function HomeMain() {
   return (
     <main>
       <section className="grid place-items-center">
-        <ul className={`grid grid-cols-${projectList.length} gap-4`}>
+        <ul className={`flex gap-4`}>
           {projectList.map((project, index) => (
             <li
               key={index}
