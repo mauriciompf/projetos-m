@@ -14,6 +14,7 @@ type UsersData = {
   gender: string;
   email: string;
   phone: string;
+  birthDate: string;
 };
 
 type FilterTableProps = {
@@ -142,7 +143,8 @@ export default function FilterTable({ usersData }: FilterTableProps) {
         </thead>
         <tbody>
           {filteredAndSortedUserData.map((user) => {
-            const { id, firstName, age, gender, email, phone } = user;
+            const { id, firstName, age, gender, email, phone, birthDate } =
+              user;
             const searchTerm = searchParams.get("value") || "";
             return (
               <tr
@@ -177,6 +179,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
                     ? highlightText(phone, searchTerm)
                     : phone}
                 </td>
+                <td className="p-2 text-center">{birthDate}</td>
               </tr>
             );
           })}
