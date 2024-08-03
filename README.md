@@ -59,19 +59,13 @@ Uma aplicação que demonstra a capacidade de filtrar e organizar de forma bási
 ### Geral
 
 - **Melhorias de Usabilidade:**
-  - Adição de teclas de atalho para uma melhor navegação.
-  - Adicão de uma fonte diferente.
-  - Exibir um pop-up no menu lateral para facilitar o retorno aos projetos.
+  - Exibir um pop-up no menu lateral para facilitar o retorno a página principal.
   - *Implementação de teclas de atalho para navegação rápida entre as páginas.*
-  - Sincronização do tempo de duração das transições para uma experiência de usuário mais fluida.
-- **Design e Estética:**
-  - Alteração da paleta de cores dos projetos na página inicial para uma aparência mais harmoniosa.
+<!-- - **Design e Estética:** -->
 - **Acessibilidade e Feedback:**
   - Adição de uma página de erro 404 para informar ao usuário quando uma página não é encontrada.
   - *Implementação de uma interface de usuário de carregamento pendente em caso de carregamento lento.*
-  - Mudança na posição do *toggle* do menu lateral, melhorando a experiência de navegação.
 - **Melhorias Técnicas:**
-  - Correções de bugs e melhorias gerais na interface do usuário.
   - *Inclusão de exemplos de código na documentação para ilustrar funcionalidades e uso.*
   - *Adição de uma seção detalhada de instalação e configuração na documentação.*
   - *Implementação de testes unitários utilizando [jest](https://jestjs.io) para garantir a estabilidade e qualidade do código.*
@@ -83,10 +77,10 @@ Uma aplicação que demonstra a capacidade de filtrar e organizar de forma bási
 - **Documentação e Compreensão:**
   - *Adição de exemplos de código na documentação para ilustrar funcionalidades e uso.*
 - **Funcionalidade**
+  - Remover parâmetros dos status quando a coluna "sexo" for selecionada no filtro.
   - *Fixar registros no topo da tabela abaixo do cabeçalho*
   - *Adicionar filtro para a coluna de data de nascimento*
 - **Interface e Design**:
-  - Mudança do fundo das caixas para um design mais atrativo.
   - Alteração do gif de carregamento para algo mais moderno e menos intrusivo.
   - Melhoria na responsividade da interface para dispositivos móveis.
 - **Acessibilidade e Feedback:**
