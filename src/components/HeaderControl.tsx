@@ -2,10 +2,16 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useThemeContext } from "../context/ThemeContext";
 import Button from "./Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-const upIcon = <FontAwesomeIcon icon={"fa-solid fa-sort-up" as IconProp} />;
-const downIcon = <FontAwesomeIcon icon={"fa-solid fa-sort-down" as IconProp} />;
-const removeButton = (
-  <FontAwesomeIcon icon={"fa-solid fa-square-xmark" as IconProp} />
+import { twMerge } from "tailwind-merge";
+const downIcon = (
+  <FontAwesomeIcon
+    width={15}
+    height={15}
+    icon={"fa-solid fa-chevron-down" as IconProp}
+  />
+);
+const removeButtonIcon = (
+  <FontAwesomeIcon icon={"fa-solid fa-circle-xmark" as IconProp} />
 );
 
 type HeaderControlProps = {
@@ -13,13 +19,14 @@ type HeaderControlProps = {
   isDropDownOpen?: boolean;
   headerLabel: string | URLSearchParams | null;
   isRemoveButton?: boolean;
+  className?: string;
 };
 
 export default function HeaderControl({
   onClick,
-  isDropDownOpen,
   headerLabel,
   isRemoveButton = false,
+  className,
 }: HeaderControlProps) {
   const { theme } = useThemeContext();
 
@@ -32,21 +39,20 @@ export default function HeaderControl({
         onClick={onClick}
         className="py-0 ring-transparent hover:text-red-500 focus:text-red-500"
       >
-        {removeButton}
+        {removeButtonIcon}
       </Button>
     </div>
   ) : (
     <Button
       onClick={onClick}
-      className={`flex w-full select-none items-center gap-2 border p-2 ${theme === "dark" ? "border-white" : "border-black"} `}
+      className={twMerge(
+        ` ${theme === "dark" ? "border-white" : "border-black"} flex w-full select-none items-center justify-between gap-2 border p-2`,
+        className,
+      )}
     >
-      <span>{headerLabel}</span>
+      <strong>{headerLabel}</strong>
 
-      <span
-        className={`relative ${isDropDownOpen ? "top-[.25rem]" : "-top-[.25rem]"} text-xl leading-none`}
-      >
-        {isDropDownOpen ? upIcon : downIcon}
-      </span>
+      <span className={`relative text-xl leading-none`}>{downIcon}</span>
     </Button>
   );
 }
