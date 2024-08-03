@@ -61,6 +61,16 @@ export default function FilterTable({ usersData }: FilterTableProps) {
           return usersDataCopy.sort((a, b) => b.age - a.age);
         }
         break;
+case "data de nasc.":
+        if (ascOrder) {
+          return usersDataCopy.sort((a, b) =>
+            a.birthDate.localeCompare(b.birthDate),
+          );
+        } else if (descOrder) {
+          return usersDataCopy.sort((a, b) =>
+            b.birthDate.localeCompare(a.birthDate),
+          );
+        }
     }
 
     return usersDataCopy;
