@@ -36,7 +36,8 @@ export default function ColumnSelector({
         <HeaderControl
           onClick={handleSelectColumnToggle}
           isDropDownOpen={orderByToggle}
-          headerLabel={"Selecione uma coluna"}
+          headerLabel={"Coluna"}
+          className="w-[9.375rem]"
         />
       )}
 
