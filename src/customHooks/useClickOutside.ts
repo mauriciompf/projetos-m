@@ -13,7 +13,8 @@ const useClickOutside = (
       if (
         ref.current && // Ensure ref element exists
         !ref.current.contains(ElementTarget) &&
-        refButton.current !== ElementTarget
+        refButton.current &&
+        !refButton.current.contains(ElementTarget)
       ) {
         callback(); // Call the callback function if click is outside
       }
