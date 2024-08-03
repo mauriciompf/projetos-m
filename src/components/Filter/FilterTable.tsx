@@ -4,10 +4,10 @@ import { useThemeContext } from "../../context/ThemeContext";
 import { useToggleContext } from "../../context/ToggleContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import tableHeaders from "../../utils/tableHeaders";
-import { highlightText } from "../../utils/highlightText";
 import getSexNameTranslated from "../../utils/getSexNameTranslated";
+import UserRow from "./UserRow";
 
-type UsersData = {
+export type UsersData = {
   id: number;
   firstName: string;
   age: number;
@@ -33,6 +33,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
     filtedTableLength,
   } = useFilterSearchContext();
 
+  // # TODO Simplify code
   const sortedUserData = useMemo(() => {
     const usersDataCopy = [...usersData];
     const descOrder = orderByParams.get("orderby") === "decrescente";
@@ -61,7 +62,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
           return usersDataCopy.sort((a, b) => b.age - a.age);
         }
         break;
-case "data de nasc.":
+      case "data de nasc.":
         if (ascOrder) {
           return usersDataCopy.sort((a, b) =>
             a.birthDate.localeCompare(b.birthDate),
@@ -76,6 +77,7 @@ case "data de nasc.":
     return usersDataCopy;
   }, [usersData, orderByParams, selectColumnSortBy]);
 
+  // # TODO Simplify code
   const filteredAndSortedUserData = useMemo(() => {
     const inputSearch = searchParams.get("value")?.trim();
     const statusLabel = statusParams.get("status");
@@ -152,47 +154,9 @@ case "data de nasc.":
           </tr>
         </thead>
         <tbody>
-          {filteredAndSortedUserData.map((user) => {
-            const { id, firstName, age, gender, email, phone, birthDate } =
-              user;
-            const searchTerm = searchParams.get("value") || "";
-            return (
-              <tr
-                className={`${theme === "dark" ? "odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
-                key={user.id}
-              >
-                <td className="text-center">
-                  {selectColumnFilter === "id"
-                    ? highlightText(id.toString(), searchTerm)
-                    : id}
-                </td>
-                <td className="p-2 text-center">
-                  {selectColumnFilter === "nome"
-                    ? highlightText(firstName, searchTerm)
-                    : firstName}
-                </td>
-                <td className="p-2 text-center">
-                  {selectColumnFilter === "idade"
-                    ? highlightText(age.toString(), searchTerm)
-                    : age}
-                </td>
-                <td className="p-2 text-center">
-                  {getSexNameTranslated(gender)}
-                </td>
-                <td className="p-2">
-                  {selectColumnFilter === "email"
-                    ? highlightText(email, searchTerm)
-                    : email}
-                </td>
-                <td className="p-2 text-center">
-                  {selectColumnFilter === "telefone"
-                    ? highlightText(phone, searchTerm)
-                    : phone}
-                </td>
-                <td className="p-2 text-center">{birthDate}</td>
-              </tr>
-            );
-          })}
+          {filteredAndSortedUserData.map((user) => (
+            <UserRow user={user} key={user.id} />
+          ))}
         </tbody>
       </table>
       {filtedTableLength === 0 && (
