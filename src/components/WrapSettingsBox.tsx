@@ -18,7 +18,7 @@ export default function WrapSettingsBox({
     <article
       ref={refElem}
       className={twMerge(
-        `${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} absolute left-0 top-14 z-50 flex w-max items-baseline gap-2 rounded-md p-4`,
+        `${theme === "dark" ? "border-none bg-[#25282A]" : "bg-white"} absolute left-0 top-14 z-50 flex w-max items-baseline rounded-md border border-gray-300 p-4 shadow-2xl`,
         className,
       )}
     >
