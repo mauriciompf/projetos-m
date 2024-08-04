@@ -139,10 +139,10 @@ export default function FilterTable({ usersData }: FilterTableProps) {
 
   return (
     <>
-      <table className="relative w-full table-auto">
+      <table className="relative w-full">
         <thead>
           <tr
-            className={`${theme === "dark" ? "bg-slate-700" : "bg-[#282A2D] text-white"} sticky top-0 z-10`}
+            className={`${theme === "dark" ? "bg-slate-700 text-gray-300" : "bg-[#282A2D] text-gray-200"} sticky top-[4.75rem] z-0`}
           >
             {tableHeaders.map((header) => {
               return (
