@@ -39,7 +39,7 @@ export default function SideBarHeader() {
       >
         <Link
           className={`${!isOpenMenu && "pointer-events-none"} flex items-center gap-2`}
-          to={"/"}
+          to={"/mauricioProjetos"}
         >
           <span className="cursor-pointer text-lg">🏠</span>
           <span className="text-2xl hover:underline focus:underline">

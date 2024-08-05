@@ -5,14 +5,14 @@ import Filter from "./pages/Filter";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/mauricioProjetos",
     element: <HomePage />,
   },
   {
     element: <SideBar />,
     children: [
       {
-        path: "/pages/filter",
+        path: "/mauricioProjetos/pages/filter",
         element: <Filter />,
       },
     ],

@@ -1,3 +1,5 @@
+import img from "../../assets/images/image.png";
+
 type Projects = {
   demoImg?: string;
   label: string;
@@ -6,7 +8,7 @@ type Projects = {
 
 const projectList: Projects[] = [
   {
-    demoImg: "./image.png",
+    demoImg: img,
     label: "Ordenação e Filtro",
     icon: "📊",
   },

@@ -143,12 +143,11 @@ export default function FilterTable({ usersData }: FilterTableProps) {
 
   return (
     <>
-      <div className="mx-6 overflow-auto max-md:max-h-[350px] min-[1200px]:mx-0">
+      <div className="mx-6 max-[1240px]:overflow-x-auto max-md:max-h-[350px] min-[1240px]:mx-0">
         <table className="w-full whitespace-nowrap">
-          {/* // sticky top-[4.75rem] z-0 */}
-          <thead className="sticky top-0 z-0">
+          <thead className="">
             <tr
-              className={`${theme === "dark" ? "bg-slate-700 text-gray-100" : "bg-[#282A2D] text-gray-100"} `}
+              className={`${theme === "dark" ? "bg-slate-700 text-gray-100" : "bg-[#282A2D] text-gray-100"} sticky z-0 min-[1240px]:top-[4.75rem]`}
             >
               {tableHeaders.map((header) => {
                 return (

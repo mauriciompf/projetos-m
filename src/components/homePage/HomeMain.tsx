@@ -12,13 +12,13 @@ export default function HomeMain() {
               className="cursor-pointer rounded-2xl bg-[#4363D2] text-white shadow-2xl transition-all duration-300 hover:scale-110"
             >
               <Link
-                to={"../pages/filter"}
+                to={"/mauricioProjetos/pages/filter"}
                 className="grid aspect-video size-60 text-center text-2xl"
               >
                 <img
                   src={project.demoImg}
                   draggable={false}
-                  className="rounded-t-2xl shadow-2xl"
+                  className="rounded-t-2xl"
                   alt=""
                 />
                 {project.label}
