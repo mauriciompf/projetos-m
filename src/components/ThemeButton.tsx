@@ -36,7 +36,6 @@ export default function ThemeButton({
       "text-white",
       `text-black`,
     );
-    bodyClassList.add("transition-colors", "duration-300", "ease-in-out");
 
     if (theme === "dark") {
       bodyClassList.add(`bg-[#181a1b]`, "text-white");
@@ -51,16 +50,16 @@ export default function ThemeButton({
       <Button
         onClick={handleThemeNameChange}
         className={twMerge(
-          ` ${theme === "dark" ? "bg-white text-black" : "bg-black text-white"} flex select-none gap-2 shadow-sm`,
+          ` ${theme === "dark" ? "bg-white text-black" : "bg-black text-white"} ${isHomePage && isOpenMenu && "px-3 py-2"} flex select-none gap-2 rounded-2xl shadow-sm`,
           className,
         )}
         aria-label={`Change to ${themeName === "dark" ? "dark" : "light"} theme`}
       >
-        <span draggable={false}>
+        <span draggable={false} className="select-none">
           {themeName === "dark" ? darkIcon : lightIcon}
         </span>
         <span
-          className={`transition-all duration-300 ease-in-out ${!isHomePage && !isOpenMenu && "w-0 opacity-0"}`}
+          className={`${!isHomePage && !isOpenMenu && "w-0 opacity-0"} transition-all duration-300 ease-in-out`}
         >
           {themeName === "dark" ? "Escuro" : "Claro"}
         </span>

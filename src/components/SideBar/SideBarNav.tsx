@@ -7,7 +7,7 @@ export default function SideBarNav() {
   const { theme } = useThemeContext();
 
   return (
-    <section className={`isOpenMenu && "ml-5"`}>
+    <section>
       <nav>
         <ul className={`grid gap-y-4 text-xl`}>
           {projectList.map((listItem) => (
@@ -21,7 +21,7 @@ export default function SideBarNav() {
                         ? "hover:bg-white hover:text-black focus:bg-white focus:text-black"
                         : "hover:bg-black hover:text-white focus:bg-black focus:text-white"
                     }`
-              } relative -left-1 flex items-center gap-3 rounded-md`}
+              } relative -left-1 flex items-center gap-3 whitespace-nowrap rounded-md`}
             >
               <span
                 className={`${
@@ -36,7 +36,7 @@ export default function SideBarNav() {
                 {listItem.icon}
               </span>
               <span
-                className={`${!isOpenMenu && "pointer-events-none opacity-0 transition-opacity"}`}
+                className={`${!isOpenMenu ? "pointer-events-none opacity-0" : "opacity-100"} transition-opacity duration-0`}
               >
                 {listItem.label}
               </span>

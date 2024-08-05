@@ -2,24 +2,22 @@ import { useThemeContext } from "../context/ThemeContext";
 
 const highlightText = (str: string, highlight: string) => {
   const { theme } = useThemeContext();
-  const regex = new RegExp(`(${highlight})`, "gi");
-  const parts = str.split(regex);
+  const index = str.toLowerCase().indexOf(highlight.toLowerCase());
+
+  if (index === -1) {
+    // If the highlight string is not found, return the original string
+    return <>{str}</>;
+  }
+
+  const highlightedText = str.slice(index, index + highlight.length);
+  const restText = str.slice(index + highlight.length);
 
   return (
     <>
-      {parts.filter(String).map((part, index) =>
-        // Check if the current part matches the highlight letter
-        part.toLowerCase() === highlight.toLowerCase() ? (
-          <span
-            key={index}
-            className={`${theme === "dark" ? "bg-gray-700" : "bg-slate-400"}`}
-          >
-            {part}
-          </span>
-        ) : (
-          part
-        ),
-      )}
+      <span className={`${theme === "dark" ? "bg-gray-700" : "bg-slate-400"}`}>
+        {highlightedText}
+      </span>
+      {restText}
     </>
   );
 };

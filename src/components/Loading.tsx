@@ -12,8 +12,8 @@ export default function Loading() {
     isLoading && (
       <section className="mt-32 grid place-items-center">
         <img
-          src="/InternetSlowdown_Day.gif"
-          className="size-32 mix-blend-multiply"
+          src="/thinking-face-thinking.gif"
+          className="size-32"
           alt="Loading..."
         />
       </section>

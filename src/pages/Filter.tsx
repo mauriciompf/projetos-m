@@ -16,22 +16,25 @@ export default function Filter() {
   );
 
   return (
-    <FilterSearchProvider>
-      <ToggleContextProvider>
-        <WrapOutlet projectName="Ordenação e Filtro">
-          <Loading />
-          {isError && <p>Error...</p>}
-          {usersData && (
-            <>
-              <section className="mx-auto my-10 w-[min(850px,_100%)] text-lg">
-                <FilterSettings />
-                <FilterTable usersData={usersData} />
-              </section>
-            </>
-          )}
-        </WrapOutlet>
-      </ToggleContextProvider>
-    </FilterSearchProvider>
+    <div className="overflow-hidden selection:bg-blue-400">
+      <FilterSearchProvider>
+        <ToggleContextProvider>
+          <WrapOutlet projectName="Ordenação e Filtro">
+            {isError && <p>Error...</p>}
+
+            <section className="mx-auto my-0 w-[min(950px,_100%)] text-lg md:my-10">
+              <Loading />
+              {usersData && (
+                <>
+                  <FilterSettings />
+                  <FilterTable usersData={usersData} />
+                </>
+              )}
+            </section>
+          </WrapOutlet>
+        </ToggleContextProvider>
+      </FilterSearchProvider>
+    </div>
   );
 }
 

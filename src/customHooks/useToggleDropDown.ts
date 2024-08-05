@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useToggleContext } from "../context/ToggleContext";
 import tableHeaders from "../utils/tableHeaders";
+import { useFilterSearchContext } from "../context/FilterSearchContext";
 
 const useToggleDropDown = (key: string) => {
   const { setSelectColumn, selectColumnMap } = useToggleContext();
   const [selectColumnToggle, setSelectColumnToggle] = useState(false);
   const orderByLabels = ["Crescente", "Decrescente", "Padrão"];
+  const { searchParams, setSearchParams } = useFilterSearchContext();
 
   const handleSelectColumnToggle = () => setSelectColumnToggle((prev) => !prev);
 
@@ -16,6 +18,8 @@ const useToggleDropDown = (key: string) => {
       orderByLabels.toString().toLowerCase().includes(column)
     ) {
       setSelectColumn(key, ""); // Remove selected column value from params
+      searchParams.delete(key);
+      setSearchParams(new URLSearchParams(searchParams));
     }
   };
 

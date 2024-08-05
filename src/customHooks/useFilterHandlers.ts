@@ -43,7 +43,7 @@ const useFilterHandlers = () => {
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = new RegExp("[^a-z0-9]", "gi"); // Allow only letters and numbers in input
+    const regex = new RegExp("[^a-z0-9][/S]", "gi"); // Allow only letters and numbers in input
     const inputValue = e.target.value.replace(regex, "");
 
     if (!statusParams.has("status")) return; // Prevent setting input value when status is not defined

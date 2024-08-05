@@ -3,19 +3,26 @@ import Button from "../Button";
 import SortByBox from "./sortBy/SortByBox";
 import { useThemeContext } from "../../context/ThemeContext";
 import FilterBox from "./filter/FilterBox";
-import { library } from "@fortawesome/fontawesome-svg-core";
+import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faSortDown,
-  faSortUp,
-  faSquareXmark,
+  faCircleXmark,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 import { tableLength } from "../../pages/Filter";
 import useFilterSettings from "../../customHooks/useFilterSettings";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+const downIcon = (
+  <FontAwesomeIcon
+    width={15}
+    height={15}
+    icon={"fa-solid fa-chevron-down" as IconProp}
+  />
+);
 
 // FontAwesome library
-library.add(faSortDown, faSortUp, faSquareXmark);
+library.add(faCircleXmark, faChevronDown);
 
 export default function FilterSettings() {
   const { theme } = useThemeContext();
@@ -38,53 +45,60 @@ export default function FilterSettings() {
   const refWrapFilter = useRef<HTMLDivElement | null>(null);
   const refFilterBtn = useRef<HTMLButtonElement | null>(null);
 
+  const buttonSettingsClass = `${theme === "dark" ? "bg-[#25282A] border-transparent" : "border-gray-300"} border relative select-none rounded-3xl px-2 py-2 font-bold`;
+  const onBoxClass = `${toggleSortBy && "animate-pulse"} absolute -right-0 -top-0 size-3 rounded-full bg-green-400 z-50`;
+
   return (
-    <div className="relative mb-4 flex items-center justify-between">
-      <div className="flex items-center gap-4">
+    <div
+      className={`${theme === "dark" ? "bg-[#181a1b]" : "bg-white"} sticky top-0 z-10 flex flex-col items-center justify-between gap-y-4 px-6 py-4 lg:flex-row min-[1250px]:px-0`}
+    >
+      <div className="flex flex-col items-center gap-4 md:flex-row">
         {/* Sort By Button and Box */}
-        <div ref={refWrapSortBy} className="relative">
-          <Button
-            refBtn={refSortByBtn}
-            onClick={handleToggleSortBy}
-            className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} select-none rounded-md px-2 py-2 font-bold`}
-          >
-            {isSortBy && (
-              <span
-                className={`absolute -right-1 -top-1 size-3 ${toggleSortBy && "animate-pulse"} rounded-full bg-green-400`}
-              ></span>
+        <div className="flex items-center gap-4">
+          <div ref={refWrapSortBy} className="relative">
+            <Button
+              refBtn={refSortByBtn}
+              onClick={handleToggleSortBy}
+              className={buttonSettingsClass}
+            >
+              {isSortBy && <span className={onBoxClass}></span>}
+              <strong>
+                <span className="max-[420px]:hidden">
+                  {toggleSortBy ? "📂" : "📁"}
+                </span>{" "}
+                Organizar {downIcon}
+              </strong>
+            </Button>
+
+            {toggleSortBy && (
+              <SortByBox
+                refSortByBtn={refSortByBtn}
+                setToggleSortBy={setToggleSortBy}
+              />
             )}
-            {toggleSortBy ? "📂" : "📁"} Organizar
-          </Button>
+          </div>
 
-          {toggleSortBy && (
-            <SortByBox
-              refSortByBtn={refSortByBtn}
-              setToggleSortBy={setToggleSortBy}
-            />
-          )}
-        </div>
+          {/* Filter Button and Box */}
+          <div ref={refWrapFilter} className="relative">
+            <Button
+              refBtn={refFilterBtn}
+              onClick={handleToggleFilter}
+              className={buttonSettingsClass}
+            >
+              {isFilter && <span className={onBoxClass}></span>}
+              <strong>
+                <span className="max-[420px]:hidden">🔍</span> Filtrar{" "}
+                {downIcon}
+              </strong>
+            </Button>
 
-        {/* Filter Button and Box */}
-        <div ref={refWrapFilter} className="relative">
-          <Button
-            refBtn={refFilterBtn}
-            onClick={handleToggleFilter}
-            className={`${theme === "dark" ? "bg-[#25282A]" : "bg-slate-300"} relative select-none rounded-md px-2 py-2 font-bold`}
-          >
-            {isFilter && (
-              <span
-                className={`absolute -right-1 -top-1 size-3 ${toggleFilter && "animate-pulse"} rounded-full bg-green-400`}
-              ></span>
+            {toggleFilter && (
+              <FilterBox
+                refFilterBtn={refFilterBtn}
+                setToggleFilter={setToggleFilter}
+              />
             )}
-            🔍 Filtrar
-          </Button>
-
-          {toggleFilter && (
-            <FilterBox
-              refFilterBtn={refFilterBtn}
-              setToggleFilter={setToggleFilter}
-            />
-          )}
+          </div>
         </div>
 
         {/* Sorting and Filtering Info */}
@@ -93,8 +107,7 @@ export default function FilterSettings() {
             <span>
               Ordenado por{" "}
               <strong>{toCapitalizeCase(searchParams.get("sortby"))}</strong> em
-              Ordem{" "}
-              <strong>{toCapitalizeCase(searchParams.get("orderby"))}</strong>
+              ordem <strong>{searchParams.get("orderby")}</strong>
             </span>
           )}
 
@@ -105,7 +118,7 @@ export default function FilterSettings() {
               {statusParams.has("status")
                 ? ` (${statusParams.get("status")})`
                 : ":"}{" "}
-              <strong>{toCapitalizeCase(searchParams.get("value"))}</strong>
+              <strong>{searchParams.get("value")}</strong>
             </span>
           )}
         </div>
@@ -113,7 +126,7 @@ export default function FilterSettings() {
 
       {/* Results Info */}
       <p className="text-right">
-        <em className="opacity-50">
+        <em>
           Exibindo {filtedTableLength} de {tableLength} Resultados
         </em>
       </p>
