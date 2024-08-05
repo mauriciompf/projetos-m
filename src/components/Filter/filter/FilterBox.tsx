@@ -48,12 +48,13 @@ export default function FilterBox({
   return (
     <WrapSettingsBox
       refElem={refFilterBox}
-      className={`grid ${searchParams.has("filter") && searchParams.has("status") && "pt-2"}`}
+      className={`-left-[120px] grid md:left-0 ${searchParams.has("filter") && searchParams.has("status") && "pt-0"}`}
     >
       <ResetParams valueOne="filter" valueTwo="status" valueThree="value" />
 
-      <div className="flex gap-2">
-        <ColumnSelector keyName="filter" />
+      <div className="flex flex-col gap-2 md:flex-row">
+        <ColumnSelector keyName="filter" restrictedList={["Data de Nasc."]} />
+
         {selectColumn !== "sexo" && (
           <div>
             <HeaderControl
@@ -64,6 +65,7 @@ export default function FilterBox({
                   )) ||
                 "Status"
               }
+              className="w-[6.25rem]"
               onClick={handleStatusToggle}
               isDropDownOpen={statusToggle}
             />
@@ -96,8 +98,9 @@ export default function FilterBox({
           ) : (
             <input
               type="text"
-              className={`border ${theme === "dark" ? "border-white" : "border-black"} bg-transparent p-2 outline-none hover:ring-4`}
-              placeholder="👌"
+              className={`border ${theme === "dark" ? "border-white" : "border-black"} w-[10rem] bg-transparent p-2 outline-none placeholder:opacity-50 hover:ring-4`}
+              placeholder="👀"
+              maxLength={27}
               value={
                 searchParams.has("value")
                   ? decodeURIComponent(searchParams.get("value")!)

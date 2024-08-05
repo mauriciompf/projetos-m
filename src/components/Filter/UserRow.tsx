@@ -12,7 +12,7 @@ type UserRowProps = {
 
 export default function UserRow({ user }: UserRowProps) {
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
-  const { searchParams } = useFilterSearchContext();
+  const { searchParams, statusParams } = useFilterSearchContext();
   const { theme } = useThemeContext();
 
   const { id, firstName, age, gender, email, phone, birthDate } = user;
@@ -22,6 +22,10 @@ export default function UserRow({ user }: UserRowProps) {
   // columnName: name of the column
   // dataValue: the exact data value extracted from the API
   const highLightMatch = (columnName: string, dataValue: string | number) => {
+    if (statusParams.get("status") === "não é") {
+      return dataValue;
+    }
+
     if (selectColumnFilter === columnName) {
       return highlightText(dataValue.toString(), searchTerm);
     }
@@ -31,7 +35,7 @@ export default function UserRow({ user }: UserRowProps) {
 
   return (
     <tr
-      className={`${theme === "dark" ? "odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
+      className={`${theme === "dark" ? "text-gray-300 odd:bg-[#25282a] even:bg-[#181a1b]" : "text-black odd:bg-slate-300 even:bg-white"} `}
     >
       <td className="text-center">{highLightMatch("id", id)}</td>
       <td className="p-2 text-center">{highLightMatch("nome", firstName)}</td>

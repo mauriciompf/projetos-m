@@ -16,20 +16,21 @@ export default function Filter() {
   );
 
   return (
-    <div className="selection:bg-blue-400">
+    <div className="overflow-hidden selection:bg-blue-400">
       <FilterSearchProvider>
         <ToggleContextProvider>
           <WrapOutlet projectName="Ordenação e Filtro">
-            <Loading />
             {isError && <p>Error...</p>}
-            {usersData && (
-              <>
-                <section className="relative mx-auto my-10 w-[min(950px,_100%)] text-lg">
+
+            <section className="mx-auto my-0 w-[min(950px,_100%)] text-lg md:my-10">
+              <Loading />
+              {usersData && (
+                <>
                   <FilterSettings />
                   <FilterTable usersData={usersData} />
-                </section>
-              </>
-            )}
+                </>
+              )}
+            </section>
           </WrapOutlet>
         </ToggleContextProvider>
       </FilterSearchProvider>

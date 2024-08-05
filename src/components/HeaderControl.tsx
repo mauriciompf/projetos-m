@@ -32,7 +32,10 @@ export default function HeaderControl({
 
   return isRemoveButton ? (
     <div
-      className={`${theme === "dark" ? "border-white" : "border-black"} flex select-none items-center gap-1 border border-black p-2`}
+      className={twMerge(
+        `${theme === "dark" ? "border-white" : "border-black"} flex select-none items-center justify-between gap-1 border p-2`,
+        className,
+      )}
     >
       <span className="font-bold">{headerLabel}</span>
       <Button

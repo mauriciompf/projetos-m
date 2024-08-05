@@ -31,13 +31,14 @@ export default function ColumnSelector({
           onClick={() => removeSelectedColumn(selectColumn)}
           headerLabel={toCapitalizeCase(selectColumn)}
           isRemoveButton={true}
+          className="w-[10rem]"
         />
       ) : (
         <HeaderControl
           onClick={handleSelectColumnToggle}
           isDropDownOpen={orderByToggle}
           headerLabel={"Coluna"}
-          className="w-[9.375rem]"
+          className="w-[10rem]"
         />
       )}
 

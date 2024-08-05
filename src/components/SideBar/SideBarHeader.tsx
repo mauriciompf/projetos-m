@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Heading from "../Heading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareCaretLeft, faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faSquareCaretLeft } from "@fortawesome/free-solid-svg-icons";
 import { useMenuContext } from "../../context/MenuContext";
+import Button from "../Button";
 
 const hideMenuIcon = <FontAwesomeIcon icon={faSquareCaretLeft} />;
-const homeIcon = <FontAwesomeIcon icon={faHouse} />;
 
 export default function SideBarHeader() {
   const { isOpenMenu, handleToggleMenu } = useMenuContext();
@@ -22,28 +22,31 @@ export default function SideBarHeader() {
   }, [isOpenMenu]);
 
   return (
-    <section
-      className={` ${isOpenMenu && "ml-5"} relative my-4 flex items-center justify-between transition-all duration-300 ease-in-out`}
-    >
+    <section className={`relative my-4 ml-0.5 flex items-center gap-6`}>
+      <span className="sr-only">
+        {isOpenMenu ? "Reduza o menu" : "Amplie o menu"}
+      </span>
+      <Button
+        aria-label="toggleMenu"
+        onClick={handleToggleMenu}
+        className={`${!isOpenMenu && "rotate-180"} transform-gpu p-0 text-2xl transition-[rotate] duration-300`}
+      >
+        <span className="grid">{hideMenuIcon}</span>
+      </Button>
       <Heading
-        className={`${!headingVisible && "opacity-0"} relative text-nowrap transition-opacity duration-200 ease-in-out`}
-        as="h1"
+        className={`${!headingVisible && "opacity-0 transition-opacity"} relative`}
+        as="h2"
       >
         <Link
-          className={`${!isOpenMenu && "pointer-events-none"} flex items-center gap-2 hover:underline focus:underline`}
+          className={`${!isOpenMenu && "pointer-events-none"} flex items-center gap-2`}
           to={"/"}
         >
           <span className="cursor-pointer text-lg">🏠</span>
-          <span className="text-2xl">Projetos</span>
+          <span className="text-2xl hover:underline focus:underline">
+            Projetos
+          </span>
         </Link>
       </Heading>
-      <span className="sr-only">Minimizar o menu</span>
-      <button
-        onClick={handleToggleMenu}
-        className={`${isOpenMenu ? "right-0 mr-4" : "rotate-180"} absolute right-[4px] text-2xl transition-all duration-500 ease-in-out`}
-      >
-        {hideMenuIcon}
-      </button>
     </section>
   );
 }

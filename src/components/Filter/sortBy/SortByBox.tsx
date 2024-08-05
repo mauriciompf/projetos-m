@@ -30,11 +30,11 @@ export default function SortByBox({
   return (
     <WrapSettingsBox
       refElem={refSortByBox}
-      className={`grid ${searchParams.has("sortby") && searchParams.has("orderby") && "pt-2"} `}
+      className={`grid ${searchParams.has("sortby") && searchParams.has("orderby") && "pt-0"} `}
     >
       <ResetParams valueOne={"sortby"} valueTwo={"orderby"} />
 
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 md:flex-row">
         <ColumnSelector
           keyName="sortby"
           restrictedList={["Sexo", "Email", "Telefone"]}
@@ -46,12 +46,14 @@ export default function SortByBox({
               onClick={handleOrderByToggle}
               isDropDownOpen={orderByToggle}
               headerLabel={toCapitalizeCase(orderByParams.get("orderby"))}
+              className="w-[10rem]"
             />
           ) : (
             <HeaderControl
               onClick={handleOrderByToggle}
               isDropDownOpen={orderByToggle}
               headerLabel={"Ordernar por"}
+              className="w-[10rem]"
             />
           )}
 

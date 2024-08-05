@@ -28,6 +28,7 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { theme } = useThemeContext();
   const {
     searchParams,
+    setStatusParams,
     statusParams,
     setFiltedTableLength,
     filtedTableLength,
@@ -105,18 +106,21 @@ export default function FilterTable({ usersData }: FilterTableProps) {
             getSexNameTranslated(user.gender).toLowerCase() === inputSearch;
         case "email":
           return (user: UsersData) =>
-            user.email.toLowerCase().startsWith(inputSearch!.toLowerCase());
+            user.email.toLowerCase().startsWith(inputSearch.toLowerCase());
         case "telefone":
-          if (/[^\d]/.test(inputSearch)) return;
           return (user: UsersData) =>
-            user.phone.substring(1).startsWith(inputSearch!);
+            user.phone.substring(1).startsWith(inputSearch);
         default:
           console.error("Default case");
           return;
       }
     };
-
     const searchCondition = getSearchCondition();
+
+    if (selectColumnFilter === "sexo") {
+      statusParams.delete("status");
+      setStatusParams(statusParams);
+    }
 
     if (!searchCondition) {
       return sortedUserData;
@@ -139,32 +143,35 @@ export default function FilterTable({ usersData }: FilterTableProps) {
 
   return (
     <>
-      <table className="relative w-full">
-        <thead>
-          <tr
-            className={`${theme === "dark" ? "bg-slate-700 text-gray-300" : "bg-[#282A2D] text-gray-200"} sticky top-[4.75rem] z-0`}
-          >
-            {tableHeaders.map((header) => {
-              return (
-                <th className={`p-2`} key={header}>
-                  {header}
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredAndSortedUserData.map((user) => (
-            <UserRow user={user} key={user.id} />
-          ))}
-        </tbody>
-      </table>
+      <div className="mx-6 overflow-auto max-md:max-h-[350px] min-[1200px]:mx-0">
+        <table className="w-full whitespace-nowrap">
+          {/* // sticky top-[4.75rem] z-0 */}
+          <thead className="sticky top-0 z-0">
+            <tr
+              className={`${theme === "dark" ? "bg-slate-700 text-gray-100" : "bg-[#282A2D] text-gray-100"} `}
+            >
+              {tableHeaders.map((header) => {
+                return (
+                  <th className={`p-2`} key={header}>
+                    {header}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredAndSortedUserData.map((user) => (
+              <UserRow user={user} key={user.id} />
+            ))}
+          </tbody>
+        </table>
+      </div>
       {filtedTableLength === 0 && (
         <div className="mt-10 grid select-none place-items-center gap-4 text-2xl">
           <p>
             <em>-- Sem valores --</em>
           </p>
-          <p> (ノ#-_-)ノ ミ┴┴</p>
+          <p>(ノ#-_-)ノ ミ┴┴</p>
         </div>
       )}
     </>

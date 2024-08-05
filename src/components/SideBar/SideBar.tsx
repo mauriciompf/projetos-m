@@ -15,19 +15,19 @@ export default function SideBar() {
   return (
     <>
       <aside
-        className={`${theme === "dark" && "bg-[#1e2124]"} ${isOpenMenu ? "w-[300px]" : "w-[60px]"} fixed h-full overflow-hidden border-r p-4 transition-all duration-500`}
+        className={`${theme === "dark" && "bg-[#1e2124]"} ${isOpenMenu ? "w-[260px]" : "w-[60px]"} fixed z-50 h-full border-r border-gray-300 p-4 transition-all duration-300 ease-in-out`}
       >
         <SideBarHeader />
-        <hr className="mx-auto my-6 w-auto border-2" />
+        <hr className="mx-auto my-6 w-auto rounded-full border-2 border-gray-300" />
         <SideBarNav />
-        <hr className="mx-auto my-6 w-auto border-2" />
+        <hr className="mx-auto my-6 w-auto rounded-full border-2 border-gray-300" />
         <section className={`flex justify-center ${isOpenMenu && "gap-2"} `}>
           <ThemeButton
-            className={`${!isOpenMenu && "translate-x-[1rem] translate-y-0"} relative ${!isHomePage && isOpenMenu ? "gap-2" : "gap-0"} transition-all duration-500`}
+            className={`${!isOpenMenu && "translate-x-[1rem] translate-y-0"} relative ${!isHomePage && isOpenMenu ? "gap-2" : "gap-0"} transition-transform duration-300 ease-in-out`}
             themeName="light"
           />
           <ThemeButton
-            className={`${!isOpenMenu && "-translate-x-[1rem] translate-y-10"} ${!isHomePage && isOpenMenu ? "gap-2" : "gap-0"} relative transition-all duration-500`}
+            className={`${!isOpenMenu && "-translate-x-[1rem] translate-y-10"} ${!isHomePage && isOpenMenu ? "gap-2" : "gap-0"} transition-transform duration-300 ease-in-out`}
             isOpenMenu={isOpenMenu}
             themeName="dark"
           />
