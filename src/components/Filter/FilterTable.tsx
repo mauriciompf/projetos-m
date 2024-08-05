@@ -1,18 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import { useToggleContext } from "../../context/ToggleContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import tableHeaders from "../../utils/tableHeaders";
-import highlightText from "../../utils/highlightText";
+import getSexNameTranslated from "../../utils/getSexNameTranslated";
+import UserRow from "./UserRow";
 
-type UsersData = {
+export type UsersData = {
   id: number;
   firstName: string;
   age: number;
   gender: string;
   email: string;
   phone: string;
+  birthDate: string;
 };
 
 type FilterTableProps = {
@@ -24,13 +26,16 @@ export default function FilterTable({ usersData }: FilterTableProps) {
   const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortby");
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
   const { theme } = useThemeContext();
-  const { searchParams, statusParams, setFiltedTableLength } =
-    useFilterSearchContext();
+  const {
+    searchParams,
+    setStatusParams,
+    statusParams,
+    setFiltedTableLength,
+    filtedTableLength,
+  } = useFilterSearchContext();
 
-  const getSexNameTranslated = (sex: string) =>
-    sex === "female" ? "Feminino" : "Masculino";
-
-  const sortedUserData = () => {
+  // # TODO Simplify code
+  const sortedUserData = useMemo(() => {
     const usersDataCopy = [...usersData];
     const descOrder = orderByParams.get("orderby") === "decrescente";
     const ascOrder = orderByParams.get("orderby") === "crescente";
@@ -58,17 +63,28 @@ export default function FilterTable({ usersData }: FilterTableProps) {
           return usersDataCopy.sort((a, b) => b.age - a.age);
         }
         break;
+      case "data de nasc.":
+        if (ascOrder) {
+          return usersDataCopy.sort((a, b) =>
+            a.birthDate.localeCompare(b.birthDate),
+          );
+        } else if (descOrder) {
+          return usersDataCopy.sort((a, b) =>
+            b.birthDate.localeCompare(a.birthDate),
+          );
+        }
     }
 
     return usersDataCopy;
-  };
+  }, [usersData, orderByParams, selectColumnSortBy]);
 
-  const filteredAndSortedUserData = () => {
+  // # TODO Simplify code
+  const filteredAndSortedUserData = useMemo(() => {
     const inputSearch = searchParams.get("value")?.trim();
     const statusLabel = statusParams.get("status");
     const isNumber = /^[0-9]+$/;
     const filterUsers = (callback: (user: UsersData) => boolean) =>
-      sortedUserData().filter(callback);
+      sortedUserData.filter(callback);
 
     const getSearchCondition = () => {
       if ((!statusLabel && inputSearch === "Masculino") || !inputSearch) {
@@ -90,21 +106,24 @@ export default function FilterTable({ usersData }: FilterTableProps) {
             getSexNameTranslated(user.gender).toLowerCase() === inputSearch;
         case "email":
           return (user: UsersData) =>
-            user.email.toLowerCase().startsWith(inputSearch!.toLowerCase());
+            user.email.toLowerCase().startsWith(inputSearch.toLowerCase());
         case "telefone":
-          if (/[^\d]/.test(inputSearch)) return;
           return (user: UsersData) =>
-            user.phone.substring(1).startsWith(inputSearch!);
+            user.phone.substring(1).startsWith(inputSearch);
         default:
           console.error("Default case");
           return;
       }
     };
-
     const searchCondition = getSearchCondition();
 
+    if (selectColumnFilter === "sexo") {
+      statusParams.delete("status");
+      setStatusParams(statusParams);
+    }
+
     if (!searchCondition) {
-      return sortedUserData();
+      return sortedUserData;
     }
 
     return filterUsers(
@@ -112,68 +131,49 @@ export default function FilterTable({ usersData }: FilterTableProps) {
         ? searchCondition
         : (user) => !searchCondition(user),
     );
-  };
+  }, [sortedUserData, searchParams, statusParams, selectColumnFilter]);
 
+  // Update the length of the filtered table data whenever it changes
   useEffect(() => {
-    setFiltedTableLength(filteredAndSortedUserData().length);
-  }, [filteredAndSortedUserData().length]);
+    setFiltedTableLength(filteredAndSortedUserData.length);
+
+    if (filteredAndSortedUserData.length === 0) {
+    }
+  }, [filteredAndSortedUserData.length]);
 
   return (
-    <table className="relative w-full table-auto">
-      <thead>
-        <tr
-          className={`${theme === "dark" ? "bg-slate-700" : "bg-[#282A2D] text-white"} sticky top-0 z-10`}
-        >
-          {tableHeaders.map((header) => {
-            return (
-              <th className={`p-2`} key={header}>
-                {header}
-              </th>
-            );
-          })}
-        </tr>
-      </thead>
-      <tbody>
-        {filteredAndSortedUserData().map((user) => {
-          const { id, firstName, age, gender, email, phone } = user;
-          const searchTerm = searchParams.get("value") || "";
-          return (
+    <>
+      <div className="mx-6 overflow-auto max-md:max-h-[350px] min-[1200px]:mx-0">
+        <table className="w-full whitespace-nowrap">
+          {/* // sticky top-[4.75rem] z-0 */}
+          <thead className="sticky top-0 z-0">
             <tr
-              className={`${theme === "dark" ? "odd:bg-[#25282a] even:bg-[#181a1b]" : "odd:bg-slate-300 even:bg-white"}`}
-              key={user.id}
+              className={`${theme === "dark" ? "bg-slate-700 text-gray-100" : "bg-[#282A2D] text-gray-100"} `}
             >
-              <td className="text-center">
-                {selectColumnFilter === "id"
-                  ? highlightText(id.toString(), searchTerm)
-                  : id}
-              </td>
-              <td className="p-2 text-center">
-                {selectColumnFilter === "nome"
-                  ? highlightText(firstName, searchTerm)
-                  : firstName}
-              </td>
-              <td className="p-2 text-center">
-                {selectColumnFilter === "idade"
-                  ? highlightText(age.toString(), searchTerm)
-                  : age}
-              </td>
-              <td className="p-2 text-center">
-                {getSexNameTranslated(gender)}
-              </td>
-              <td className="p-2">
-                {selectColumnFilter === "email"
-                  ? highlightText(email, searchTerm)
-                  : email}
-              </td>
-              <td className="p-2 text-center">
-                {selectColumnFilter === "telefone"
-                  ? highlightText(phone, searchTerm)
-                  : phone}
-              </td>
+              {tableHeaders.map((header) => {
+                return (
+                  <th className={`p-2`} key={header}>
+                    {header}
+                  </th>
+                );
+              })}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          </thead>
+          <tbody>
+            {filteredAndSortedUserData.map((user) => (
+              <UserRow user={user} key={user.id} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {filtedTableLength === 0 && (
+        <div className="mt-10 grid select-none place-items-center gap-4 text-2xl">
+          <p>
+            <em>-- Sem valores --</em>
+          </p>
+          <p>(ノ#-_-)ノ ミ┴┴</p>
+        </div>
+      )}
+    </>
   );
 }

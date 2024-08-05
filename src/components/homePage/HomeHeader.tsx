@@ -3,7 +3,7 @@ import ThemeButton from "../ThemeButton";
 
 export default function HomeHeader() {
   return (
-    <header className="flex items-center justify-center gap-6 text-center">
+    <header className="flex flex-col items-center justify-center gap-6 text-center sm:flex-row">
       <Heading as="h1">Projetos</Heading>
       <ul className="flex gap-4">
         <li>

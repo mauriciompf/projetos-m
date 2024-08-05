@@ -1,8 +1,12 @@
 import { useThemeContext } from "../context/ThemeContext";
 import Button from "./Button";
 
-// FIXME any type
-export default function ListItem({ list, handleClick }: any) {
+type ListItemProps = {
+  list: string;
+  handleClick: () => void;
+};
+
+export default function ListItem({ list, handleClick }: ListItemProps) {
   const { theme } = useThemeContext();
 
   return (

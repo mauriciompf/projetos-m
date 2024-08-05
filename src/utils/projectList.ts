@@ -1,15 +1,17 @@
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faFilter, faImages } from "@fortawesome/free-solid-svg-icons";
+type Projects = {
+  demoImg?: string;
+  label: string;
+  icon: string;
+};
 
-const projectList = [
+const projectList: Projects[] = [
   {
+    demoImg: "./image.png",
     label: "Ordenação e Filtro",
-    // icon: <FontAwesomeIcon icon={faFilter} />,
     icon: "📊",
   },
   {
     label: "Galeria",
-    // icon: <FontAwesomeIcon icon={faImages} />,
     icon: "🖼️",
   },
 ];
