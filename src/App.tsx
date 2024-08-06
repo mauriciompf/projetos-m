@@ -1,18 +1,26 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createHashRouter as createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import SideBar from "./components/SideBar/SideBar";
 import Filter from "./pages/Filter";
+import NotFound from "./components/NotFound";
 
 const router = createBrowserRouter([
   {
-    path: "/mauricioProjetos",
+    path: "*",
+    element: <NotFound />,
+  },
+  {
+    path: "/",
     element: <HomePage />,
   },
   {
     element: <SideBar />,
     children: [
       {
-        path: "/mauricioProjetos/pages/filter",
+        path: "/pages/filter",
         element: <Filter />,
       },
     ],
