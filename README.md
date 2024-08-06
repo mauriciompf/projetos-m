@@ -59,7 +59,6 @@ O projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web
   - *Implementação de teclas de atalho para navegação rápida entre as páginas.*
 <!-- - **Design e Estética:** -->
 - **Acessibilidade e Feedback:**
-  - Adição de uma página de erro 404 para informar ao usuário quando uma página não é encontrada.
   - *Implementação de uma interface de usuário de carregamento pendente em caso de carregamento lento.*
 - **Melhorias Técnicas:**
   - *Inclusão de exemplos de código na documentação para ilustrar funcionalidades e uso.*
