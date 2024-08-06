@@ -2,7 +2,11 @@ import { useMenuContext } from "../../context/MenuContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import projectList from "../../utils/projectList";
 
-export default function SideBarNav() {
+type SideBarNavProps = {
+  elementVisible: boolean;
+};
+
+export default function SideBarNav({ elementVisible }: SideBarNavProps) {
   const { isOpenMenu } = useMenuContext();
   const { theme } = useThemeContext();
 
@@ -36,7 +40,7 @@ export default function SideBarNav() {
                 {listItem.icon}
               </span>
               <span
-                className={`${!isOpenMenu ? "pointer-events-none opacity-0" : "opacity-100"} transition-opacity duration-0`}
+                className={`${!elementVisible && "pointer-events-none opacity-0"}`}
               >
                 {listItem.label}
               </span>
