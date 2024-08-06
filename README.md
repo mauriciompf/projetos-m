@@ -65,7 +65,6 @@ O projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web
   - *Inclusão de exemplos de código na documentação para ilustrar funcionalidades e uso.*
   - *Adição de uma seção detalhada de instalação e configuração na documentação.*
   - *Implementação de testes unitários utilizando [jest](https://jestjs.io) para garantir a estabilidade e qualidade do código.*
-  <!-- - Publicação do site utilizando [GitHub Pages](https://pages.github.com) para facilitar o acesso e visualização online. -->
 
 ### Projeto 1
 
