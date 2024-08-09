@@ -63,26 +63,18 @@ O projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web
 - **Melhorias Técnicas:**
   - *Inclusão de exemplos de código na documentação para ilustrar funcionalidades e uso.*
   - *Adição de uma seção detalhada de instalação e configuração na documentação.*
-  - *Implementação de testes unitários utilizando [jest](https://jestjs.io) para garantir a estabilidade e qualidade do código.*
+  <!-- - *Implementação de testes unitários utilizando [jest](https://jestjs.io) para garantir a estabilidade e qualidade do código.* -->
 
 ### Projeto 1
 
-- **Documentação e Compreensão:**
-  - *Adição de exemplos de código na documentação para ilustrar funcionalidades e uso.*
+<!-- - **Documentação e Compreensão:**
+  - *Adição de exemplos de código na documentação para ilustrar funcionalidades e uso.* -->
 - **Funcionalidade**
   - *Fixar registros no topo da tabela abaixo do cabeçalho (pelo próprio usuário)*
   - *Adicionar filtro para a coluna de data de nascimento*
 <!-- - **Interface e Design**: -->
 - **Acessibilidade e Feedback:**
   - *Melhoria na acessibilidade para garantir que todos os usuários possam interagir com a aplicação sem barreiras.*
-
-### Projeto 2
-
-- (Não iniciado)
-
-### Projeto 3
-
-- (Não iniciado)
 
 ---
 
