@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import SideBar from "./components/SideBar/SideBar";
 import Filter from "./pages/Filter";
 import NotFound from "./components/NotFound";
+import Gallery from "./pages/Gallery";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/pages/filter",
         element: <Filter />,
+      },
+      {
+        path: "/pages/gallery",
+        element: <Gallery />,
       },
     ],
   },
