@@ -10,16 +10,15 @@ export default function WrapOutlet({ children, projectName }: WrapOutletProps) {
   const { isOpenMenu } = useMenuContext();
 
   return (
-    <main
-      className={`${isOpenMenu ? "ml-[260px]" : "ml-[60px]"} ease-in-out" mx-auto transition-all duration-300`}
+    <div
+      className={`${isOpenMenu ? "sm:ml-[260px]" : "min-[640px]:ml-[60px]"} ease-in-out" mx-auto ml-[60px] transition-all duration-300`}
     >
-      <section>
+      <header>
         <Heading className="pt-12 text-center tracking-wide" as={"h1"}>
           {projectName}
         </Heading>
-      </section>
-
-      {children}
-    </main>
+      </header>
+      <main>{children}</main>
+    </div>
   );
 }
