@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useMenuContext } from "../../context/MenuContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import projectList from "../../utils/projectList";
@@ -10,40 +11,43 @@ export default function SideBarNav({ elementVisible }: SideBarNavProps) {
   const { isOpenMenu } = useMenuContext();
   const { theme } = useThemeContext();
 
+  const onHoverDarkClass =
+    "hover:bg-white hover:text-black focus:bg-white focus:text-black";
+  const onHoverLightClass =
+    "hover:bg-black hover:text-white focus:bg-black focus:text-white";
+
   return (
     <section>
       <nav>
         <ul className={`grid gap-y-4 text-xl`}>
-          {projectList.map((listItem) => (
-            <li
-              key={listItem.label}
-              className={` ${
-                !isOpenMenu
-                  ? "w-min -translate-x-1"
-                  : `cursor-pointer ${
-                      theme === "dark"
-                        ? "hover:bg-white hover:text-black focus:bg-white focus:text-black"
-                        : "hover:bg-black hover:text-white focus:bg-black focus:text-white"
+          {projectList.map((project) => (
+            <li key={project.label}>
+              <Link
+                className={` ${
+                  !isOpenMenu
+                    ? "w-min -translate-x-1"
+                    : `cursor-pointer ${
+                        theme === "dark" ? onHoverDarkClass : onHoverLightClass
+                      }`
+                } relative -left-1 flex items-center gap-3 whitespace-nowrap rounded-md`}
+                to={project.path}
+              >
+                <span
+                  className={`${
+                    !isOpenMenu &&
+                    ` ${
+                      theme === "dark" ? onHoverDarkClass : onHoverLightClass
                     }`
-              } relative -left-1 flex items-center gap-3 whitespace-nowrap rounded-md`}
-            >
-              <span
-                className={`${
-                  !isOpenMenu &&
-                  ` ${
-                    theme === "dark"
-                      ? "hover:bg-white hover:text-black focus:bg-white focus:text-black"
-                      : "hover:bg-black hover:text-white focus:bg-black focus:text-white"
-                  }`
-                } cursor-pointer rounded-md p-2 text-lg`}
-              >
-                {listItem.icon}
-              </span>
-              <span
-                className={`${!elementVisible && "pointer-events-none opacity-0"}`}
-              >
-                {listItem.label}
-              </span>
+                  } cursor-pointer rounded-md p-2 text-lg`}
+                >
+                  {project.icon}
+                </span>
+                <span
+                  className={`${!elementVisible && "pointer-events-none hidden opacity-0"}`}
+                >
+                  {project.label}
+                </span>
+              </Link>
             </li>
           ))}
         </ul>
