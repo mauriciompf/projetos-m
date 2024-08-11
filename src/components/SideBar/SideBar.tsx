@@ -17,7 +17,7 @@ export default function SideBar() {
   return (
     <>
       <aside
-        className={`${theme === "dark" && "bg-[#1e2124]"} ${isOpenMenu ? "w-[260px]" : "w-[60px]"} fixed z-50 h-full border-r border-gray-300 bg-white p-4 transition-all duration-300 ease-in-out`}
+        className={`${theme === "dark" ? "bg-[#1e2124]" : "bg-white"} ${isOpenMenu ? "w-[260px]" : "w-[60px]"} fixed z-50 h-full border-r border-gray-300 p-4 transition-all duration-300 ease-in-out`}
       >
         <SideBarHeader elementVisible={elementVisible} />
         <hr className="mx-auto my-6 w-auto rounded-full border-2 border-gray-300" />
