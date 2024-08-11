@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useMenuContext } from "../../context/MenuContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import projectList from "../../utils/projectList";
@@ -22,14 +22,14 @@ export default function SideBarNav({ elementVisible }: SideBarNavProps) {
         <ul className={`grid gap-y-4 text-xl`}>
           {projectList.map((project) => (
             <li key={project.label}>
-              <Link
-                className={` ${
-                  !isOpenMenu
-                    ? "w-min -translate-x-1"
-                    : `cursor-pointer ${
-                        theme === "dark" ? onHoverDarkClass : onHoverLightClass
-                      }`
-                } relative -left-1 flex items-center gap-3 whitespace-nowrap rounded-md`}
+              <NavLink
+                className={({ isActive }) =>
+                  `${isActive ? (theme === "dark" ? "bg-white text-black" : "bg-black text-white") : ""} ${
+                    !isOpenMenu
+                      ? "w-min -translate-x-1"
+                      : `${theme === "dark" ? onHoverDarkClass : onHoverLightClass} cursor-pointer`
+                  } relative -left-1 flex items-center gap-3 whitespace-nowrap rounded-md`
+                }
                 to={project.path}
               >
                 <span
@@ -47,7 +47,7 @@ export default function SideBarNav({ elementVisible }: SideBarNavProps) {
                 >
                   {project.label}
                 </span>
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>
