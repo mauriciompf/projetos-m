@@ -1,9 +1,9 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, Ref } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  refBtn?: any;
+  refBtn?: Ref<HTMLButtonElement>;
 }
 
 export default function Button({
