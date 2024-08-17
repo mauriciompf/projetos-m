@@ -15,7 +15,7 @@ export default function Gallery() {
   const refBtn = useRef(null);
   const refWrap = useRef(null);
 
-  const handleToggleAlbumSetttings = () => {
+  const handleToggleAlbumSettings = () => {
     setToggleAlbum(!toggleAlbum);
   };
 
@@ -26,7 +26,7 @@ export default function Gallery() {
       {toggleAlbum && (
         <AlbumSettings
           refWrap={refWrap}
-          handleToggleAlbumSetttings={handleToggleAlbumSetttings}
+          handleToggleAlbumSettings={handleToggleAlbumSettings}
         />
       )}
 
@@ -36,7 +36,7 @@ export default function Gallery() {
         <div className="h-[300px] w-full rounded-2xl bg-slate-400"></div>
         <Button
           refBtn={refBtn}
-          onClick={handleToggleAlbumSetttings}
+          onClick={handleToggleAlbumSettings}
           disabled={toggleAlbum && false}
           className={`${toggleAlbum && "cursor-default ring-transparent"} size-[5rem] rounded-2xl bg-slate-400`}
         >
