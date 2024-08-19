@@ -1,12 +1,36 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, createContext } from "react";
+import useCustomHookContext from "../customHooks/useCustomHookContext";
 
 type ImageType = {
   type: "file" | "url";
   data: File | string;
 };
 
-const useAlbumSettingsHandlers = () => {
+type AlbumSettingsValues = {
+  images: ImageType[];
+  handleOnChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleInsertURL: () => void;
+  handleDeleteAlbum: () => void;
+  // #FIXME any type
+  handleOnDrop: any;
+  handleOnDragOver: any;
+  handleDeleteImage: (img: any, index: number) => void;
+  handleExpandImage: (e: {}) => void;
+  toggleScreen: boolean;
+  setToggleScreen: (e: boolean) => void;
+  getImage: File | string;
+};
+
+const AlbumSettingsContext = createContext<AlbumSettingsValues | null>(null);
+
+export default function AlbumSettingsProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [images, setImages] = useState<ImageType[]>([]);
+  const [toggleScreen, setToggleScreen] = useState(false);
+  const [getImage, setGetImage] = useState("");
   const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -84,8 +108,10 @@ const useAlbumSettingsHandlers = () => {
     }
   };
 
-  const handleDeleteImage = (index: number) => {
-    if (confirm("Tem certeza que deseja deletar esta imagem?")) {
+  // #FIXME any type
+  const handleDeleteImage = (img: any, index: number) => {
+    if (confirm(`Tem certeza que deseja deletar ${img.name}?`)) {
+      console.log(img);
       setImages((prev) => {
         const newArr = [...prev];
         newArr.splice(index, 1);
@@ -94,20 +120,38 @@ const useAlbumSettingsHandlers = () => {
     }
   };
 
-  const handleExpandImage = (img: any) => {
-    console.log(img);
+  // #FIXME any type
+  const handleExpandImage = (img?: any) => {
+    setToggleScreen(true);
+    setGetImage(img);
   };
 
-  return {
-    handleOnChange,
-    handleInsertURL,
-    handleOnDrop,
-    handleOnDragOver,
-    handleDeleteAlbum,
-    handleDeleteImage,
-    handleExpandImage,
-    images,
-  };
-};
+  return (
+    <AlbumSettingsContext.Provider
+      value={{
+        handleOnChange,
+        handleInsertURL,
+        handleOnDrop,
+        handleOnDragOver,
+        handleDeleteAlbum,
+        handleDeleteImage,
+        handleExpandImage,
+        toggleScreen,
+        setToggleScreen,
+        getImage,
+        images,
+      }}
+    >
+      {children}
+    </AlbumSettingsContext.Provider>
+  );
+}
 
-export default useAlbumSettingsHandlers;
+const useAlbumSettings = () =>
+  useCustomHookContext(
+    AlbumSettingsContext,
+    "AlbumSettingsContext",
+    "AlbumSettingsProvider",
+  );
+
+export { useAlbumSettings };

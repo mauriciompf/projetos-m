@@ -1,28 +1,16 @@
-import { ChangeEvent } from "react";
-import Button from "../components/Button";
+import { useAlbumSettings } from "../../context/AlbumSettingsContext";
+import Button from "../Button";
 
-type ImageType = {
-  type: "file" | "url";
-  data: File | string;
-};
+export default function AlbumSettingsBody() {
+  const {
+    handleOnChange,
+    handleInsertURL,
+    handleDeleteAlbum,
+    handleDeleteImage,
+    handleExpandImage,
+    images,
+  } = useAlbumSettings();
 
-type AlbumSettingsBodyProps = {
-  images: ImageType[];
-  handleOnChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleInsertURL: () => void;
-  handleDeleteAlbum: () => void;
-  handleDeleteImage: (e: number) => void;
-  handleExpandImage: (e: any) => void;
-};
-
-export default function AlbumSettingsBody({
-  images,
-  handleOnChange,
-  handleInsertURL,
-  handleDeleteAlbum,
-  handleDeleteImage,
-  handleExpandImage,
-}: AlbumSettingsBodyProps) {
   return (
     <>
       <label
@@ -71,7 +59,7 @@ export default function AlbumSettingsBody({
                 ex
               </Button>
               <Button
-                onClick={() => handleDeleteImage(index)}
+                onClick={() => handleDeleteImage(image.data, index)}
                 className="absolute bottom-0 right-0 hidden rounded-br-2xl border border-black bg-white px-2 pt-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
               >
                 x
