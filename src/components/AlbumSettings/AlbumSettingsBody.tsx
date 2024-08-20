@@ -2,7 +2,13 @@ import { useAlbumSettings } from "../../context/AlbumSettingsContext";
 import { deleteIcon, expandIcon } from "../../utils/icons";
 import Button from "../Button";
 
-export default function AlbumSettingsBody() {
+type AlbumSettingsBodyProps = {
+  inputTitle: string;
+};
+
+export default function AlbumSettingsBody({
+  inputTitle,
+}: AlbumSettingsBodyProps) {
   const {
     handleOnChange,
     handleInsertURL,
@@ -11,6 +17,10 @@ export default function AlbumSettingsBody() {
     handleExpandImage,
     images,
   } = useAlbumSettings();
+
+  const handleAddAlbum = () => {
+    console.log(inputTitle);
+  };
 
   return (
     <>
@@ -78,6 +88,13 @@ export default function AlbumSettingsBody() {
           Deletar Album
         </Button>
       )}
+
+      <Button
+        onClick={handleAddAlbum}
+        className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
+      >
+        Adicionar Novo Álbum
+      </Button>
     </>
   );
 }

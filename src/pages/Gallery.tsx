@@ -7,8 +7,6 @@ import AlbumSettings from "../components/AlbumSettings/AlbumSettings";
 import { useAlbumSettings } from "../context/AlbumSettingsContext";
 import { closeIcon, deleteIcon, plusIcon } from "../utils/icons";
 
-// FontAwesome library
-
 export default function Gallery() {
   const [toggleAlbum, setToggleAlbum] = useState(false);
   const settingsBtnRef = useRef(null);
@@ -19,10 +17,9 @@ export default function Gallery() {
   const { toggleScreen, setToggleScreen, getImage, images, handleDeleteImage } =
     useAlbumSettings();
 
-  // console.log("getImage: ", getImage);
-  // console.log("images: ", images);
-
-  const handleToggleAlbumSettings = () => setToggleAlbum(!toggleAlbum);
+  const handleToggleAlbumSettings = () => {
+    setToggleAlbum(!toggleAlbum);
+  };
 
   // Close album settings when clicking outside, only if toggleScreen is false
   useClickOutside([settingsRef, settingsBtnRef], () => {
@@ -79,7 +76,7 @@ export default function Gallery() {
       <AlbumSettings
         className={`${!toggleAlbum && "hidden"}`}
         refWrap={settingsRef}
-        handleToggleAlbumSettings={handleToggleAlbumSettings}
+        handleAlbumSettingsBtn={handleToggleAlbumSettings}
       />
 
       <section

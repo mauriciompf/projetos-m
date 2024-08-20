@@ -1,21 +1,26 @@
-import { Ref } from "react";
+import { ChangeEvent, Ref, useState } from "react";
 import AlbumSettingsHeader from "./AlbumSettingsHeader";
 import AlbumSettingsBody from "./AlbumSettingsBody";
 import { useAlbumSettings } from "../../context/AlbumSettingsContext";
 import { twMerge } from "tailwind-merge";
 
 type AlbumSettingsProps = {
-  handleToggleAlbumSettings: () => void;
+  handleAlbumSettingsBtn: () => void;
   refWrap: Ref<HTMLElement>;
   className: string;
 };
 
 export default function AlbumSettings({
-  handleToggleAlbumSettings,
+  handleAlbumSettingsBtn,
   refWrap,
   className,
 }: AlbumSettingsProps) {
   const { handleOnDrop, handleOnDragOver } = useAlbumSettings();
+  const [inputTitle, setInputTitle] = useState("");
+  const handleOnChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = (event.target as HTMLInputElement).value;
+    setInputTitle(value);
+  };
 
   return (
     <article
@@ -26,7 +31,9 @@ export default function AlbumSettings({
       )}
     >
       <AlbumSettingsHeader
-        handleToggleAlbumSettings={handleToggleAlbumSettings}
+        handleOnChangeTitle={handleOnChangeTitle}
+        inputTitle={inputTitle}
+        handleToggleAlbumSettings={handleAlbumSettingsBtn}
       />
 
       <div
@@ -34,7 +41,7 @@ export default function AlbumSettings({
         onDrop={(event) => handleOnDrop(event)}
         onDragOver={(event) => handleOnDragOver(event)}
       >
-        <AlbumSettingsBody />
+        <AlbumSettingsBody inputTitle={inputTitle} />
       </div>
     </article>
   );
