@@ -1,4 +1,5 @@
 import { useAlbumSettings } from "../../context/AlbumSettingsContext";
+import { deleteIcon, expandIcon } from "../../utils/icons";
 import Button from "../Button";
 
 export default function AlbumSettingsBody() {
@@ -54,15 +55,15 @@ export default function AlbumSettingsBody() {
               />
               <Button
                 onClick={() => handleExpandImage(image.data)}
-                className="absolute bottom-0 left-0 hidden rounded-bl-2xl border border-black bg-white px-2 pt-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
+                className="absolute bottom-0 left-0 hidden rounded-bl-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white group-hover:block"
               >
-                ex
+                {expandIcon}
               </Button>
               <Button
                 onClick={() => handleDeleteImage(image.data, index)}
-                className="absolute bottom-0 right-0 hidden rounded-br-2xl border border-black bg-white px-2 pt-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
+                className="absolute bottom-0 right-0 hidden rounded-br-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
               >
-                x
+                {deleteIcon}
               </Button>
             </div>
           ))}

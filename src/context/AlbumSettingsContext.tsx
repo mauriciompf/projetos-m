@@ -6,31 +6,29 @@ type ImageType = {
   data: File | string;
 };
 
-type AlbumSettingsValues = {
+type AlbumSettingsValues<T> = {
   images: ImageType[];
   handleOnChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleInsertURL: () => void;
   handleDeleteAlbum: () => void;
-  // #FIXME any type
-  handleOnDrop: any;
-  handleOnDragOver: any;
-  handleDeleteImage: (img: any, index: number) => void;
-  handleExpandImage: (e: {}) => void;
+  handleOnDrop: (e: React.DragEvent) => void;
+  handleOnDragOver: (e: React.DragEvent) => void;
+  handleDeleteImage: (img: T, index: number) => void;
+  handleExpandImage: (img: T) => void;
   toggleScreen: boolean;
   setToggleScreen: (e: boolean) => void;
-  getImage: File | string;
+  getImage: T;
 };
 
-const AlbumSettingsContext = createContext<AlbumSettingsValues | null>(null);
+const AlbumSettingsContext = createContext<AlbumSettingsValues<
+  File | string
+> | null>(null);
 
-export default function AlbumSettingsProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AlbumSettingsProvider({ children }: { children: React.ReactNode }) {
   const [images, setImages] = useState<ImageType[]>([]);
   const [toggleScreen, setToggleScreen] = useState(false);
-  const [getImage, setGetImage] = useState("");
+  const [getImage, setGetImage] = useState<File | string>("");
+
   const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +40,7 @@ export default function AlbumSettingsProvider({
       // 2097152 === 2MB
       if (file.size > 2097152) {
         // #TODO Improve user feedback
-        alert(`File ${file.name} is too large and will not be added.`);
+        alert(`A imagem ${file.name} é muito grande e não será adicionada.`);
         return;
       }
       return true;
@@ -62,7 +60,7 @@ export default function AlbumSettingsProvider({
     if (!url) return;
 
     if (!regexImageFile.test(url)) {
-      alert("Only images files is allowed to use");
+      alert("Somente imagens devem ser usados.");
       return handleInsertURL();
     }
 
@@ -76,7 +74,7 @@ export default function AlbumSettingsProvider({
     if (!filesDrop || filesDrop.length <= 0) return;
 
     if (!regexImageFile.test(filesDrop[0].name)) {
-      alert("Only images files is allowed to use");
+      alert("Somente imagens devem ser usados.");
       return;
     }
 
@@ -108,10 +106,16 @@ export default function AlbumSettingsProvider({
     }
   };
 
-  // #FIXME any type
-  const handleDeleteImage = (img: any, index: number) => {
-    if (confirm(`Tem certeza que deseja deletar ${img.name}?`)) {
-      console.log(img);
+  const handleDeleteImage = (img: File | string, index: number) => {
+    if (
+      confirm(
+        `Tem certeza que deseja excluir ${img instanceof File ? img.name : img}?`,
+      )
+    ) {
+      if (toggleScreen) {
+        setToggleScreen(false);
+      }
+
       setImages((prev) => {
         const newArr = [...prev];
         newArr.splice(index, 1);
@@ -120,8 +124,7 @@ export default function AlbumSettingsProvider({
     }
   };
 
-  // #FIXME any type
-  const handleExpandImage = (img?: any) => {
+  const handleExpandImage = (img: File | string) => {
     setToggleScreen(true);
     setGetImage(img);
   };
@@ -154,4 +157,4 @@ const useAlbumSettings = () =>
     "AlbumSettingsProvider",
   );
 
-export { useAlbumSettings };
+export { useAlbumSettings, AlbumSettingsProvider };

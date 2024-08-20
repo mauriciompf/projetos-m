@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeContextProvider } from "./context/ThemeContext.tsx";
 import MenuContextProvider from "./context/MenuContext.tsx";
-import AlbumSettingsProvider from "./context/AlbumSettingsContext.tsx";
+import { AlbumSettingsProvider } from "./context/AlbumSettingsContext.tsx";
 
 const queryClient = new QueryClient();
 
