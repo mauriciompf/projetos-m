@@ -8,15 +8,23 @@ type AlbumSettingsProps = {
   handleAlbumSettingsBtn: () => void;
   refWrap: Ref<HTMLElement>;
   className: string;
+  // FIXME any type
+  setAlbums: any;
+  setIsAlbumCreated: any;
+  isAlbumCreated: any;
 };
 
 export default function AlbumSettings({
   handleAlbumSettingsBtn,
   refWrap,
   className,
+  setAlbums,
+  isAlbumCreated,
+  setIsAlbumCreated,
 }: AlbumSettingsProps) {
   const { handleOnDrop, handleOnDragOver } = useAlbumSettings();
   const [inputTitle, setInputTitle] = useState("");
+
   const handleOnChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
     setInputTitle(value);
@@ -33,7 +41,7 @@ export default function AlbumSettings({
       <AlbumSettingsHeader
         handleOnChangeTitle={handleOnChangeTitle}
         inputTitle={inputTitle}
-        handleToggleAlbumSettings={handleAlbumSettingsBtn}
+        handleAlbumSettingsBtn={handleAlbumSettingsBtn}
       />
 
       <div
@@ -41,7 +49,14 @@ export default function AlbumSettings({
         onDrop={(event) => handleOnDrop(event)}
         onDragOver={(event) => handleOnDragOver(event)}
       >
-        <AlbumSettingsBody inputTitle={inputTitle} />
+        <AlbumSettingsBody
+          setInputTitle={setInputTitle}
+          inputTitle={inputTitle}
+          setAlbums={setAlbums}
+          handleAlbumSettingsBtn={handleAlbumSettingsBtn}
+          setIsAlbumCreated={setIsAlbumCreated}
+          isAlbumCreated={isAlbumCreated}
+        />
       </div>
     </article>
   );

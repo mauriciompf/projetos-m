@@ -9,6 +9,9 @@ import { closeIcon, deleteIcon, plusIcon } from "../utils/icons";
 
 export default function Gallery() {
   const [toggleAlbum, setToggleAlbum] = useState(false);
+  const [albums, setAlbums] = useState([{ title: "", images: [] }]);
+  const [isAlbumCreated, setIsAlbumCreated] = useState(false);
+
   const settingsBtnRef = useRef(null);
   const settingsRef = useRef(null);
   const extendRef = useRef(null);
@@ -19,7 +22,12 @@ export default function Gallery() {
 
   const handleToggleAlbumSettings = () => {
     setToggleAlbum(!toggleAlbum);
+    setIsAlbumCreated(false);
   };
+
+  albums.forEach((album) => {
+    console.log(album);
+  });
 
   // Close album settings when clicking outside, only if toggleScreen is false
   useClickOutside([settingsRef, settingsBtnRef], () => {
@@ -74,23 +82,37 @@ export default function Gallery() {
         </div>
       )}
       <AlbumSettings
+        isAlbumCreated={isAlbumCreated}
+        setIsAlbumCreated={setIsAlbumCreated}
         className={`${!toggleAlbum && "hidden"}`}
         refWrap={settingsRef}
+        setAlbums={setAlbums}
         handleAlbumSettingsBtn={handleToggleAlbumSettings}
       />
 
       <section
-        id="gallery"
         className={`${toggleAlbum && "blur-lg"} mx-auto mt-10 grid w-[90%] gap-4`}
       >
         <div className="h-[300px] w-full rounded-2xl bg-white"></div>
-        <Button
+        {/* <Button
           refBtn={settingsBtnRef}
           onClick={handleToggleAlbumSettings}
           className={`${toggleAlbum && "cursor-default ring-transparent"} size-[5rem] rounded-2xl bg-white text-black`}
         >
           {plusIcon}
-        </Button>
+        </Button> */}
+
+        <div ref={settingsBtnRef} className="grid grid-cols-3 gap-4">
+          {albums.map((album, index) => (
+            <Button
+              key={index}
+              onClick={handleToggleAlbumSettings}
+              className={`${toggleAlbum && "cursor-default ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
+            >
+              {album.title || plusIcon}
+            </Button>
+          ))}
+        </div>
       </section>
     </WrapOutlet>
   );

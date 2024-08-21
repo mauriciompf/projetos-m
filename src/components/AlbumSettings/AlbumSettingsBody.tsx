@@ -4,10 +4,21 @@ import Button from "../Button";
 
 type AlbumSettingsBodyProps = {
   inputTitle: string;
+  // FIXME any type
+  setAlbums: any;
+  setInputTitle: any;
+  handleAlbumSettingsBtn: () => void;
+  setIsAlbumCreated: any;
+  isAlbumCreated: any;
 };
 
 export default function AlbumSettingsBody({
   inputTitle,
+  setInputTitle,
+  setAlbums,
+  handleAlbumSettingsBtn,
+  isAlbumCreated,
+  setIsAlbumCreated,
 }: AlbumSettingsBodyProps) {
   const {
     handleOnChange,
@@ -19,7 +30,17 @@ export default function AlbumSettingsBody({
   } = useAlbumSettings();
 
   const handleAddAlbum = () => {
-    console.log(inputTitle);
+    if (!inputTitle) {
+      alert("Insira um título antes de adicionar um novo álbum.");
+      return;
+    }
+
+    handleAlbumSettingsBtn();
+    setAlbums((prev: any) => [{ title: inputTitle, images: [] }, ...prev]);
+    // setInputTitle("");
+    setIsAlbumCreated(true);
+
+    // setAlbums((prev: any) => [inputTitle, ...prev]);
   };
 
   return (
@@ -89,12 +110,14 @@ export default function AlbumSettingsBody({
         </Button>
       )}
 
-      <Button
-        onClick={handleAddAlbum}
-        className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
-      >
-        Adicionar Novo Álbum
-      </Button>
+      {!isAlbumCreated && (
+        <Button
+          onClick={handleAddAlbum}
+          className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
+        >
+          Adicionar Novo Álbum
+        </Button>
+      )}
     </>
   );
 }

@@ -3,13 +3,13 @@ import { closeIcon } from "../../utils/icons";
 import Button from "../Button";
 
 type AlbumSetingsHeaderProps = {
-  handleToggleAlbumSettings: () => void;
+  handleAlbumSettingsBtn: () => void;
   handleOnChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
   inputTitle: string;
 };
 
 export default function AlbumSettingsHeader({
-  handleToggleAlbumSettings,
+  handleAlbumSettingsBtn,
   handleOnChangeTitle,
   inputTitle,
 }: AlbumSetingsHeaderProps) {
@@ -18,7 +18,7 @@ export default function AlbumSettingsHeader({
       <div>
         <input
           type="text"
-          className="w-36 text-2xl outline-none"
+          className={`w-36 text-2xl outline-none`}
           placeholder="Título"
           maxLength={15}
           value={inputTitle}
@@ -28,7 +28,7 @@ export default function AlbumSettingsHeader({
         <div className="rounded-full border border-black"></div>
       </div>
       <Button
-        onClick={handleToggleAlbumSettings}
+        onClick={handleAlbumSettingsBtn}
         className="p-0 text-2xl leading-none ring-transparent hover:text-red-700 focus:text-red-700"
         aria-labelledby="Feche configurações de galeria"
       >
