@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Button from "../components/Button";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
@@ -6,12 +6,9 @@ import useClickOutside from "../customHooks/useClickOutside";
 import AlbumSettings from "../components/AlbumSettings/AlbumSettings";
 import { useAlbumSettings } from "../context/AlbumSettingsContext";
 import { closeIcon, deleteIcon, plusIcon } from "../utils/icons";
+import { useAlbumContext } from "../context/AlbumContext";
 
 export default function Gallery() {
-  const [toggleAlbum, setToggleAlbum] = useState(false);
-  const [albums, setAlbums] = useState([{ title: "", images: [] }]);
-  const [isAlbumCreated, setIsAlbumCreated] = useState(false);
-
   const settingsBtnRef = useRef(null);
   const settingsRef = useRef(null);
   const extendRef = useRef(null);
@@ -20,19 +17,13 @@ export default function Gallery() {
   const { toggleScreen, setToggleScreen, getImage, images, handleDeleteImage } =
     useAlbumSettings();
 
-  const handleToggleAlbumSettings = () => {
-    setToggleAlbum(!toggleAlbum);
-    setIsAlbumCreated(false);
-  };
-
-  albums.forEach((album) => {
-    console.log(album);
-  });
+  const { albums, handleToggleAlbumSettings, toggleAlbumSettings } =
+    useAlbumContext();
 
   // Close album settings when clicking outside, only if toggleScreen is false
-  useClickOutside([settingsRef, settingsBtnRef], () => {
-    if (!toggleScreen) setToggleAlbum(false);
-  });
+  // useClickOutside([settingsRef, settingsBtnRef], () => {
+  //   if (!toggleScreen) setToggleAlbum(false);
+  // });
 
   // Close modal when clicking outside, only if toggleScreen is true
   useClickOutside([extendRef, deleteBtnRef], () => {
@@ -81,33 +72,26 @@ export default function Gallery() {
           </div>
         </div>
       )}
+
       <AlbumSettings
-        isAlbumCreated={isAlbumCreated}
-        setIsAlbumCreated={setIsAlbumCreated}
-        className={`${!toggleAlbum && "hidden"}`}
         refWrap={settingsRef}
-        setAlbums={setAlbums}
-        handleAlbumSettingsBtn={handleToggleAlbumSettings}
+        className={`${!toggleAlbumSettings && "hidden"}`}
       />
 
       <section
-        className={`${toggleAlbum && "blur-lg"} mx-auto mt-10 grid w-[90%] gap-4`}
+        className={`${toggleAlbumSettings && "blur-lg"} mx-auto mt-10 grid w-[90%] gap-4`}
       >
-        <div className="h-[300px] w-full rounded-2xl bg-white"></div>
-        {/* <Button
-          refBtn={settingsBtnRef}
-          onClick={handleToggleAlbumSettings}
-          className={`${toggleAlbum && "cursor-default ring-transparent"} size-[5rem] rounded-2xl bg-white text-black`}
-        >
-          {plusIcon}
-        </Button> */}
-
+        <div className="grid h-[300px] w-full place-items-center rounded-2xl bg-white text-center text-black">
+          <p className="text-2xl">
+            <strong>Adicione um novo album clicando em "+"</strong>
+          </p>
+        </div>
         <div ref={settingsBtnRef} className="grid grid-cols-3 gap-4">
           {albums.map((album, index) => (
             <Button
               key={index}
-              onClick={handleToggleAlbumSettings}
-              className={`${toggleAlbum && "cursor-default ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
+              onClick={() => handleToggleAlbumSettings(index)}
+              className={`${toggleAlbumSettings && "cursor-default ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
             >
               {album.title || plusIcon}
             </Button>

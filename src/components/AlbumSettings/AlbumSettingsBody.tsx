@@ -1,25 +1,9 @@
+// import { useAlbumContext } from "../../context/AlbumContext";
 import { useAlbumSettings } from "../../context/AlbumSettingsContext";
 import { deleteIcon, expandIcon } from "../../utils/icons";
 import Button from "../Button";
 
-type AlbumSettingsBodyProps = {
-  inputTitle: string;
-  // FIXME any type
-  setAlbums: any;
-  setInputTitle: any;
-  handleAlbumSettingsBtn: () => void;
-  setIsAlbumCreated: any;
-  isAlbumCreated: any;
-};
-
-export default function AlbumSettingsBody({
-  inputTitle,
-  setInputTitle,
-  setAlbums,
-  handleAlbumSettingsBtn,
-  isAlbumCreated,
-  setIsAlbumCreated,
-}: AlbumSettingsBodyProps) {
+export default function AlbumSettingsBody() {
   const {
     handleOnChange,
     handleInsertURL,
@@ -28,20 +12,6 @@ export default function AlbumSettingsBody({
     handleExpandImage,
     images,
   } = useAlbumSettings();
-
-  const handleAddAlbum = () => {
-    if (!inputTitle) {
-      alert("Insira um título antes de adicionar um novo álbum.");
-      return;
-    }
-
-    handleAlbumSettingsBtn();
-    setAlbums((prev: any) => [{ title: inputTitle, images: [] }, ...prev]);
-    // setInputTitle("");
-    setIsAlbumCreated(true);
-
-    // setAlbums((prev: any) => [inputTitle, ...prev]);
-  };
 
   return (
     <>
@@ -110,14 +80,13 @@ export default function AlbumSettingsBody({
         </Button>
       )}
 
-      {!isAlbumCreated && (
-        <Button
-          onClick={handleAddAlbum}
-          className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
-        >
-          Adicionar Novo Álbum
-        </Button>
-      )}
+      <Button className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white">
+        Adicionar Novo Álbum
+      </Button>
+
+      <Button className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white">
+        Salve alterações
+      </Button>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeContextProvider } from "./context/ThemeContext.tsx";
 import MenuContextProvider from "./context/MenuContext.tsx";
 import { AlbumSettingsProvider } from "./context/AlbumSettingsContext.tsx";
+import AlbumContextProvider from "./context/AlbumContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <MenuContextProvider>
         <ThemeContextProvider>
           <AlbumSettingsProvider>
-            <App />
+            <AlbumContextProvider>
+              <App />
+            </AlbumContextProvider>
           </AlbumSettingsProvider>
         </ThemeContextProvider>
       </MenuContextProvider>

@@ -1,34 +1,19 @@
-import { ChangeEvent, Ref, useState } from "react";
+import { Ref } from "react";
 import AlbumSettingsHeader from "./AlbumSettingsHeader";
 import AlbumSettingsBody from "./AlbumSettingsBody";
 import { useAlbumSettings } from "../../context/AlbumSettingsContext";
 import { twMerge } from "tailwind-merge";
 
 type AlbumSettingsProps = {
-  handleAlbumSettingsBtn: () => void;
   refWrap: Ref<HTMLElement>;
   className: string;
-  // FIXME any type
-  setAlbums: any;
-  setIsAlbumCreated: any;
-  isAlbumCreated: any;
 };
 
 export default function AlbumSettings({
-  handleAlbumSettingsBtn,
   refWrap,
   className,
-  setAlbums,
-  isAlbumCreated,
-  setIsAlbumCreated,
 }: AlbumSettingsProps) {
   const { handleOnDrop, handleOnDragOver } = useAlbumSettings();
-  const [inputTitle, setInputTitle] = useState("");
-
-  const handleOnChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = (event.target as HTMLInputElement).value;
-    setInputTitle(value);
-  };
 
   return (
     <article
@@ -38,25 +23,14 @@ export default function AlbumSettings({
         className,
       )}
     >
-      <AlbumSettingsHeader
-        handleOnChangeTitle={handleOnChangeTitle}
-        inputTitle={inputTitle}
-        handleAlbumSettingsBtn={handleAlbumSettingsBtn}
-      />
+      <AlbumSettingsHeader />
 
       <div
         className="grid gap-4"
         onDrop={(event) => handleOnDrop(event)}
         onDragOver={(event) => handleOnDragOver(event)}
       >
-        <AlbumSettingsBody
-          setInputTitle={setInputTitle}
-          inputTitle={inputTitle}
-          setAlbums={setAlbums}
-          handleAlbumSettingsBtn={handleAlbumSettingsBtn}
-          setIsAlbumCreated={setIsAlbumCreated}
-          isAlbumCreated={isAlbumCreated}
-        />
+        <AlbumSettingsBody />
       </div>
     </article>
   );

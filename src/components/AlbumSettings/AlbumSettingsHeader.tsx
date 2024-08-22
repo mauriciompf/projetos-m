@@ -1,18 +1,11 @@
-import { ChangeEvent } from "react";
+import { useAlbumContext } from "../../context/AlbumContext";
 import { closeIcon } from "../../utils/icons";
 import Button from "../Button";
 
-type AlbumSetingsHeaderProps = {
-  handleAlbumSettingsBtn: () => void;
-  handleOnChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
-  inputTitle: string;
-};
+export default function AlbumSettingsHeader({}) {
+  const { handleToggleAlbumSettings, inputTitle, handleOnChangeTitle } =
+    useAlbumContext();
 
-export default function AlbumSettingsHeader({
-  handleAlbumSettingsBtn,
-  handleOnChangeTitle,
-  inputTitle,
-}: AlbumSetingsHeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <div>
@@ -28,7 +21,7 @@ export default function AlbumSettingsHeader({
         <div className="rounded-full border border-black"></div>
       </div>
       <Button
-        onClick={handleAlbumSettingsBtn}
+        onClick={() => handleToggleAlbumSettings(-1)}
         className="p-0 text-2xl leading-none ring-transparent hover:text-red-700 focus:text-red-700"
         aria-labelledby="Feche configurações de galeria"
       >
