@@ -1,101 +1,156 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Button from "../components/Button";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
-import useClickOutside from "../customHooks/useClickOutside";
-import AlbumSettings from "../components/AlbumSettings/AlbumSettings";
-import { useAlbumSettings } from "../context/AlbumSettingsContext";
-import { closeIcon, deleteIcon, plusIcon } from "../utils/icons";
-import { useAlbumContext } from "../context/AlbumContext";
+import { plusIcon } from "../utils/icons";
 
 export default function Gallery() {
   const settingsBtnRef = useRef(null);
-  const settingsRef = useRef(null);
-  const extendRef = useRef(null);
-  const deleteBtnRef = useRef(null);
 
-  const { toggleScreen, setToggleScreen, getImage, images, handleDeleteImage } =
-    useAlbumSettings();
+  interface Album {
+    id: number;
+    title: string;
+    images: string[];
+  }
 
-  const { albums, handleToggleAlbumSettings, toggleAlbumSettings } =
-    useAlbumContext();
+  const [albumBoxes, setAlbumBoxes] = useState<Album[]>([]);
+  const [editAlbumBoxes, setEditAlbumBoxes] = useState<Album[]>([]);
+  const [nextId, setNextId] = useState(0);
 
-  // Close album settings when clicking outside, only if toggleScreen is false
-  // useClickOutside([settingsRef, settingsBtnRef], () => {
-  //   if (!toggleScreen) setToggleAlbum(false);
-  // });
+  const handleCreateNewAlbum = () => {
+    setEditAlbumBoxes((prev) => [
+      {
+        id: nextId,
+        title: "",
+        images: [],
+      },
+      ...prev,
+    ]);
 
-  // Close modal when clicking outside, only if toggleScreen is true
-  useClickOutside([extendRef, deleteBtnRef], () => {
-    if (toggleScreen) setToggleScreen(false);
-  });
+    setNextId((prev) => prev + 1);
+  };
 
-  // Handle both File and URL string cases
-  const selectedImageName = getImage instanceof File ? getImage.name : getImage;
-  const selectedImageIndex = images
-    .map((img) => (img.data instanceof File ? img.data.name : img.data))
-    .findIndex((elem) => elem === selectedImageName);
+  const handleOnChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    id: number,
+  ) => {
+    const value = event.target.value;
+
+    setEditAlbumBoxes((prev) =>
+      prev.map((box) => (box.id === id ? { ...box, title: value } : box)),
+    );
+  };
+
+  const handleAddNewAlbum = (id: number) => {
+    const boxToAdd = editAlbumBoxes.find((box) => box.id === id);
+    if (boxToAdd) {
+      setAlbumBoxes((prev) => [...prev, boxToAdd]);
+      setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+    }
+  };
+
+  const handleCloseAlbum = (id: number) => {
+    setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+  };
+
+  const handleEditAlbum = (id: number) => {
+    const albumToEdit = albumBoxes.find((box) => box.id === id);
+
+    if (albumToEdit) {
+      setEditAlbumBoxes((prev) => [albumToEdit, ...prev]);
+    }
+  };
 
   return (
     <WrapOutlet projectName={projectList[1].label}>
-      {toggleScreen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-          <div>
-            <div className="flex justify-center pb-4">
+      <section>
+        {editAlbumBoxes.map((editBox) => (
+          <article
+            key={editBox.id}
+            className={
+              "absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl border border-gray-400 bg-white p-4 text-black shadow-2xl"
+            }
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <input
+                  type="text"
+                  onChange={(event) => handleOnChange(event, editBox.id)}
+                  className={`w-36 text-2xl outline-none`}
+                  placeholder="Título"
+                  value={editBox.title}
+                  maxLength={15}
+                  aria-label="Título do album"
+                />
+                <div className="rounded-full border border-black"></div>
+              </div>
               <Button
-                onClick={() => setToggleScreen(!toggleScreen)}
-                className="h-[1.875rem] px-0 py-0 text-3xl"
+                onClick={() => handleCloseAlbum(editBox.id)}
+                className="p-0 text-2xl leading-none ring-transparent hover:text-red-700 focus:text-red-700"
+                aria-labelledby="Feche configurações de galeria"
               >
-                {closeIcon}
+                x
               </Button>
             </div>
-            <img
-              ref={extendRef}
-              className="max-h-[80vh] max-w-[90vw] object-contain"
-              src={
-                getImage instanceof File
-                  ? URL.createObjectURL(getImage as File)
-                  : (getImage as string)
-              }
-              alt=""
-            />
 
-            <div className="flex justify-center pt-6">
-              <Button
-                refBtn={deleteBtnRef}
-                onClick={() => handleDeleteImage(getImage, selectedImageIndex)}
-                className="flex items-center gap-2 rounded-2xl bg-white p-2 px-3 text-black hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white"
+            <div className="grid gap-4">
+              <label
+                htmlFor="files"
+                className="w-full cursor-pointer rounded-xl bg-[#4363D2] p-2 text-center font-bold text-white hover:ring-4 focus:ring-4"
               >
-                Excluir {deleteIcon}
+                Faça Upload
+              </label>
+              <input
+                className="invisible hidden"
+                type="file"
+                id="files"
+                accept="image/*"
+                multiple
+              />
+
+              <p className="text-center">
+                ou arraste uma imagem, cole imagem ou 
+                <Button className="p-0 text-[#4363D2] underline">URL</Button>
+              </p>
+
+              <Button
+                onClick={() => handleAddNewAlbum(editBox.id)}
+                className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
+              >
+                Adicionar Novo Álbum
+              </Button>
+
+              <Button className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white">
+                Salve alterações
               </Button>
             </div>
-          </div>
-        </div>
-      )}
+          </article>
+        ))}
+      </section>
 
-      <AlbumSettings
-        refWrap={settingsRef}
-        className={`${!toggleAlbumSettings && "hidden"}`}
-      />
-
-      <section
-        className={`${toggleAlbumSettings && "blur-lg"} mx-auto mt-10 grid w-[90%] gap-4`}
-      >
+      <section className={`mx-auto mt-10 grid w-[90%] gap-4`}>
         <div className="grid h-[300px] w-full place-items-center rounded-2xl bg-white text-center text-black">
           <p className="text-2xl">
             <strong>Adicione um novo album clicando em "+"</strong>
           </p>
         </div>
         <div ref={settingsBtnRef} className="grid grid-cols-3 gap-4">
-          {albums.map((album, index) => (
+          {albumBoxes.map((box) => (
             <Button
-              key={index}
-              onClick={() => handleToggleAlbumSettings(index)}
-              className={`${toggleAlbumSettings && "cursor-default ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
+              onClick={() => handleEditAlbum(box.id)}
+              key={box.id}
+              className={`size-[4.5rem] rounded-2xl bg-white text-black`}
             >
-              {album.title || plusIcon}
+              {box.title}
             </Button>
           ))}
+
+          <Button
+            onClick={handleCreateNewAlbum}
+            className={`size-[4.5rem] rounded-2xl bg-white text-black`}
+          >
+            {plusIcon}
+          </Button>
         </div>
       </section>
     </WrapOutlet>
