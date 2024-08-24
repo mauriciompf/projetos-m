@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import Button from "../components/Button";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
@@ -10,12 +10,13 @@ export default function Gallery() {
   interface Album {
     id: number;
     title: string;
-    images: string[];
+    images: File[];
   }
 
   const [albumBoxes, setAlbumBoxes] = useState<Album[]>([]);
   const [editAlbumBoxes, setEditAlbumBoxes] = useState<Album[]>([]);
   const [nextId, setNextId] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleCreateNewAlbum = () => {
     setEditAlbumBoxes((prev) => [
@@ -28,9 +29,10 @@ export default function Gallery() {
     ]);
 
     setNextId((prev) => prev + 1);
+    setIsEditing(false);
   };
 
-  const handleOnChange = (
+  const handleInputTitle = (
     event: React.ChangeEvent<HTMLInputElement>,
     id: number,
   ) => {
@@ -51,6 +53,7 @@ export default function Gallery() {
 
   const handleCloseAlbum = (id: number) => {
     setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+    setIsEditing(false);
   };
 
   const handleEditAlbum = (id: number) => {
@@ -58,8 +61,45 @@ export default function Gallery() {
 
     if (albumToEdit) {
       setEditAlbumBoxes((prev) => [albumToEdit, ...prev]);
+      setIsEditing(true);
     }
   };
+
+  const handleSaveAlbum = (id: number, title: string) => {
+    setAlbumBoxes((prev) =>
+      prev.map((box) => (box.id === id ? { ...box, title } : box)),
+    );
+
+    setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+    setIsEditing(false);
+  };
+
+  const handleUpload = (event: ChangeEvent<HTMLInputElement>, id: number) => {
+    const files = event.target.files; // Files in object format
+    if (!files && files!.length <= 0) return;
+
+    // Convert to array and filter files that exceed the size limit
+    const validFiles = Array.from(files!).filter((file) => {
+      // 2097152 === 2MB
+      if (file.size > 2097152) {
+        alert(`A imagem ${file.name} é muito grande e não será adicionada.`);
+        return;
+      }
+      return true;
+    });
+
+    setEditAlbumBoxes((prev) =>
+      prev.map((box) =>
+        box.id === id
+          ? { ...box, images: [...box.images, ...validFiles] }
+          : box,
+      ),
+    );
+
+    event.target.value = "";
+  };
+
+  console.log(editAlbumBoxes);
 
   return (
     <WrapOutlet projectName={projectList[1].label}>
@@ -75,7 +115,7 @@ export default function Gallery() {
               <div>
                 <input
                   type="text"
-                  onChange={(event) => handleOnChange(event, editBox.id)}
+                  onChange={(event) => handleInputTitle(event, editBox.id)}
                   className={`w-36 text-2xl outline-none`}
                   placeholder="Título"
                   value={editBox.title}
@@ -101,6 +141,7 @@ export default function Gallery() {
                 Faça Upload
               </label>
               <input
+                onChange={(event) => handleUpload(event, editBox.id)}
                 className="invisible hidden"
                 type="file"
                 id="files"
@@ -113,16 +154,49 @@ export default function Gallery() {
                 <Button className="p-0 text-[#4363D2] underline">URL</Button>
               </p>
 
-              <Button
-                onClick={() => handleAddNewAlbum(editBox.id)}
-                className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
-              >
-                Adicionar Novo Álbum
-              </Button>
+              <div className="grid max-h-52 grid-cols-2 place-items-center gap-y-4 overflow-y-auto">
+                {editAlbumBoxes.map((editBox) => (
+                  <div key={editBox.id} className="group relative">
+                    {editBox.images.map((imagem, index) => (
+                      <img
+                        draggable="false"
+                        className="size-20 rounded-2xl object-cover"
+                        key={index}
+                        src={URL.createObjectURL(imagem as File)}
+                        alt=""
+                      />
+                    ))}
+                    {/* <Button
+                      onClick={() => handleExpandImage(image.data)}
+                      className="absolute bottom-0 left-0 hidden rounded-bl-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white group-hover:block"
+                    >
+                      {expandIcon}
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteImage(image.data, index)}
+                      className="absolute bottom-0 right-0 hidden rounded-br-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
+                    >
+                      {deleteIcon}
+                    </Button> */}
+                  </div>
+                ))}
+              </div>
 
-              <Button className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white">
-                Salve alterações
-              </Button>
+              {isEditing ? (
+                <Button
+                  onClick={() => handleSaveAlbum(editBox.id, editBox.title)}
+                  className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
+                >
+                  Salve alterações
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleAddNewAlbum(editBox.id)}
+                  className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
+                >
+                  Adicionar Novo Álbum
+                </Button>
+              )}
             </div>
           </article>
         ))}
