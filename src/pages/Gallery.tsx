@@ -8,7 +8,7 @@ import useClickOutside from "../customHooks/useClickOutside";
 type Album = {
   id: number;
   title: string;
-  images: File[];
+  images: (string | File)[];
 };
 
 export default function Gallery() {
@@ -20,10 +20,16 @@ export default function Gallery() {
   const [nextId, setNextId] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
 
-  useClickOutside([settingsAlbumRef], () => {
-    setEditAlbumBoxes([]);
+  const handleClickOutside = () => {
+    editAlbumBoxes.forEach((editBox) => {
+      handleSaveAlbum(editBox.id, editBox.title, editBox.images); // Save current state
+    });
+
+    setEditAlbumBoxes([]); // Close editing mode
     setIsEditing(false);
-  });
+  };
+
+  useClickOutside([settingsAlbumRef], handleClickOutside);
 
   const handleCreateNewAlbum = () => {
     setEditAlbumBoxes((prev) => [
@@ -72,9 +78,13 @@ export default function Gallery() {
     }
   };
 
-  const handleSaveAlbum = (id: number, title: string) => {
+  const handleSaveAlbum = (
+    id: number,
+    title: string,
+    images: (string | File)[],
+  ) => {
     setAlbumBoxes((prev) =>
-      prev.map((box) => (box.id === id ? { ...box, title } : box)),
+      prev.map((box) => (box.id === id ? { ...box, title, images } : box)),
     );
 
     setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
@@ -105,6 +115,26 @@ export default function Gallery() {
 
     event.target.value = "";
   };
+
+  const handleURL = (id: number) => {
+    const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
+    const url = prompt("URL:");
+    if (!url) return;
+
+    if (!regexImageFile.test(url)) {
+      alert("Somente imagens devem ser usados.");
+      return handleURL(id);
+    }
+
+    setEditAlbumBoxes((prev) =>
+      prev.map((box) =>
+        box.id === id ? { ...box, images: [...box.images, url] } : box,
+      ),
+    );
+  };
+
+  console.log("editAlbumBoxes", editAlbumBoxes);
+  console.log("albumBoxes", albumBoxes);
 
   return (
     <WrapOutlet projectName={projectList[1].label}>
@@ -157,18 +187,27 @@ export default function Gallery() {
 
               <p className="text-center">
                 ou arraste uma imagem, cole imagem ou 
-                <Button className="p-0 text-[#4363D2] underline">URL</Button>
+                <Button
+                  onClick={() => handleURL(editBox.id)}
+                  className="p-0 text-[#4363D2] underline"
+                >
+                  URL
+                </Button>
               </p>
 
               <div className="grid max-h-52 grid-cols-2 place-items-center gap-y-4 overflow-y-auto">
                 {editAlbumBoxes.map((editBox) => (
                   <div key={editBox.id} className="group relative">
-                    {editBox.images.map((imagem, index) => (
+                    {editBox.images.map((image, index) => (
                       <img
                         draggable="false"
                         className="size-20 rounded-2xl object-cover"
                         key={index}
-                        src={URL.createObjectURL(imagem as File)}
+                        src={
+                          image instanceof File
+                            ? URL.createObjectURL(image as File)
+                            : (image as string)
+                        }
                         alt=""
                       />
                     ))}
@@ -190,7 +229,9 @@ export default function Gallery() {
 
               {isEditing ? (
                 <Button
-                  onClick={() => handleSaveAlbum(editBox.id, editBox.title)}
+                  onClick={() =>
+                    handleSaveAlbum(editBox.id, editBox.title, editBox.images)
+                  }
                   className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
                 >
                   Salve alterações
