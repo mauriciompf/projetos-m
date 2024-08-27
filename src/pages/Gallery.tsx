@@ -3,20 +3,27 @@ import Button from "../components/Button";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
 import { plusIcon } from "../utils/icons";
+import useClickOutside from "../customHooks/useClickOutside";
+
+type Album = {
+  id: number;
+  title: string;
+  images: File[];
+};
 
 export default function Gallery() {
   const settingsBtnRef = useRef(null);
-
-  interface Album {
-    id: number;
-    title: string;
-    images: File[];
-  }
+  const settingsAlbumRef = useRef(null);
 
   const [albumBoxes, setAlbumBoxes] = useState<Album[]>([]);
   const [editAlbumBoxes, setEditAlbumBoxes] = useState<Album[]>([]);
   const [nextId, setNextId] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+
+  useClickOutside([settingsAlbumRef], () => {
+    setEditAlbumBoxes([]);
+    setIsEditing(false);
+  });
 
   const handleCreateNewAlbum = () => {
     setEditAlbumBoxes((prev) => [
@@ -99,13 +106,12 @@ export default function Gallery() {
     event.target.value = "";
   };
 
-  console.log(editAlbumBoxes);
-
   return (
     <WrapOutlet projectName={projectList[1].label}>
       <section>
         {editAlbumBoxes.map((editBox) => (
           <article
+            ref={settingsAlbumRef}
             key={editBox.id}
             className={
               "absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl border border-gray-400 bg-white p-4 text-black shadow-2xl"
@@ -202,7 +208,9 @@ export default function Gallery() {
         ))}
       </section>
 
-      <section className={`mx-auto mt-10 grid w-[90%] gap-4`}>
+      <section
+        className={`${isEditing && "blur-md"} mx-auto mt-10 grid w-[90%] gap-4`}
+      >
         <div className="grid h-[300px] w-full place-items-center rounded-2xl bg-white text-center text-black">
           <p className="text-2xl">
             <strong>Adicione um novo album clicando em "+"</strong>
@@ -211,17 +219,19 @@ export default function Gallery() {
         <div ref={settingsBtnRef} className="grid grid-cols-3 gap-4">
           {albumBoxes.map((box) => (
             <Button
+              disabled={isEditing}
               onClick={() => handleEditAlbum(box.id)}
               key={box.id}
-              className={`size-[4.5rem] rounded-2xl bg-white text-black`}
+              className={`${isEditing && "ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
             >
               {box.title}
             </Button>
           ))}
 
           <Button
+            disabled={isEditing}
             onClick={handleCreateNewAlbum}
-            className={`size-[4.5rem] rounded-2xl bg-white text-black`}
+            className={`${isEditing && "ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
           >
             {plusIcon}
           </Button>
