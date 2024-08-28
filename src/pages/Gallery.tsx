@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import Button from "../components/Button";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
-import { plusIcon } from "../utils/icons";
+import { closeIcon, deleteIcon, plusIcon } from "../utils/icons";
 import useClickOutside from "../customHooks/useClickOutside";
 
 type Album = {
@@ -19,6 +19,7 @@ export default function Gallery() {
   const [editAlbumBoxes, setEditAlbumBoxes] = useState<Album[]>([]);
   const [nextId, setNextId] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
 
   const handleClickOutside = () => {
     editAlbumBoxes.forEach((editBox) => {
@@ -115,9 +116,9 @@ export default function Gallery() {
 
     event.target.value = "";
   };
+  // console.log(editAlbumBoxes);
 
   const handleURL = (id: number) => {
-    const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
     const url = prompt("URL:");
     if (!url) return;
 
@@ -133,8 +134,58 @@ export default function Gallery() {
     );
   };
 
-  console.log("editAlbumBoxes", editAlbumBoxes);
-  console.log("albumBoxes", albumBoxes);
+  const handleOnDrop = (event: React.DragEvent, id: number) => {
+    event.preventDefault(); // Prevent to open the file in the browser
+    const filesList = event.dataTransfer.files; // Files object dropped incluing length
+    const filesDrop = filesList[0]; // Files dropped
+
+    if (!filesList || filesList.length <= 0) return;
+
+    if (!regexImageFile.test(filesDrop.name)) {
+      alert("Somente imagens devem ser usadas.");
+      return;
+    }
+
+    if (filesDrop.size > 2097152) {
+      alert(
+        `A imagem ${filesList[0].name} é muito grande e não será adicionada.`,
+      );
+      return;
+    }
+
+    setEditAlbumBoxes((prev) =>
+      prev.map((box) =>
+        box.id === id ? { ...box, images: [...box.images, filesDrop] } : box,
+      ),
+    );
+  };
+
+  const handleOnDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+  };
+
+  const handleRemoveImage = (
+    image: string | File,
+    id: number,
+    index: number,
+  ) => {
+    const imageName = image instanceof File ? image.name : image;
+
+    if (confirm(`Tem certeza que deseja excluir ${imageName}?`))
+      setEditAlbumBoxes((prev) =>
+        prev.map((box) =>
+          box.id === id
+            ? {
+                ...box,
+                images: box.images.filter((_, i) => i !== index),
+              }
+            : box,
+        ),
+      );
+  };
+
+  // console.log("editAlbumBoxes", editAlbumBoxes);
+  // console.log("albumBoxes", albumBoxes);
 
   return (
     <WrapOutlet projectName={projectList[1].label}>
@@ -165,11 +216,15 @@ export default function Gallery() {
                 className="p-0 text-2xl leading-none ring-transparent hover:text-red-700 focus:text-red-700"
                 aria-labelledby="Feche configurações de galeria"
               >
-                x
+                {closeIcon}
               </Button>
             </div>
 
-            <div className="grid gap-4">
+            <div
+              onDrop={(event) => handleOnDrop(event, editBox.id)}
+              onDragOver={handleOnDragOver}
+              className="grid gap-4"
+            >
               <label
                 htmlFor="files"
                 className="w-full cursor-pointer rounded-xl bg-[#4363D2] p-2 text-center font-bold text-white hover:ring-4 focus:ring-4"
@@ -195,34 +250,44 @@ export default function Gallery() {
                 </Button>
               </p>
 
-              <div className="grid max-h-52 grid-cols-2 place-items-center gap-y-4 overflow-y-auto">
-                {editAlbumBoxes.map((editBox) => (
-                  <div key={editBox.id} className="group relative">
-                    {editBox.images.map((image, index) => (
-                      <img
-                        draggable="false"
-                        className="size-20 rounded-2xl object-cover"
-                        key={index}
-                        src={
-                          image instanceof File
-                            ? URL.createObjectURL(image as File)
-                            : (image as string)
-                        }
-                        alt=""
-                      />
-                    ))}
+              <div className="max-h-52 overflow-y-auto">
+                {editAlbumBoxes.map((editBox, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-2 place-items-center gap-y-4"
+                  >
+                    {editBox.images.map((image, index) => {
+                      return (
+                        <div key={index} className="group relative">
+                          <img
+                            draggable="false"
+                            className="size-20 rounded-xl object-cover"
+                            src={
+                              image instanceof File
+                                ? URL.createObjectURL(image as File)
+                                : (image as string)
+                            }
+                            alt=""
+                          />
+
+                          <Button
+                            onClick={() =>
+                              handleRemoveImage(image, editBox.id, index)
+                            }
+                            className="absolute bottom-0 right-0 hidden rounded-br-xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
+                          >
+                            {deleteIcon}
+                          </Button>
+                        </div>
+                      );
+                    })}
                     {/* <Button
                       onClick={() => handleExpandImage(image.data)}
                       className="absolute bottom-0 left-0 hidden rounded-bl-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white group-hover:block"
                     >
                       {expandIcon}
                     </Button>
-                    <Button
-                      onClick={() => handleDeleteImage(image.data, index)}
-                      className="absolute bottom-0 right-0 hidden rounded-br-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
-                    >
-                      {deleteIcon}
-                    </Button> */}
+ */}
                   </div>
                 ))}
               </div>
@@ -250,7 +315,7 @@ export default function Gallery() {
       </section>
 
       <section
-        className={`${isEditing && "blur-md"} mx-auto mt-10 grid w-[90%] gap-4`}
+        className={`${editAlbumBoxes.length > 0 && "blur-md"} mx-auto mt-10 grid w-[90%] gap-4`}
       >
         <div className="grid h-[300px] w-full place-items-center rounded-2xl bg-white text-center text-black">
           <p className="text-2xl">
@@ -260,7 +325,7 @@ export default function Gallery() {
         <div ref={settingsBtnRef} className="grid grid-cols-3 gap-4">
           {albumBoxes.map((box) => (
             <Button
-              disabled={isEditing}
+              disabled={editAlbumBoxes.length > 0}
               onClick={() => handleEditAlbum(box.id)}
               key={box.id}
               className={`${isEditing && "ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
@@ -270,9 +335,9 @@ export default function Gallery() {
           ))}
 
           <Button
-            disabled={isEditing}
+            disabled={editAlbumBoxes.length > 0}
             onClick={handleCreateNewAlbum}
-            className={`${isEditing && "ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
+            className={`${editAlbumBoxes.length > 0 && "ring-transparent"} size-[4.5rem] rounded-2xl bg-white text-black`}
           >
             {plusIcon}
           </Button>
