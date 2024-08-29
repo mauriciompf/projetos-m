@@ -213,6 +213,12 @@ export default function Gallery() {
     setIsExpand(false);
   };
 
+  const handleRemoveAlbum = (id: number, title: string) => {
+    if (confirm(`Tem certeza que deseja excluir ${title}?`)) setAlbumBoxes([]);
+    setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+    setIsEditing(false);
+  };
+
   // console.log("editAlbumBoxes", editAlbumBoxes);
   // console.log("albumBoxes", albumBoxes);
 
@@ -371,14 +377,22 @@ export default function Gallery() {
               </div>
 
               {isEditing ? (
-                <Button
-                  onClick={() =>
-                    handleSaveAlbum(editBox.id, editBox.title, editBox.images)
-                  }
-                  className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
-                >
-                  Salve alterações
-                </Button>
+                <>
+                  <Button
+                    onClick={() =>
+                      handleSaveAlbum(editBox.id, editBox.title, editBox.images)
+                    }
+                    className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
+                  >
+                    Salve alterações
+                  </Button>
+                  <Button
+                    onClick={() => handleRemoveAlbum(editBox.id, editBox.title)}
+                    className="rounded-xl border border-black hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white"
+                  >
+                    Deletar Álbum
+                  </Button>
+                </>
               ) : (
                 <Button
                   onClick={() => handleAddNewAlbum(editBox.id)}
