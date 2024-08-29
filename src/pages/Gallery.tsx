@@ -74,7 +74,12 @@ export default function Gallery() {
     );
   };
 
-  const handleAddNewAlbum = (id: number) => {
+  const handleAddNewAlbum = (id: number, title: string) => {
+    if (!title) {
+      alert("Adicione um título para o álbum");
+      return;
+    }
+
     const boxToAdd = editAlbumBoxes.find((box) => box.id === id);
     if (boxToAdd) {
       setAlbumBoxes((prev) => [...prev, boxToAdd]);
@@ -101,6 +106,11 @@ export default function Gallery() {
     title: string,
     images: (string | File)[],
   ) => {
+    if (!title) {
+      alert("Adicione um título para o álbum");
+      return;
+    }
+
     setAlbumBoxes((prev) =>
       prev.map((box) => (box.id === id ? { ...box, title, images } : box)),
     );
@@ -214,9 +224,13 @@ export default function Gallery() {
   };
 
   const handleRemoveAlbum = (id: number, title: string) => {
-    if (confirm(`Tem certeza que deseja excluir ${title}?`)) setAlbumBoxes([]);
-    setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
-    setIsEditing(false);
+    if (confirm(`Tem certeza que deseja excluir ${title}?`)) {
+      setAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+      setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+      setIsEditing(false);
+    } else {
+      return;
+    }
   };
 
   // console.log("editAlbumBoxes", editAlbumBoxes);
@@ -395,7 +409,7 @@ export default function Gallery() {
                 </>
               ) : (
                 <Button
-                  onClick={() => handleAddNewAlbum(editBox.id)}
+                  onClick={() => handleAddNewAlbum(editBox.id, editBox.title)}
                   className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
                 >
                   Adicionar Novo Álbum
