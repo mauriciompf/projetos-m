@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import Button from "../components/Button";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
-import { closeIcon, deleteIcon, plusIcon } from "../utils/icons";
+import { closeIcon, deleteIcon, expandIcon, plusIcon } from "../utils/icons";
 import useClickOutside from "../customHooks/useClickOutside";
 
 type Album = {
@@ -14,11 +14,19 @@ type Album = {
 export default function Gallery() {
   const settingsBtnRef = useRef(null);
   const settingsAlbumRef = useRef(null);
+  const extendRef = useRef(null);
+  const removeRef = useRef(null);
 
   const [albumBoxes, setAlbumBoxes] = useState<Album[]>([]);
   const [editAlbumBoxes, setEditAlbumBoxes] = useState<Album[]>([]);
   const [nextId, setNextId] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const [isExpand, setIsExpand] = useState(false);
+  const [expandedImage, setExpandedImage] = useState<{
+    image: string | File;
+    id: number;
+    index: number;
+  } | null>(null);
   const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
 
   const handleClickOutside = () => {
@@ -27,10 +35,19 @@ export default function Gallery() {
     });
 
     setEditAlbumBoxes([]); // Close editing mode
-    setIsEditing(false);
   };
 
-  useClickOutside([settingsAlbumRef], handleClickOutside);
+  useClickOutside([settingsAlbumRef], () => {
+    if (!isExpand) {
+      handleClickOutside();
+    }
+  });
+
+  useClickOutside([extendRef, removeRef], () => {
+    if (isExpand) {
+      setIsExpand(false);
+    }
+  });
 
   const handleCreateNewAlbum = () => {
     setEditAlbumBoxes((prev) => [
@@ -169,9 +186,8 @@ export default function Gallery() {
     id: number,
     index: number,
   ) => {
-    const imageName = image instanceof File ? image.name : image;
-
-    if (confirm(`Tem certeza que deseja excluir ${imageName}?`))
+    setIsExpand(false);
+    if (confirm(`Tem certeza que deseja excluir ${image}?`))
       setEditAlbumBoxes((prev) =>
         prev.map((box) =>
           box.id === id
@@ -184,11 +200,67 @@ export default function Gallery() {
       );
   };
 
+  const handleExpandImage = (
+    image: string | File,
+    id: number,
+    index: number,
+  ) => {
+    setIsExpand(true);
+    setExpandedImage({ image, id, index });
+  };
+
+  const handleCloseExpandImage = () => {
+    setIsExpand(false);
+  };
+
   // console.log("editAlbumBoxes", editAlbumBoxes);
   // console.log("albumBoxes", albumBoxes);
 
   return (
     <WrapOutlet projectName={projectList[1].label}>
+      {isExpand && (
+        <section className="fixed inset-0 z-50 flex select-none items-center justify-center bg-black bg-opacity-75">
+          <div>
+            <div className="pb-4">
+              <div className="mb-4 grid place-items-center">
+                <Button
+                  onClick={handleCloseExpandImage}
+                  className="h-[1.875rem] px-0 py-0 text-3xl"
+                >
+                  {closeIcon}
+                </Button>
+              </div>
+              <img
+                ref={extendRef}
+                className="max-h-[80vh] max-w-[90vw] object-contain"
+                src={
+                  expandedImage!.image instanceof File
+                    ? URL.createObjectURL(expandedImage!.image as File)
+                    : expandedImage!.image
+                }
+                alt=""
+              />
+            </div>
+
+            <div className="flex justify-center pt-6">
+              <Button
+                refBtn={extendRef}
+                onClick={() =>
+                  handleRemoveImage(
+                    expandedImage!.image,
+                    expandedImage!.id,
+                    expandedImage!.index,
+                  )
+                }
+                className="flex items-center gap-2 rounded-2xl bg-white p-2 px-3 text-black hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white"
+              >
+                Excluir {deleteIcon}
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section>
         {editAlbumBoxes.map((editBox) => (
           <article
@@ -250,7 +322,7 @@ export default function Gallery() {
                 </Button>
               </p>
 
-              <div className="max-h-52 overflow-y-auto">
+              <div className="max-h-52 select-none overflow-y-auto">
                 {editAlbumBoxes.map((editBox, index) => (
                   <div
                     key={index}
@@ -272,7 +344,20 @@ export default function Gallery() {
 
                           <Button
                             onClick={() =>
-                              handleRemoveImage(image, editBox.id, index)
+                              handleExpandImage(image, editBox.id, index)
+                            }
+                            className="absolute bottom-0 left-0 hidden rounded-bl-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white group-hover:block"
+                          >
+                            {expandIcon}
+                          </Button>
+
+                          <Button
+                            onClick={() =>
+                              handleRemoveImage(
+                                image instanceof File ? image.name : image,
+                                editBox.id,
+                                index,
+                              )
                             }
                             className="absolute bottom-0 right-0 hidden rounded-br-xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
                           >
@@ -281,13 +366,6 @@ export default function Gallery() {
                         </div>
                       );
                     })}
-                    {/* <Button
-                      onClick={() => handleExpandImage(image.data)}
-                      className="absolute bottom-0 left-0 hidden rounded-bl-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white group-hover:block"
-                    >
-                      {expandIcon}
-                    </Button>
- */}
                   </div>
                 ))}
               </div>
