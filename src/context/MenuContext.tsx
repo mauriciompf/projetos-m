@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { useLocalStorage } from "../customHooks/useLocalStorage";
+import useLocalStorage from "../customHooks/useLocalStorage";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 
 type MenuContextValues = {

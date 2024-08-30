@@ -4,6 +4,8 @@ import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
 import { closeIcon, deleteIcon, expandIcon, plusIcon } from "../utils/icons";
 import useClickOutside from "../customHooks/useClickOutside";
+import useLocalStorage from "../customHooks/useLocalStorage";
+import axios from "axios";
 
 type Album = {
   id: number;
@@ -17,8 +19,17 @@ export default function Gallery() {
   const extendRef = useRef(null);
   const removeRef = useRef(null);
 
-  const [albumBoxes, setAlbumBoxes] = useState<Album[]>([]);
+  const [albumBoxes, setAlbumBoxes] = useLocalStorage<Album[]>({
+    key: "albums",
+    initialState: [],
+  });
+
   const [editAlbumBoxes, setEditAlbumBoxes] = useState<Album[]>([]);
+  // const [editAlbumBoxes, setEditAlbumBoxes] = useLocalStorage<Album[]>({
+  //   key: "editAlbums",
+  //   initialState: [],
+  // });
+
   const [nextId, setNextId] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [isExpand, setIsExpand] = useState(false);
@@ -28,6 +39,7 @@ export default function Gallery() {
     index: number;
   } | null>(null);
   const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
+  const SIZELIMIT = 2097152; // 2MB
 
   const handleClickOutside = () => {
     editAlbumBoxes.forEach((editBox) => {
@@ -121,83 +133,106 @@ export default function Gallery() {
 
   const handleUpload = (event: ChangeEvent<HTMLInputElement>, id: number) => {
     const files = event.target.files; // Files in object format
-    if (!files && files!.length <= 0) return;
+    if (!files || files.length < 1) return;
 
-    // Convert to array and filter files that exceed the size limit
-    const validFiles = Array.from(files!).filter((file) => {
-      // 2097152 === 2MB
-      if (file.size > 2097152) {
-        alert(`A imagem ${file.name} é muito grande e não será adicionada.`);
-        return;
-      }
-      return true;
+    // Convert files to array
+    const validFiles = Array.from(files).filter((file) =>
+      file.size > SIZELIMIT
+        ? alert(`A imagem é muito grande e não será adicionada.`)
+        : true,
+    );
+
+    if (validFiles.length < 1) return;
+
+    validFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file); // Read the content and convert each file object to a Data URL
+
+      reader.addEventListener("load", () => {
+        const url = reader.result as string; // base64-encoded string (Data URL) representing the file
+
+        // Insert url image to state
+        setEditAlbumBoxes((prev) =>
+          prev.map((box) =>
+            box.id === id ? { ...box, images: [...box.images, url] } : box,
+          ),
+        );
+      });
     });
 
-    setEditAlbumBoxes((prev) =>
-      prev.map((box) =>
-        box.id === id
-          ? { ...box, images: [...box.images, ...validFiles] }
-          : box,
-      ),
-    );
-
-    event.target.value = "";
+    event.target.value = ""; // Clear file input value to be selected again
   };
-  // console.log(editAlbumBoxes);
 
-  const handleURL = (id: number) => {
-    const url = prompt("URL:");
-    if (!url) return;
+  const handleURL = async (id: number) => {
+    try {
+      const url = prompt("Insira a URL da imagem:");
+      if (!url) return;
 
-    if (!regexImageFile.test(url)) {
-      alert("Somente imagens devem ser usados.");
-      return handleURL(id);
+      if (!regexImageFile.test(url)) {
+        alert("Somente imagens devem ser usados.");
+        return handleURL(id);
+      }
+
+      const response = await axios.get(url, { responseType: "blob" }); // Fetch url image
+      const blob = response.data; // Get Blob Object (image details)
+
+      if (blob.size > SIZELIMIT) {
+        alert("A imagem é muito grande e não será adicionada.");
+        return handleURL(id);
+      }
+
+      setEditAlbumBoxes((prev) =>
+        prev.map((box) =>
+          box.id === id ? { ...box, images: [...box.images, url] } : box,
+        ),
+      );
+    } catch (error) {
+      console.error(`Erro ao validar a imagem...`);
+      return;
     }
-
-    setEditAlbumBoxes((prev) =>
-      prev.map((box) =>
-        box.id === id ? { ...box, images: [...box.images, url] } : box,
-      ),
-    );
   };
 
   const handleOnDrop = (event: React.DragEvent, id: number) => {
     event.preventDefault(); // Prevent to open the file in the browser
-    const filesList = event.dataTransfer.files; // Files object dropped incluing length
-    const filesDrop = filesList[0]; // Files dropped
+    const files = event.dataTransfer.files; // Files object dropped
+    if (!files || files.length < 1) return;
 
-    if (!filesList || filesList.length <= 0) return;
-
-    if (!regexImageFile.test(filesDrop.name)) {
-      alert("Somente imagens devem ser usadas.");
-      return;
-    }
-
-    if (filesDrop.size > 2097152) {
-      alert(
-        `A imagem ${filesList[0].name} é muito grande e não será adicionada.`,
+    // Convert file to array
+    const validFiles = Array.from(files)
+      .filter((file) =>
+        !regexImageFile.test(file.name)
+          ? alert("Somente imagens devem ser usadas.")
+          : true,
+      )
+      .filter((file) =>
+        file.size > SIZELIMIT
+          ? alert(`A imagem é muito grande e não será adicionada.`)
+          : true,
       );
-      return;
-    }
 
-    setEditAlbumBoxes((prev) =>
-      prev.map((box) =>
-        box.id === id ? { ...box, images: [...box.images, filesDrop] } : box,
-      ),
-    );
+    if (validFiles.length < 1) return;
+
+    validFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file); // Read the file as a data URL
+
+      reader.onload = () => {
+        const url = reader.result as string;
+        // Update state with the image URL
+        setEditAlbumBoxes((prev) =>
+          prev.map((box) =>
+            box.id === id ? { ...box, images: [...box.images, url] } : box,
+          ),
+        );
+      };
+    });
   };
 
-  const handleOnDragOver = (event: React.DragEvent) => {
-    event.preventDefault();
-  };
+  const handleOnDragOver = (event: React.DragEvent) => event.preventDefault();
 
-  const handleRemoveImage = (
-    image: string | File,
-    id: number,
-    index: number,
-  ) => {
+  const handleRemoveImage = (id: number, index: number) => {
     setIsExpand(false);
-    if (confirm(`Tem certeza que deseja excluir ${image}?`))
+    if (confirm(`Tem certeza que deseja excluir esta imagem?`))
       setEditAlbumBoxes((prev) =>
         prev.map((box) =>
           box.id === id
@@ -219,9 +254,7 @@ export default function Gallery() {
     setExpandedImage({ image, id, index });
   };
 
-  const handleCloseExpandImage = () => {
-    setIsExpand(false);
-  };
+  const handleCloseExpandImage = () => setIsExpand(false);
 
   const handleRemoveAlbum = (id: number, title: string) => {
     if (confirm(`Tem certeza que deseja excluir ${title}?`)) {
@@ -233,8 +266,8 @@ export default function Gallery() {
     }
   };
 
-  // console.log("editAlbumBoxes", editAlbumBoxes);
   // console.log("albumBoxes", albumBoxes);
+  // console.log("editAlbumBoxes", editAlbumBoxes);
 
   return (
     <WrapOutlet projectName={projectList[1].label}>
@@ -266,11 +299,7 @@ export default function Gallery() {
               <Button
                 refBtn={extendRef}
                 onClick={() =>
-                  handleRemoveImage(
-                    expandedImage!.image,
-                    expandedImage!.id,
-                    expandedImage!.index,
-                  )
+                  handleRemoveImage(expandedImage!.id, expandedImage!.index)
                 }
                 className="flex items-center gap-2 rounded-2xl bg-white p-2 px-3 text-black hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white"
               >
@@ -354,6 +383,11 @@ export default function Gallery() {
                           <img
                             draggable="false"
                             className="size-20 rounded-xl object-cover"
+                            // src={
+                            //   typeof image === "string"
+                            //     ? image
+                            //     : URL.createObjectURL(image as File)
+                            // }
                             src={
                               image instanceof File
                                 ? URL.createObjectURL(image as File)
@@ -372,13 +406,7 @@ export default function Gallery() {
                           </Button>
 
                           <Button
-                            onClick={() =>
-                              handleRemoveImage(
-                                image instanceof File ? image.name : image,
-                                editBox.id,
-                                index,
-                              )
-                            }
+                            onClick={() => handleRemoveImage(editBox.id, index)}
                             className="absolute bottom-0 right-0 hidden rounded-br-xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
                           >
                             {deleteIcon}

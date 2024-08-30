@@ -14,7 +14,7 @@ const useLocalStorage = <T>({
       const item = localStorage.getItem(key);
       return item ? (JSON.parse(item) as T) : initialState;
     } catch (error) {
-      console.error("Failed to get item from localStorage", error);
+      console.warn("Failed to get item from localStorage", error);
       return initialState;
     }
   });
@@ -23,7 +23,7 @@ const useLocalStorage = <T>({
     localStorage.setItem(key, JSON.stringify(storedValue));
   }, [key, storedValue]);
 
-  return [storedValue, setStoredValue];
+  return [storedValue, setStoredValue] as const;
 };
 
-export { useLocalStorage };
+export default useLocalStorage;
