@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useRef, useState } from "react";
 import Button from "../components/Button";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
@@ -23,13 +23,7 @@ export default function Gallery() {
     key: "albums",
     initialState: [],
   });
-
   const [editAlbumBoxes, setEditAlbumBoxes] = useState<Album[]>([]);
-  // const [editAlbumBoxes, setEditAlbumBoxes] = useLocalStorage<Album[]>({
-  //   key: "editAlbums",
-  //   initialState: [],
-  // });
-
   const [nextId, setNextId] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [isExpand, setIsExpand] = useState(false);
@@ -40,26 +34,52 @@ export default function Gallery() {
   } | null>(null);
   const regexImageFile = new RegExp("\\.(jpg|gif|png|jpeg)(\\?.*)?$", "i");
   const SIZELIMIT = 2097152; // 2MB
+  const isMatchingId = useCallback(
+    (id: number) => (album: Album) => album.id === id,
+    [],
+  );
 
-  const handleClickOutside = () => {
+  const handleSaveAlbum = (
+    id: number,
+    title: string,
+    images: (string | File)[],
+  ) => {
+    if (!validateInputTitle(title, id)) return;
+
+    setAlbumBoxes((prev) =>
+      prev
+        .filter(isMatchingId(id))
+        .map((album) => ({ ...album, title, images })),
+    );
+
+    closeEditAlbum(id);
+    setIsEditing(false);
+  };
+
+  const handleClickOutside = useCallback(() => {
     editAlbumBoxes.forEach((editBox) => {
       handleSaveAlbum(editBox.id, editBox.title, editBox.images); // Save current state
     });
 
     setEditAlbumBoxes([]); // Close editing mode
-  };
+  }, [editAlbumBoxes, handleSaveAlbum, setEditAlbumBoxes]);
 
   useClickOutside([settingsAlbumRef], () => {
-    if (!isExpand) {
-      handleClickOutside();
-    }
+    if (!isExpand) handleClickOutside();
   });
 
   useClickOutside([extendRef, removeRef], () => {
-    if (isExpand) {
-      setIsExpand(false);
-    }
+    if (isExpand) setIsExpand(false);
   });
+
+  const closeEditAlbum = useCallback(
+    (id: number) => {
+      return setEditAlbumBoxes((prev) =>
+        prev.filter((album) => album.id !== id),
+      );
+    },
+    [setEditAlbumBoxes],
+  );
 
   const handleCreateNewAlbum = () => {
     setEditAlbumBoxes((prev) => [
@@ -71,96 +91,114 @@ export default function Gallery() {
       ...prev,
     ]);
 
-    setNextId((prev) => prev + 1);
+    setNextId(nextId + 1);
     setIsEditing(false);
   };
 
-  const handleInputTitle = (
+  const handleAddInputTitle = (
     event: React.ChangeEvent<HTMLInputElement>,
     id: number,
   ) => {
     const value = event.target.value;
 
     setEditAlbumBoxes((prev) =>
-      prev.map((box) => (box.id === id ? { ...box, title: value } : box)),
+      prev
+        .filter(isMatchingId(id))
+        .map((album) => ({ ...album, title: value })),
     );
   };
 
   const handleAddNewAlbum = (id: number, title: string) => {
-    if (!title) {
-      alert("Adicione um título para o álbum");
-      return;
-    }
+    if (!validateInputTitle(title, id)) return;
 
-    const boxToAdd = editAlbumBoxes.find((box) => box.id === id);
-    if (boxToAdd) {
-      setAlbumBoxes((prev) => [...prev, boxToAdd]);
-      setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
-    }
+    const boxToAdd = editAlbumBoxes.find(isMatchingId(id)); // Get all the elements of editAlbumBoxes array
+    if (!boxToAdd) return;
+
+    setAlbumBoxes((prev) => [...prev, boxToAdd]);
+    closeEditAlbum(id);
   };
 
   const handleCloseAlbum = (id: number) => {
-    setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
+    closeEditAlbum(id);
     setIsEditing(false);
   };
 
   const handleEditAlbum = (id: number) => {
-    const albumToEdit = albumBoxes.find((box) => box.id === id);
+    const albumToEdit = albumBoxes.find(isMatchingId(id)); // Get all the elements of AlbumBoxes array
+    if (!albumToEdit) return;
 
-    if (albumToEdit) {
-      setEditAlbumBoxes((prev) => [albumToEdit, ...prev]);
-      setIsEditing(true);
-    }
+    setEditAlbumBoxes((prev) => [...prev, albumToEdit]);
+    setIsEditing(true);
   };
 
-  const handleSaveAlbum = (
-    id: number,
-    title: string,
-    images: (string | File)[],
-  ) => {
-    if (!title) {
-      alert("Adicione um título para o álbum");
-      return;
-    }
+  const validateInputTitle = useCallback(
+    (title: string, id: number) => {
+      if (!title) {
+        alert("Adicione um título para o álbum");
+        return;
+      }
 
-    setAlbumBoxes((prev) =>
-      prev.map((box) => (box.id === id ? { ...box, title, images } : box)),
-    );
+      const AlbumTitles = albumBoxes
+        .filter((album) => album.id !== id)
+        .map((album) => album.title);
+      // Prevent insert the title again
+      if (AlbumTitles.includes(title)) {
+        alert("Já está criado um álbum com este mesmo nome");
+        return;
+      }
 
-    setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
-    setIsEditing(false);
-  };
+      return true;
+    },
+    [albumBoxes],
+  );
+
+  const uploadValidImage = useCallback(
+    (files: (File | string)[] | FileList | null, id: number) => {
+      if (!files || files.length < 1) return;
+
+      // Convert files to array
+      const validFiles = Array.from(files)
+        .filter((file) => file instanceof File)
+        .filter((file) =>
+          !regexImageFile.test(file.name)
+            ? alert("Somente imagens devem ser usadas.")
+            : true,
+        )
+        .filter((file) =>
+          file.size > SIZELIMIT
+            ? alert(`A imagem é muito grande e não será adicionada.`)
+            : true,
+        );
+
+      if (validFiles.length < 1) return;
+
+      validFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file as Blob); // Read the content and convert each file object to a Data URL
+
+        reader.addEventListener("load", () => {
+          const url = reader.result as string; // base64-encoded string (Data URL) representing the file
+
+          // Insert url image to state
+          setEditAlbumBoxes((prev) =>
+            prev
+              .filter(isMatchingId(id))
+              .map((album) => ({ ...album, images: [...album.images, url] })),
+          );
+        });
+      });
+    },
+    [setEditAlbumBoxes, isMatchingId],
+  );
 
   const handleUpload = (event: ChangeEvent<HTMLInputElement>, id: number) => {
-    const files = event.target.files; // Files in object format
-    if (!files || files.length < 1) return;
-
-    // Convert files to array
-    const validFiles = Array.from(files).filter((file) =>
-      file.size > SIZELIMIT
-        ? alert(`A imagem é muito grande e não será adicionada.`)
-        : true,
-    );
-
-    if (validFiles.length < 1) return;
-
-    validFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file); // Read the content and convert each file object to a Data URL
-
-      reader.addEventListener("load", () => {
-        const url = reader.result as string; // base64-encoded string (Data URL) representing the file
-
-        // Insert url image to state
-        setEditAlbumBoxes((prev) =>
-          prev.map((box) =>
-            box.id === id ? { ...box, images: [...box.images, url] } : box,
-          ),
-        );
-      });
-    });
-
+    uploadValidImage(event.target.files, id);
     event.target.value = ""; // Clear file input value to be selected again
+  };
+
+  const handleOnDrop = (event: React.DragEvent, id: number) => {
+    event.preventDefault(); // Prevent to open the file in the browser
+    uploadValidImage(event.dataTransfer.files, id);
   };
 
   const handleURL = async (id: number) => {
@@ -182,9 +220,9 @@ export default function Gallery() {
       }
 
       setEditAlbumBoxes((prev) =>
-        prev.map((box) =>
-          box.id === id ? { ...box, images: [...box.images, url] } : box,
-        ),
+        prev
+          .filter(isMatchingId(id))
+          .map((box) => ({ ...box, images: [...box.images, url] })),
       );
     } catch (error) {
       console.error(`Erro ao validar a imagem...`);
@@ -192,57 +230,18 @@ export default function Gallery() {
     }
   };
 
-  const handleOnDrop = (event: React.DragEvent, id: number) => {
-    event.preventDefault(); // Prevent to open the file in the browser
-    const files = event.dataTransfer.files; // Files object dropped
-    if (!files || files.length < 1) return;
-
-    // Convert file to array
-    const validFiles = Array.from(files)
-      .filter((file) =>
-        !regexImageFile.test(file.name)
-          ? alert("Somente imagens devem ser usadas.")
-          : true,
-      )
-      .filter((file) =>
-        file.size > SIZELIMIT
-          ? alert(`A imagem é muito grande e não será adicionada.`)
-          : true,
-      );
-
-    if (validFiles.length < 1) return;
-
-    validFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file); // Read the file as a data URL
-
-      reader.onload = () => {
-        const url = reader.result as string;
-        // Update state with the image URL
-        setEditAlbumBoxes((prev) =>
-          prev.map((box) =>
-            box.id === id ? { ...box, images: [...box.images, url] } : box,
-          ),
-        );
-      };
-    });
-  };
-
   const handleOnDragOver = (event: React.DragEvent) => event.preventDefault();
 
   const handleRemoveImage = (id: number, index: number) => {
     setIsExpand(false);
-    if (confirm(`Tem certeza que deseja excluir esta imagem?`))
-      setEditAlbumBoxes((prev) =>
-        prev.map((box) =>
-          box.id === id
-            ? {
-                ...box,
-                images: box.images.filter((_, i) => i !== index),
-              }
-            : box,
-        ),
-      );
+    if (!confirm(`Tem certeza que deseja excluir esta imagem?`)) return;
+
+    setEditAlbumBoxes((prev) =>
+      prev.filter(isMatchingId(id)).map((album) => ({
+        ...album,
+        images: album.images.filter((_, i) => i !== index),
+      })),
+    );
   };
 
   const handleExpandImage = (
@@ -257,17 +256,22 @@ export default function Gallery() {
   const handleCloseExpandImage = () => setIsExpand(false);
 
   const handleRemoveAlbum = (id: number, title: string) => {
-    if (confirm(`Tem certeza que deseja excluir ${title}?`)) {
-      setAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
-      setEditAlbumBoxes((prev) => prev.filter((box) => box.id !== id));
-      setIsEditing(false);
-    } else {
-      return;
-    }
-  };
+    if (!confirm(`Tem certeza que deseja excluir ${title}?`)) return;
 
-  // console.log("albumBoxes", albumBoxes);
-  // console.log("editAlbumBoxes", editAlbumBoxes);
+    // Remove the album from albumBoxes and reset IDs
+    setAlbumBoxes((prev) =>
+      prev
+        .filter((album) => album.id !== id)
+        .map((album, index) => ({
+          ...album,
+          id: index, // Ensure IDs start from 0 and increment sequentially
+        })),
+    );
+
+    closeEditAlbum(id);
+    setNextId((prev) => Math.max(0, prev - 1));
+    setIsEditing(false);
+  };
 
   return (
     <WrapOutlet projectName={projectList[1].label}>
@@ -323,7 +327,7 @@ export default function Gallery() {
               <div>
                 <input
                   type="text"
-                  onChange={(event) => handleInputTitle(event, editBox.id)}
+                  onChange={(event) => handleAddInputTitle(event, editBox.id)}
                   className={`w-36 text-2xl outline-none`}
                   placeholder="Título"
                   value={editBox.title}
@@ -383,11 +387,6 @@ export default function Gallery() {
                           <img
                             draggable="false"
                             className="size-20 rounded-xl object-cover"
-                            // src={
-                            //   typeof image === "string"
-                            //     ? image
-                            //     : URL.createObjectURL(image as File)
-                            // }
                             src={
                               image instanceof File
                                 ? URL.createObjectURL(image as File)
