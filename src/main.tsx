@@ -4,7 +4,8 @@ import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeContextProvider } from "./context/ThemeContext.tsx";
 import MenuContextProvider from "./context/MenuContext.tsx";
-import EditAlbumProvider from "./pages/EditAlbumContext.tsx";
+import ExpandedImageProvider from "./components/AlbumSettings/ExpandedImageContext.tsx";
+import EditAlbumProvider from "./context/EditAlbumContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <MenuContextProvider>
         <ThemeContextProvider>
           <EditAlbumProvider>
-            <App />
+            <ExpandedImageProvider>
+              <App />
+            </ExpandedImageProvider>
           </EditAlbumProvider>
         </ThemeContextProvider>
       </MenuContextProvider>

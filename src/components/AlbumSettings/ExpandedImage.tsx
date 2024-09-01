@@ -1,23 +1,24 @@
 import { useRef } from "react";
 import Button from "../Button";
 import { closeIcon, deleteIcon } from "../../utils/icons";
+import { useExpandedImageContext } from "./ExpandedImageContext";
+import useClickOutside from "../../customHooks/useClickOutside";
 
-type ExpandedImageProps = {
-  expandedImage: {
-    image: string | File;
-    id: number;
-    index: number;
-  } | null;
-  handleRemoveImage: (id: number, index: number) => void;
-  handleCloseExpandImage: () => void;
-};
-
-function ExpandedImage({
-  expandedImage,
-  handleRemoveImage,
-  handleCloseExpandImage,
-}: ExpandedImageProps) {
+function ExpandedImage() {
   const extendRef = useRef(null);
+  const removeRef = useRef(null);
+
+  const {
+    isExpand,
+    setIsExpand,
+    handleCloseExpandImage,
+    handleRemoveImage,
+    expandedImage,
+  } = useExpandedImageContext();
+
+  useClickOutside([extendRef, removeRef], () => {
+    if (isExpand) setIsExpand(false);
+  });
 
   return (
     <section className="fixed inset-0 z-50 flex select-none items-center justify-center bg-black bg-opacity-75">
@@ -49,6 +50,7 @@ function ExpandedImage({
         {/* Button to delete the current expanded image */}
         <div className="flex justify-center pt-6">
           <Button
+            refBtn={removeRef}
             onClick={() =>
               handleRemoveImage(expandedImage!.id, expandedImage!.index)
             }

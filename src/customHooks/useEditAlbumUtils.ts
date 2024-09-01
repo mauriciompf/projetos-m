@@ -1,12 +1,18 @@
-import { useCallback } from "react";
+import { useEditAlbumContext } from "../context/EditAlbumContext";
+import isMatchingId from "../pages/isMatchingId";
 import { regexImageFile, SIZELIMIT } from "../utils/constants";
-import isMatchingId from "./isMatchingId";
-import { useEditAlbumContext } from "./EditAlbumContext";
 
-const { setEditAlbumBoxes } = useEditAlbumContext();
+const useEditAlbumUtils = () => {
+  const { setEditAlbumBoxes, albumBoxes } = useEditAlbumContext();
 
-const uploadValidImage = useCallback(
-  (files: (File | string)[] | FileList | null, id: number) => {
+  const closeEditAlbum = (id: number) => {
+    return setEditAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
+  };
+
+  const uploadValidImage = (
+    files: (File | string)[] | FileList | null,
+    id: number,
+  ) => {
     if (!files || files.length < 1) return;
 
     // Convert files to array
@@ -40,8 +46,26 @@ const uploadValidImage = useCallback(
         );
       });
     });
-  },
-  [setEditAlbumBoxes, isMatchingId],
-);
+  };
 
-export default uploadValidImage;
+  const validateInputTitle = (title: string, id: number) => {
+    if (!title) {
+      alert("Adicione um título para o álbum");
+      return;
+    }
+
+    const AlbumTitles = albumBoxes
+      .filter((album) => album.id !== id)
+      .map((album) => album.title);
+    // Prevent insert the title again
+    if (AlbumTitles.includes(title)) {
+      alert("Já está criado um álbum com este mesmo nome");
+      return;
+    }
+
+    return true;
+  };
+
+  return { closeEditAlbum, uploadValidImage, validateInputTitle };
+};
+export default useEditAlbumUtils;
