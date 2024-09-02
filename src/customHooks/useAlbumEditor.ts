@@ -6,7 +6,7 @@ import isMatchingId from "../pages/isMatchingId";
 const useAlbumEditor = () => {
   const {
     setEditAlbumBoxes,
-    setisEditAlbum,
+    setIsEditAlbum,
     setAlbumBoxes,
     editAlbumBoxes,
     setIsEditing,
@@ -35,27 +35,27 @@ const useAlbumEditor = () => {
   const handleCloseAlbum = useCallback(
     (id: number) => {
       closeEditAlbum(id);
-      setisEditAlbum(false);
+      setIsEditAlbum(false);
       setIsEditing(false);
     },
-    [closeEditAlbum, setisEditAlbum, setIsEditing],
+    [closeEditAlbum, setIsEditAlbum, setIsEditing],
   );
 
   const handleSaveAlbum = useCallback(
-    (id: number, title: string, images: (string | File)[]) => {
+    (id: number, title: string, images: (string | File)[], isMain: boolean) => {
       if (!validateInputTitle(title, id)) return;
 
       setAlbumBoxes((prev) =>
         prev.map(
           (album) =>
             album.id === id
-              ? { ...album, title, images } // Update the album being edited
+              ? { ...album, title, images, isMain } // Update the album being edited
               : album, // Keep other albums unchanged
         ),
       );
 
       closeEditAlbum(id);
-      setisEditAlbum(false);
+      setIsEditAlbum(false);
       setIsEditing(false);
     },
     [
@@ -63,18 +63,23 @@ const useAlbumEditor = () => {
       setAlbumBoxes,
       isMatchingId,
       closeEditAlbum,
-      setisEditAlbum,
+      setIsEditAlbum,
       setIsEditing,
     ],
   );
 
   const handleClickOutside = useCallback(() => {
     editAlbumBoxes.forEach((editBox) => {
-      handleSaveAlbum(editBox.id, editBox.title, editBox.images); // Save current state
+      handleSaveAlbum(
+        editBox.id,
+        editBox.title,
+        editBox.images,
+        editBox.isMain,
+      ); // Save current state
     });
 
     setEditAlbumBoxes([]); // Close editing mode
-    setisEditAlbum(false);
+    setIsEditAlbum(false);
   }, [editAlbumBoxes, handleSaveAlbum, setEditAlbumBoxes]);
 
   return {

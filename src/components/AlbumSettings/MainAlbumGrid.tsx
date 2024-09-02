@@ -9,7 +9,7 @@ function MainAlbumGrid() {
     editAlbumBoxes,
     setEditAlbumBoxes,
     nextId,
-    setisEditAlbum,
+    setIsEditAlbum,
     albumBoxes,
     isEditAlbum,
   } = useEditAlbumContext();
@@ -20,12 +20,13 @@ function MainAlbumGrid() {
         id: nextId,
         title: "",
         images: [],
+        isMain: false,
       },
       ...prev,
     ]);
 
-    setisEditAlbum(false);
-  }, [setisEditAlbum, setEditAlbumBoxes]);
+    setIsEditAlbum(false);
+  }, [setIsEditAlbum, setEditAlbumBoxes]);
 
   const handleEditAlbum = useCallback(
     (id: number) => {
@@ -33,9 +34,9 @@ function MainAlbumGrid() {
       if (!albumToEdit) return;
 
       setEditAlbumBoxes((prev) => [...prev, albumToEdit]);
-      setisEditAlbum(true);
+      setIsEditAlbum(true);
     },
-    [albumBoxes, isMatchingId, setEditAlbumBoxes, setisEditAlbum],
+    [albumBoxes, isMatchingId, setEditAlbumBoxes, setIsEditAlbum],
   );
 
   return (

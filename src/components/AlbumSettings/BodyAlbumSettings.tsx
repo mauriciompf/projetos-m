@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback } from "react";
+import React, { ChangeEvent, useCallback } from "react";
 import useEditAlbumUtils from "../../customHooks/useEditAlbumUtils";
 import Button from "../Button";
 import { regexImageFile, SIZELIMIT } from "../../utils/constants";
@@ -13,8 +13,14 @@ type BodyAlbumSettingsProps = {
     id: number,
     title: string,
     images: (string | File)[],
+    isMain: boolean,
   ) => void;
-  editBox: { id: number; title: string; images: (string | File)[] };
+  editBox: {
+    id: number;
+    title: string;
+    images: (string | File)[];
+    isMain: boolean;
+  };
 };
 
 export default function BodyAlbumSettings({
@@ -26,7 +32,7 @@ export default function BodyAlbumSettings({
     editAlbumBoxes,
     isEditAlbum,
     setAlbumBoxes,
-    setisEditAlbum,
+    setIsEditAlbum,
     setNextId,
     isEditing,
     setIsEditing,
@@ -110,10 +116,10 @@ export default function BodyAlbumSettings({
           : 0;
       setNextId(highestId + 1);
       closeEditAlbum(id);
-      setisEditAlbum(false);
+      setIsEditAlbum(false);
       setIsEditing(true);
     },
-    [setAlbumBoxes, closeEditAlbum, setisEditAlbum, setIsEditing],
+    [setAlbumBoxes, closeEditAlbum, setIsEditAlbum, setIsEditing],
   );
 
   const handleAddNewAlbum = useCallback(
@@ -125,12 +131,30 @@ export default function BodyAlbumSettings({
 
       setAlbumBoxes((prev) => [...prev, { ...boxToAdd, id: nextId }]);
       setNextId((prev) => prev + 1);
-      setisEditAlbum(false);
+      setIsEditAlbum(false);
       setIsEditing(false);
       closeEditAlbum(id);
     },
-    [setAlbumBoxes, setNextId, setisEditAlbum, setIsEditing, closeEditAlbum],
+    [setAlbumBoxes, setNextId, setIsEditAlbum, setIsEditing, closeEditAlbum],
   );
+
+  const handleAddMainAlbum = useCallback(
+    (event: ChangeEvent<HTMLInputElement>, id: number) => {
+      const isChecked = event.target.checked;
+
+      setEditAlbumBoxes((prev) =>
+        prev.map((album) =>
+          album.id === id
+            ? { ...album, isMain: isChecked }
+            : { ...album, isMain: false },
+        ),
+      );
+    },
+    [setEditAlbumBoxes],
+  );
+
+  // console.log("albumBoxes", albumBoxes);
+  // console.log("editAlbumBoxes", editAlbumBoxes);
 
   return (
     <div
@@ -138,6 +162,21 @@ export default function BodyAlbumSettings({
       onDragOver={handleOnDragOver}
       className="grid gap-4"
     >
+      <span className="sr-only">Adicionar álbum em visualização principal</span>
+      <label
+        className="flex cursor-pointer select-none gap-3 font-bold leading-4 tracking-tight"
+        htmlFor="mainAlbum"
+      >
+        <input
+          onChange={(event) => handleAddMainAlbum(event, editBox.id)}
+          type="checkbox"
+          id="mainAlbum"
+          className="w-8 cursor-pointer"
+          checked={editBox.isMain}
+        />
+        <span>Adicionar como visualização principal</span>
+      </label>
+
       {/* Button for uploading images */}
       <label
         htmlFor="files"
@@ -215,7 +254,12 @@ export default function BodyAlbumSettings({
         <>
           <Button
             onClick={() =>
-              handleSaveAlbum(editBox.id, editBox.title, editBox.images)
+              handleSaveAlbum(
+                editBox.id,
+                editBox.title,
+                editBox.images,
+                editBox.isMain,
+              )
             }
             // border-transparent bg-green-500 text-white
             className={`${isEditing ? "border-transparent bg-green-500 text-white" : "border-black"} rounded-xl border hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white`}
