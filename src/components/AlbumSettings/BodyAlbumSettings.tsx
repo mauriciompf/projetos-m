@@ -33,11 +33,8 @@ export default function BodyAlbumSettings({
     isEditAlbum,
     setAlbumBoxes,
     setIsEditAlbum,
-    setNextId,
     isEditing,
     setIsEditing,
-    albumBoxes,
-    nextId,
   } = useEditAlbumContext();
   const { handleRemoveImage, handleExpandImage } = useExpandedImageContext();
   const { uploadValidImage, validateInputTitle, closeEditAlbum } =
@@ -104,17 +101,7 @@ export default function BodyAlbumSettings({
     (id: number, title: string) => {
       if (!confirm(`Tem certeza que deseja excluir ${title}?`)) return;
 
-      setAlbumBoxes((prev) =>
-        prev
-          .filter((album) => album.id !== id)
-          .map((album, index) => ({ ...album, id: index + 1 })),
-      ); // Remove the album from albumBoxes
-
-      const highestId =
-        albumBoxes.length > 0
-          ? Math.max(...albumBoxes.map((album) => album.id))
-          : 0;
-      setNextId(highestId + 1);
+      setAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
       closeEditAlbum(id);
       setIsEditAlbum(false);
       setIsEditing(true);
@@ -129,13 +116,12 @@ export default function BodyAlbumSettings({
       const boxToAdd = editAlbumBoxes.find(isMatchingId(id)); // Get all the elements of editAlbumBoxes array
       if (!boxToAdd) return;
 
-      setAlbumBoxes((prev) => [...prev, { ...boxToAdd, id: nextId }]);
-      setNextId((prev) => prev + 1);
+      setAlbumBoxes((prev) => [...prev, { ...boxToAdd, id: Date.now() }]);
       setIsEditAlbum(false);
       setIsEditing(false);
       closeEditAlbum(id);
     },
-    [setAlbumBoxes, setNextId, setIsEditAlbum, setIsEditing, closeEditAlbum],
+    [setAlbumBoxes, setIsEditAlbum, setIsEditing, closeEditAlbum],
   );
 
   const handleAddMainAlbum = useCallback(

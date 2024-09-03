@@ -16,8 +16,6 @@ type EditAlbumValues = {
   setIsEditAlbum: Dispatch<SetStateAction<boolean>>;
   isEditAlbum: boolean;
   setAlbumBoxes: Dispatch<SetStateAction<Album[]>>;
-  nextId: number;
-  setNextId: Dispatch<SetStateAction<number>>;
   isEditing: boolean;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
 };
@@ -35,7 +33,6 @@ export default function EditAlbumProvider({
     key: "albums",
     initialState: [],
   });
-  const [nextId, setNextId] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -47,8 +44,6 @@ export default function EditAlbumProvider({
         setIsEditAlbum,
         isEditAlbum,
         setAlbumBoxes,
-        nextId,
-        setNextId,
         isEditing,
         setIsEditing,
       }}

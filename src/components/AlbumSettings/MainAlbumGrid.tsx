@@ -8,7 +8,6 @@ function MainAlbumGrid() {
   const {
     editAlbumBoxes,
     setEditAlbumBoxes,
-    nextId,
     setIsEditAlbum,
     albumBoxes,
     isEditAlbum,
@@ -17,7 +16,7 @@ function MainAlbumGrid() {
   const handleCreateNewAlbum = useCallback(() => {
     setEditAlbumBoxes((prev) => [
       {
-        id: nextId,
+        id: Date.now(),
         title: "",
         images: [],
         isMain: false,
