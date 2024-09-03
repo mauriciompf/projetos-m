@@ -136,6 +136,7 @@ export default function BodyAlbumSettings({
 
       setEditAlbumBoxes((prev) => prev.map(updateIsMain));
       setAlbumBoxes((prev) => prev.map(updateIsMain));
+      setIsEditing(true);
     },
     [setEditAlbumBoxes, setAlbumBoxes],
   );
@@ -151,7 +152,7 @@ export default function BodyAlbumSettings({
       {editAlbumBoxes.map((editBox) => (
         <label
           key={editBox.id}
-          className="flex cursor-pointer select-none gap-3 font-bold leading-4 tracking-tight"
+          className="flex cursor-pointer select-none gap-1 font-bold leading-4 tracking-tight"
           htmlFor={`mainAlbum-${editBox.id}`}
         >
           <input
@@ -161,7 +162,7 @@ export default function BodyAlbumSettings({
             className="w-8 cursor-pointer"
             checked={editBox.isMain}
           />
-          <span>Adicionar como visualização principal</span>
+          <span>Album principal</span>
         </label>
       ))}
 

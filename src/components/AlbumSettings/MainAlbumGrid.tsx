@@ -44,24 +44,42 @@ function MainAlbumGrid() {
         editAlbumBoxes.length > 0 && "blur-md"
       } mx-auto mt-10 grid w-[90%] gap-4`}
     >
-      {/* Placeholder for creating a new album */}
-      <div className="grid h-[300px] w-full place-items-center rounded-2xl bg-white text-center text-black">
-        <p className="text-2xl">
-          <strong>Adicione um novo album clicando em "+"</strong>
-        </p>
+      <div className="w-full rounded-2xl">
+        {albumBoxes.some((album) => album.isMain) ? (
+          albumBoxes
+            .filter((album) => album.isMain)
+            .map((album) => (
+              <div key={album.id} className="flex overflow-hidden">
+                {album.images.map((image, index) => (
+                  <img
+                    className="rounded-2xl object-cover"
+                    key={index}
+                    src={
+                      image instanceof File ? URL.createObjectURL(image) : image
+                    }
+                    alt=""
+                  />
+                ))}
+              </div>
+            ))
+        ) : (
+          <p className="grid h-[300px] place-items-center bg-white text-center text-2xl text-black">
+            <strong>Adicione um novo album clicando em "+"</strong>
+          </p>
+        )}
       </div>
       {/* Grid of album buttons and add button */}
       <div className="grid grid-cols-3 gap-4">
-        {albumBoxes.map((box) => (
+        {albumBoxes.map((album) => (
           <Button
             disabled={editAlbumBoxes.length > 0}
-            onClick={() => handleEditAlbum(box.id)}
-            key={box.id}
+            onClick={() => handleEditAlbum(album.id)}
+            key={album.id}
             className={`${
               isEditAlbum && "ring-transparent"
             } size-[4.5rem] rounded-2xl bg-white text-black`}
           >
-            {box.title}
+            {album.title}
           </Button>
         ))}
 
