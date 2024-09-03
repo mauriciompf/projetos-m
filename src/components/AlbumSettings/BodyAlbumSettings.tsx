@@ -44,7 +44,7 @@ export default function BodyAlbumSettings({
     (event: React.DragEvent, id: number) => {
       event.preventDefault(); // Prevent to open the file in the browser
       uploadValidImage(event.dataTransfer.files, id);
-      setIsEditing(true);
+      if (isEditing) setIsEditing(true);
     },
     [uploadValidImage, setIsEditing],
   );
@@ -58,7 +58,7 @@ export default function BodyAlbumSettings({
     (event: ChangeEvent<HTMLInputElement>, id: number) => {
       uploadValidImage(event.target.files, id);
       event.target.value = ""; // Clear file input value to be selected again
-      if (!isEditAlbum) setIsEditing(true);
+      if (isEditAlbum) setIsEditing(true);
     },
     [uploadValidImage, isEditAlbum],
   );
@@ -88,7 +88,7 @@ export default function BodyAlbumSettings({
             .map((box) => ({ ...box, images: [...box.images, url] })),
         );
 
-        setIsEditing(true);
+        if (isEditing) setIsEditing(true);
       } catch (error) {
         console.error(`Erro ao validar a imagem...`);
         return;
@@ -104,7 +104,7 @@ export default function BodyAlbumSettings({
       setAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
       closeEditAlbum(id);
       setIsEditAlbum(false);
-      setIsEditing(true);
+      setIsEditing(false);
     },
     [setAlbumBoxes, closeEditAlbum, setIsEditAlbum, setIsEditing],
   );
@@ -128,19 +128,17 @@ export default function BodyAlbumSettings({
     (event: ChangeEvent<HTMLInputElement>, id: number) => {
       const isChecked = event.target.checked;
 
-      setEditAlbumBoxes((prev) =>
-        prev.map((album) =>
-          album.id === id
-            ? { ...album, isMain: isChecked }
-            : { ...album, isMain: false },
-        ),
-      );
-    },
-    [setEditAlbumBoxes],
-  );
+      // #FIXME any type
+      const updateIsMain = (album: any) => ({
+        ...album,
+        isMain: album.id === id ? isChecked : false,
+      });
 
-  // console.log("albumBoxes", albumBoxes);
-  // console.log("editAlbumBoxes", editAlbumBoxes);
+      setEditAlbumBoxes((prev) => prev.map(updateIsMain));
+      setAlbumBoxes((prev) => prev.map(updateIsMain));
+    },
+    [setEditAlbumBoxes, setAlbumBoxes],
+  );
 
   return (
     <div
@@ -149,19 +147,23 @@ export default function BodyAlbumSettings({
       className="grid gap-4"
     >
       <span className="sr-only">Adicionar álbum em visualização principal</span>
-      <label
-        className="flex cursor-pointer select-none gap-3 font-bold leading-4 tracking-tight"
-        htmlFor="mainAlbum"
-      >
-        <input
-          onChange={(event) => handleAddMainAlbum(event, editBox.id)}
-          type="checkbox"
-          id="mainAlbum"
-          className="w-8 cursor-pointer"
-          checked={editBox.isMain}
-        />
-        <span>Adicionar como visualização principal</span>
-      </label>
+
+      {editAlbumBoxes.map((editBox) => (
+        <label
+          key={editBox.id}
+          className="flex cursor-pointer select-none gap-3 font-bold leading-4 tracking-tight"
+          htmlFor={`mainAlbum-${editBox.id}`}
+        >
+          <input
+            onChange={(event) => handleAddMainAlbum(event, editBox.id)}
+            type="checkbox"
+            id={`mainAlbum-${editBox.id}`}
+            className="w-8 cursor-pointer"
+            checked={editBox.isMain}
+          />
+          <span>Adicionar como visualização principal</span>
+        </label>
+      ))}
 
       {/* Button for uploading images */}
       <label
