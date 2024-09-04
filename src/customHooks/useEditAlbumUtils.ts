@@ -1,5 +1,5 @@
 import { useEditAlbumContext } from "../context/EditAlbumContext";
-import isMatchingId from "../pages/isMatchingId";
+import isMatchingId from "../utils/isMatchingId";
 import { regexImageFile, SIZELIMIT } from "../utils/constants";
 
 const useEditAlbumUtils = () => {

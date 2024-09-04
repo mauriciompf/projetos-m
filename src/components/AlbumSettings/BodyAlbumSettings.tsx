@@ -3,7 +3,7 @@ import useEditAlbumUtils from "../../customHooks/useEditAlbumUtils";
 import Button from "../Button";
 import { regexImageFile, SIZELIMIT } from "../../utils/constants";
 import axios from "axios";
-import isMatchingId from "../../pages/isMatchingId";
+import isMatchingId from "../../utils/isMatchingId";
 import { deleteIcon, expandIcon } from "../../utils/icons";
 import { useExpandedImageContext } from "./ExpandedImageContext";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";

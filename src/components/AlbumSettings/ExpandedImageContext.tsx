@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import useCustomHookContext from "../../customHooks/useCustomHookContext";
-import isMatchingId from "../../pages/isMatchingId";
+import isMatchingId from "../../utils/isMatchingId";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
 
 type EditAlbumValues = {

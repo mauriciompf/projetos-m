@@ -1,8 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
-import isMatchingId from "../../pages/isMatchingId";
-import { plusIcon } from "../../utils/icons";
+import isMatchingId from "../../utils/isMatchingId";
+import { nextIcon, plusIcon, previousIcon } from "../../utils/icons";
 import Button from "../Button";
+import { INTERVALTIME } from "../../utils/constants";
 
 function MainAlbumGrid() {
   const {
@@ -12,6 +13,13 @@ function MainAlbumGrid() {
     albumBoxes,
     isEditAlbum,
   } = useEditAlbumContext();
+
+  const [imageIndex, setImageIndex] = useState(0);
+  const intervalIdRef = useRef<number | null>(null);
+
+  const clearIntervalId = () => {
+    if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+  };
 
   const handleCreateNewAlbum = useCallback(() => {
     setEditAlbumBoxes((prev) => [
@@ -38,38 +46,116 @@ function MainAlbumGrid() {
     [albumBoxes, isMatchingId, setEditAlbumBoxes, setIsEditAlbum],
   );
 
+  const handleNextImage = useCallback(
+    (imagesLength: number) => {
+      setImageIndex(
+        (prev) =>
+          (prev + 1) % // Increment the current index
+          imagesLength, // Loop back to the start when reaching the end
+      );
+      clearIntervalId(); // Clear interval when clicked
+      setTimeout(startInterval, INTERVALTIME); // After some time, active carrousel interval
+    },
+    [clearIntervalId],
+  );
+
+  const handlePrevImage = useCallback(
+    (imagesLength: number) => {
+      setImageIndex(
+        (prev) =>
+          (prev -
+            1 + // Decrement the current index
+            imagesLength) % // Ensure positive index even when wrapping around (< 0)
+          imagesLength, // Loop back to the end when reaching the start
+      );
+
+      clearIntervalId(); // Clear interval when clicked
+      setTimeout(startInterval, INTERVALTIME); // After some time, turn carrousel interval
+    },
+    [clearIntervalId],
+  );
+
+  const startInterval = useCallback(() => {
+    clearIntervalId();
+
+    intervalIdRef.current = setInterval(() => {
+      const album = albumBoxes.find((album) => album.isMain); // Get album which isMain is true
+
+      if (album && album.images.length > 0) {
+        handleNextImage(album.images.length);
+      }
+    }, INTERVALTIME);
+  }, [albumBoxes, handleNextImage, clearIntervalId]);
+
+  useEffect(() => {
+    startInterval();
+    return () => {
+      clearIntervalId();
+    };
+  }, [startInterval]);
+
   return (
     <section
       className={`${
         editAlbumBoxes.length > 0 && "blur-md"
       } mx-auto mt-10 grid w-[90%] gap-4`}
     >
-      <div className="w-full rounded-2xl">
-        {albumBoxes.some((album) => album.isMain) ? (
+      {/* Carousel */}
+      <div className="relative flex overflow-hidden">
+        {albumBoxes.some((album) => album.isMain) ? ( // Check if at least one isMain is true
           albumBoxes
-            .filter((album) => album.isMain)
+            .filter((album) => album.isMain) // Filter which album isMain is true
             .map((album) => (
-              <div key={album.id} className="flex overflow-hidden">
-                {album.images.map((image, index) => (
-                  <img
-                    className="rounded-2xl object-cover"
-                    key={index}
-                    src={
-                      image instanceof File ? URL.createObjectURL(image) : image
-                    }
-                    alt=""
-                  />
-                ))}
+              <div key={album.id} className="flex w-full">
+                {album.images.length > 0 ? ( // Check if at least one image exist
+                  album.images.map((image, index) => (
+                    <img
+                      key={index}
+                      style={{
+                        transform: `translateX(-${imageIndex * 100}%)`,
+                      }}
+                      className="relative h-full w-full select-none rounded-2xl object-cover transition-transform"
+                      src={
+                        image instanceof File
+                          ? URL.createObjectURL(image)
+                          : image
+                      }
+                      alt=""
+                    />
+                  ))
+                ) : (
+                  <p className="grid h-[300px] place-items-center rounded-2xl bg-white px-4 text-center text-2xl text-black">
+                    <strong>
+                      Adicione imagens dentro do álbum para visualizá-las por
+                      aqui, ou crie um novo álbum clicando em "+"
+                    </strong>
+                  </p>
+                )}
+
+                <Button
+                  onClick={() => handlePrevImage(album.images.length)}
+                  className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                >
+                  {previousIcon}
+                </Button>
+
+                <Button
+                  onClick={() => handleNextImage(album.images.length)}
+                  className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                >
+                  {nextIcon}
+                </Button>
               </div>
             ))
         ) : (
-          <p className="grid h-[300px] place-items-center bg-white text-center text-2xl text-black">
+          <p className="grid h-[300px] place-items-center rounded-2xl bg-white px-4 text-center text-2xl text-black">
             <strong>Adicione um novo album clicando em "+"</strong>
           </p>
         )}
       </div>
+
       {/* Grid of album buttons and add button */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="flex flex-wrap place-items-start gap-4">
         {albumBoxes.map((album) => (
           <Button
             disabled={editAlbumBoxes.length > 0}
@@ -77,7 +163,7 @@ function MainAlbumGrid() {
             key={album.id}
             className={`${
               isEditAlbum && "ring-transparent"
-            } size-[4.5rem] rounded-2xl bg-white text-black`}
+            } size-[4rem] rounded-2xl bg-white text-black`}
           >
             {album.title}
           </Button>
@@ -89,7 +175,7 @@ function MainAlbumGrid() {
           onClick={handleCreateNewAlbum}
           className={`${
             editAlbumBoxes.length > 0 && "ring-transparent"
-          } size-[4.5rem] rounded-2xl bg-white text-black`}
+          } size-[4rem] rounded-2xl bg-white text-black`}
         >
           {plusIcon}
         </Button>

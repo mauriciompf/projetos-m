@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useEditAlbumContext } from "../context/EditAlbumContext";
 import useEditAlbumUtils from "./useEditAlbumUtils";
-import isMatchingId from "../pages/isMatchingId";
+import isMatchingId from "../utils/isMatchingId";
 
 const useAlbumEditor = () => {
   const {
