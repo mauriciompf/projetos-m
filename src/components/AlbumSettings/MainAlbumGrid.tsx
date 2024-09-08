@@ -46,33 +46,37 @@ function MainAlbumGrid() {
     [albumBoxes, isMatchingId, setEditAlbumBoxes, setIsEditAlbum],
   );
 
-  const handleNextImage = useCallback(
-    (imagesLength: number) => {
-      setImageIndex(
-        (prev) =>
-          (prev + 1) % // Increment the current index
-          imagesLength, // Loop back to the start when reaching the end
-      );
-      clearIntervalId(); // Clear interval when clicked
-      setTimeout(startInterval, INTERVALTIME); // After some time, active carrousel interval
-    },
-    [clearIntervalId],
-  );
+  const handleCarouselControls = useCallback(
+    (controlButton: string, imagesLength: number) => {
+      const increaseIndex = (prev: number) =>
+        (prev + 1) % // Increment the current index
+        imagesLength; // Loop back to the start when reaching the end
 
-  const handlePrevImage = useCallback(
-    (imagesLength: number) => {
-      setImageIndex(
-        (prev) =>
-          (prev -
-            1 + // Decrement the current index
-            imagesLength) % // Ensure positive index even when wrapping around (< 0)
-          imagesLength, // Loop back to the end when reaching the start
-      );
+      const decreaseIndex = (prev: number) =>
+        (prev -
+          1 + // Decrement the current index
+          imagesLength) % // Ensure positive index even when wrapping around (< 0)
+        imagesLength;
+
+      if (controlButton === "Next") {
+        setImageIndex(increaseIndex);
+      } else if (controlButton === "Prev") {
+        setImageIndex(decreaseIndex);
+      }
 
       clearIntervalId(); // Clear interval when clicked
       setTimeout(startInterval, INTERVALTIME); // After some time, turn carrousel interval
     },
     [clearIntervalId],
+  );
+
+  const handleSelectImage = useCallback(
+    (index: number) => {
+      setImageIndex(index);
+      clearIntervalId();
+      setTimeout(startInterval, INTERVALTIME);
+    },
+    [setImageIndex],
   );
 
   const startInterval = useCallback(() => {
@@ -82,10 +86,10 @@ function MainAlbumGrid() {
       const album = albumBoxes.find((album) => album.isMain); // Get album which isMain is true
 
       if (album && album.images.length > 0) {
-        handleNextImage(album.images.length);
+        handleCarouselControls("Next", album.images.length);
       }
     }, INTERVALTIME);
-  }, [albumBoxes, handleNextImage, clearIntervalId]);
+  }, [albumBoxes, handleCarouselControls, clearIntervalId]);
 
   useEffect(() => {
     startInterval();
@@ -133,18 +137,35 @@ function MainAlbumGrid() {
                 )}
 
                 <Button
-                  onClick={() => handlePrevImage(album.images.length)}
+                  onClick={() =>
+                    handleCarouselControls("Prev", album.images.length)
+                  }
                   className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
                 >
                   {previousIcon}
                 </Button>
 
                 <Button
-                  onClick={() => handleNextImage(album.images.length)}
+                  onClick={() =>
+                    handleCarouselControls("Next", album.images.length)
+                  }
                   className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
                 >
                   {nextIcon}
                 </Button>
+
+                <div className="absolute bottom-4 left-[25%] flex gap-4">
+                  {album.images.length > 0 &&
+                    album.images.map((_, index) => (
+                      <Button
+                        onClick={() => handleSelectImage(index)}
+                        className={`grid size-4 place-items-center rounded-full border border-black bg-white text-sm text-black hover:bg-[#4363D2] focus:bg-[#4363D2] active:bg-[#4363D2] ${index === imageIndex && "bg-[#4363D2]"} `}
+                        key={index}
+                      >
+                        {""}
+                      </Button>
+                    ))}
+                </div>
               </div>
             ))
         ) : (
