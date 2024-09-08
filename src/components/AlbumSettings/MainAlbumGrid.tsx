@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
 import isMatchingId from "../../utils/isMatchingId";
-import { nextIcon, plusIcon, previousIcon } from "../../utils/icons";
+import {
+  closeIcon,
+  expandIcon,
+  nextIcon,
+  plusIcon,
+  previousIcon,
+} from "../../utils/icons";
 import Button from "../Button";
 import { INTERVALTIME } from "../../utils/constants";
 
@@ -16,6 +22,7 @@ function MainAlbumGrid() {
 
   const [imageIndex, setImageIndex] = useState(0);
   const intervalIdRef = useRef<number | null>(null);
+  const [extendAlbum, setExtendAlbum] = useState(false);
 
   const clearIntervalId = () => {
     if (intervalIdRef.current) clearInterval(intervalIdRef.current);
@@ -65,38 +72,52 @@ function MainAlbumGrid() {
       }
 
       clearIntervalId(); // Clear interval when clicked
-      setTimeout(startInterval, INTERVALTIME); // After some time, turn carrousel interval
+      if (!extendAlbum) {
+        // Restart interval only if album is not expanded
+        setTimeout(startInterval, INTERVALTIME);
+      }
     },
     [clearIntervalId],
-  );
-
-  const handleSelectImage = useCallback(
-    (index: number) => {
-      setImageIndex(index);
-      clearIntervalId();
-      setTimeout(startInterval, INTERVALTIME);
-    },
-    [setImageIndex],
   );
 
   const startInterval = useCallback(() => {
     clearIntervalId();
 
-    intervalIdRef.current = setInterval(() => {
-      const album = albumBoxes.find((album) => album.isMain); // Get album which isMain is true
+    if (!extendAlbum) {
+      intervalIdRef.current = setInterval(() => {
+        const album = albumBoxes.find((album) => album.isMain); // Get album which isMain is true
 
-      if (album && album.images.length > 0) {
-        handleCarouselControls("Next", album.images.length);
-      }
-    }, INTERVALTIME);
+        if (album && album.images.length > 0) {
+          handleCarouselControls("Next", album.images.length);
+        }
+      }, INTERVALTIME);
+    }
   }, [albumBoxes, handleCarouselControls, clearIntervalId]);
 
+  const handleSelectImage = useCallback(
+    (index: number) => {
+      clearIntervalId();
+      setImageIndex(index);
+      if (!extendAlbum) {
+        setTimeout(startInterval, INTERVALTIME); // Restart interval only if album is not expanded
+      }
+    },
+    [setImageIndex, clearIntervalId, extendAlbum, startInterval],
+  );
+
+  const handleExpandAlbum = useCallback(() => {
+    clearIntervalId();
+    setExtendAlbum(true);
+  }, [setExtendAlbum, clearIntervalId]);
+
   useEffect(() => {
-    startInterval();
+    if (!extendAlbum) {
+      startInterval();
+    }
     return () => {
       clearIntervalId();
     };
-  }, [startInterval]);
+  }, [startInterval, extendAlbum]);
 
   return (
     <section
@@ -110,7 +131,7 @@ function MainAlbumGrid() {
           albumBoxes
             .filter((album) => album.isMain) // Filter which album isMain is true
             .map((album) => (
-              <div key={album.id} className="flex w-full">
+              <div key={album.id} className="flex w-full rounded-2xl bg-white">
                 {album.images.length > 0 ? ( // Check if at least one image exist
                   album.images.map((image, index) => (
                     <img
@@ -118,7 +139,7 @@ function MainAlbumGrid() {
                       style={{
                         transform: `translateX(-${imageIndex * 100}%)`,
                       }}
-                      className="relative h-full w-full select-none rounded-2xl object-cover transition-transform"
+                      className="relative min-h-[300px] w-full select-none object-contain transition-transform"
                       src={
                         image instanceof File
                           ? URL.createObjectURL(image)
@@ -136,36 +157,97 @@ function MainAlbumGrid() {
                   </p>
                 )}
 
-                <Button
-                  onClick={() =>
-                    handleCarouselControls("Prev", album.images.length)
-                  }
-                  className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
-                >
-                  {previousIcon}
-                </Button>
+                {album.images.length > 0 && (
+                  <>
+                    <Button
+                      onClick={handleExpandAlbum}
+                      className="absolute border border-black bg-white text-2xl text-black"
+                    >
+                      {expandIcon}
+                    </Button>
 
-                <Button
-                  onClick={() =>
-                    handleCarouselControls("Next", album.images.length)
-                  }
-                  className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
-                >
-                  {nextIcon}
-                </Button>
+                    <Button
+                      onClick={() =>
+                        handleCarouselControls("Prev", album.images.length)
+                      }
+                      className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                    >
+                      {previousIcon}
+                    </Button>
 
-                <div className="absolute bottom-4 left-[25%] flex gap-4">
-                  {album.images.length > 0 &&
-                    album.images.map((_, index) => (
-                      <Button
-                        onClick={() => handleSelectImage(index)}
-                        className={`grid size-4 place-items-center rounded-full border border-black bg-white text-sm text-black hover:bg-[#4363D2] focus:bg-[#4363D2] active:bg-[#4363D2] ${index === imageIndex && "bg-[#4363D2]"} `}
-                        key={index}
-                      >
-                        {""}
-                      </Button>
-                    ))}
-                </div>
+                    <Button
+                      onClick={() =>
+                        handleCarouselControls("Next", album.images.length)
+                      }
+                      className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                    >
+                      {nextIcon}
+                    </Button>
+
+                    <div className="absolute -left-[50%] bottom-4 mx-auto flex w-full translate-x-1/2 content-center justify-center gap-1">
+                      {album.images.map((_, index) => (
+                        <Button
+                          onClick={() => handleSelectImage(index)}
+                          className={`rounded-full border border-black bg-white hover:bg-[#4363D2] focus:bg-[#4363D2] active:bg-[#4363D2] ${index === imageIndex && "bg-[#4363D2]"} `}
+                          key={index}
+                        >
+                          {""}
+                        </Button>
+                      ))}
+                    </div>
+
+                    {extendAlbum && (
+                      <div className="fixed inset-0 z-50 grid select-none bg-black bg-opacity-85">
+                        <div className="flex overflow-hidden">
+                          {album.images.length > 0 && // Check if at least one image exist
+                            album.images.map((image, index) => (
+                              <img
+                                key={index}
+                                draggable="false"
+                                style={{
+                                  transform: `translateX(-${imageIndex * 100}%)`,
+                                }}
+                                className="select-none rounded-2xl object-contain transition-transform"
+                                src={
+                                  image instanceof File
+                                    ? URL.createObjectURL(image)
+                                    : image
+                                }
+                                alt=""
+                              />
+                            ))}
+                        </div>
+
+                        <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
+                          <Button
+                            onClick={() => setExtendAlbum(false)}
+                            className="h-[1.875rem] rounded-full px-0 py-0 text-4xl"
+                          >
+                            {closeIcon}
+                          </Button>
+                        </div>
+
+                        <Button
+                          onClick={() =>
+                            handleCarouselControls("Prev", album.images.length)
+                          }
+                          className="absolute left-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
+                        >
+                          {previousIcon}
+                        </Button>
+
+                        <Button
+                          onClick={() =>
+                            handleCarouselControls("Next", album.images.length)
+                          }
+                          className="absolute right-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
+                        >
+                          {nextIcon}
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             ))
         ) : (

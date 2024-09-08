@@ -44,7 +44,7 @@ export default function BodyAlbumSettings({
     (event: React.DragEvent, id: number) => {
       event.preventDefault(); // Prevent to open the file in the browser
       uploadValidImage(event.dataTransfer.files, id);
-      if (isEditing) setIsEditing(true);
+      setIsEditing(true);
     },
     [uploadValidImage, setIsEditing],
   );
@@ -58,7 +58,7 @@ export default function BodyAlbumSettings({
     (event: ChangeEvent<HTMLInputElement>, id: number) => {
       uploadValidImage(event.target.files, id);
       event.target.value = ""; // Clear file input value to be selected again
-      if (isEditAlbum) setIsEditing(true);
+      setIsEditing(true);
     },
     [uploadValidImage, isEditAlbum],
   );
