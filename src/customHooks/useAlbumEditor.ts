@@ -10,6 +10,7 @@ const useAlbumEditor = () => {
     setAlbumBoxes,
     editAlbumBoxes,
     setIsEditing,
+    setImageIndex,
   } = useEditAlbumContext();
   const { closeEditAlbum, validateInputTitle } = useEditAlbumUtils();
   const { isEditAlbum } = useEditAlbumContext();
@@ -54,6 +55,7 @@ const useAlbumEditor = () => {
         ),
       );
 
+      setImageIndex(0);
       closeEditAlbum(id);
       setIsEditAlbum(false);
       setIsEditing(false);

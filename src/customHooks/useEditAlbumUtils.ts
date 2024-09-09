@@ -1,9 +1,23 @@
 import { useEditAlbumContext } from "../context/EditAlbumContext";
 import isMatchingId from "../utils/isMatchingId";
-import { regexImageFile, SIZELIMIT } from "../utils/constants";
+import {
+  ALBUM_IMAGE_LIMIT,
+  regexImageFile,
+  SIZELIMIT,
+} from "../utils/constants";
 
 const useEditAlbumUtils = () => {
-  const { setEditAlbumBoxes, albumBoxes } = useEditAlbumContext();
+  const { setEditAlbumBoxes, albumBoxes, editAlbumBoxes } =
+    useEditAlbumContext();
+
+  const isAlbumAtImageLimit = (id: number) => {
+    const album = editAlbumBoxes.find((e) => e.id === id);
+    if (album!.images.length > ALBUM_IMAGE_LIMIT) {
+      alert("Limite de images atingido");
+      return true;
+    }
+    return false;
+  };
 
   const closeEditAlbum = (id: number) => {
     return setEditAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
@@ -66,6 +80,11 @@ const useEditAlbumUtils = () => {
     return true;
   };
 
-  return { closeEditAlbum, uploadValidImage, validateInputTitle };
+  return {
+    closeEditAlbum,
+    uploadValidImage,
+    validateInputTitle,
+    isAlbumAtImageLimit,
+  };
 };
 export default useEditAlbumUtils;

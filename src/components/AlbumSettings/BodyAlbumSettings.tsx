@@ -35,14 +35,20 @@ export default function BodyAlbumSettings({
     setIsEditAlbum,
     isEditing,
     setIsEditing,
+    setImageIndex,
   } = useEditAlbumContext();
   const { handleRemoveImage, handleExpandImage } = useExpandedImageContext();
-  const { uploadValidImage, validateInputTitle, closeEditAlbum } =
-    useEditAlbumUtils();
+  const {
+    uploadValidImage,
+    validateInputTitle,
+    closeEditAlbum,
+    isAlbumAtImageLimit,
+  } = useEditAlbumUtils();
 
   const handleOnDrop = useCallback(
     (event: React.DragEvent, id: number) => {
       event.preventDefault(); // Prevent to open the file in the browser
+      if (isAlbumAtImageLimit(id)) return;
       uploadValidImage(event.dataTransfer.files, id);
       setIsEditing(true);
     },
@@ -56,6 +62,7 @@ export default function BodyAlbumSettings({
 
   const handleUpload = useCallback(
     (event: ChangeEvent<HTMLInputElement>, id: number) => {
+      if (isAlbumAtImageLimit(id)) return;
       uploadValidImage(event.target.files, id);
       event.target.value = ""; // Clear file input value to be selected again
       setIsEditing(true);
@@ -67,7 +74,7 @@ export default function BodyAlbumSettings({
     async (id: number) => {
       try {
         const url = prompt("Insira a URL da imagem:");
-        if (!url) return;
+        if (!url || isAlbumAtImageLimit(id)) return;
 
         if (!regexImageFile.test(url)) {
           alert("Somente imagens devem ser usados.");
@@ -120,6 +127,7 @@ export default function BodyAlbumSettings({
       setIsEditAlbum(false);
       setIsEditing(false);
       closeEditAlbum(id);
+      setImageIndex(0);
     },
     [setAlbumBoxes, setIsEditAlbum, setIsEditing, closeEditAlbum],
   );

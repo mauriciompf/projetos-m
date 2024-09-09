@@ -18,6 +18,8 @@ type EditAlbumValues = {
   setAlbumBoxes: Dispatch<SetStateAction<Album[]>>;
   isEditing: boolean;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
+  imageIndex: number;
+  setImageIndex: Dispatch<SetStateAction<number>>;
 };
 
 export const EditAlbumContext = createContext<EditAlbumValues | null>(null);
@@ -34,6 +36,7 @@ export default function EditAlbumProvider({
     initialState: [],
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
 
   return (
     <EditAlbumContext.Provider
@@ -46,6 +49,8 @@ export default function EditAlbumProvider({
         setAlbumBoxes,
         isEditing,
         setIsEditing,
+        imageIndex,
+        setImageIndex,
       }}
     >
       {children}

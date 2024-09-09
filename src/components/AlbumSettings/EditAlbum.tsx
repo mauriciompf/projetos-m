@@ -44,7 +44,7 @@ function EditAlbum() {
                 placeholder="Título"
                 value={editBox.title}
                 autoComplete="off"
-                maxLength={15}
+                maxLength={10}
                 aria-label="Título do album"
                 id={`album-title-${editBox.id}`}
                 name="albumTitle"

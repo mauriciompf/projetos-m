@@ -18,9 +18,11 @@ function MainAlbumGrid() {
     setIsEditAlbum,
     albumBoxes,
     isEditAlbum,
+    imageIndex,
+    setImageIndex,
   } = useEditAlbumContext();
 
-  const [imageIndex, setImageIndex] = useState(0);
+  // const [imageIndex, setImageIndex] = useState(0);
   const intervalIdRef = useRef<number | null>(null);
   const [extendAlbum, setExtendAlbum] = useState(false);
 
@@ -40,6 +42,7 @@ function MainAlbumGrid() {
     ]);
 
     setIsEditAlbum(false);
+    // setImageIndex(0);
   }, [setIsEditAlbum, setEditAlbumBoxes]);
 
   const handleEditAlbum = useCallback(
@@ -166,29 +169,33 @@ function MainAlbumGrid() {
                       {expandIcon}
                     </Button>
 
-                    <Button
-                      onClick={() =>
-                        handleCarouselControls("Prev", album.images.length)
-                      }
-                      className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
-                    >
-                      {previousIcon}
-                    </Button>
+                    {album.images.length !== 1 && (
+                      <>
+                        <Button
+                          onClick={() =>
+                            handleCarouselControls("Prev", album.images.length)
+                          }
+                          className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                        >
+                          {previousIcon}
+                        </Button>
 
-                    <Button
-                      onClick={() =>
-                        handleCarouselControls("Next", album.images.length)
-                      }
-                      className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
-                    >
-                      {nextIcon}
-                    </Button>
+                        <Button
+                          onClick={() =>
+                            handleCarouselControls("Next", album.images.length)
+                          }
+                          className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                        >
+                          {nextIcon}
+                        </Button>
+                      </>
+                    )}
 
-                    <div className="absolute -left-[50%] bottom-4 mx-auto flex w-full translate-x-1/2 content-center justify-center gap-1">
+                    <div className="absolute -left-[50%] bottom-3 mx-auto flex w-full translate-x-1/2 content-center justify-center gap-1">
                       {album.images.map((_, index) => (
                         <Button
                           onClick={() => handleSelectImage(index)}
-                          className={`rounded-full border border-black bg-white hover:bg-[#4363D2] focus:bg-[#4363D2] active:bg-[#4363D2] ${index === imageIndex && "bg-[#4363D2]"} `}
+                          className={`size-4 rounded-full border border-black bg-white hover:bg-[#4363D2] focus:bg-[#4363D2] active:bg-[#4363D2] ${index === imageIndex && "bg-[#4363D2]"} `}
                           key={index}
                         >
                           {""}
@@ -227,23 +234,33 @@ function MainAlbumGrid() {
                           </Button>
                         </div>
 
-                        <Button
-                          onClick={() =>
-                            handleCarouselControls("Prev", album.images.length)
-                          }
-                          className="absolute left-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
-                        >
-                          {previousIcon}
-                        </Button>
+                        {album.images.length !== 1 && (
+                          <>
+                            <Button
+                              onClick={() =>
+                                handleCarouselControls(
+                                  "Prev",
+                                  album.images.length,
+                                )
+                              }
+                              className="absolute left-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
+                            >
+                              {previousIcon}
+                            </Button>
 
-                        <Button
-                          onClick={() =>
-                            handleCarouselControls("Next", album.images.length)
-                          }
-                          className="absolute right-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
-                        >
-                          {nextIcon}
-                        </Button>
+                            <Button
+                              onClick={() =>
+                                handleCarouselControls(
+                                  "Next",
+                                  album.images.length,
+                                )
+                              }
+                              className="absolute right-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
+                            >
+                              {nextIcon}
+                            </Button>
+                          </>
+                        )}
                       </div>
                     )}
                   </>
@@ -266,7 +283,7 @@ function MainAlbumGrid() {
             key={album.id}
             className={`${
               isEditAlbum && "ring-transparent"
-            } size-[4rem] rounded-2xl bg-white text-black`}
+            } size-[4rem] break-words rounded-2xl bg-white leading-5 text-black`}
           >
             {album.title}
           </Button>
