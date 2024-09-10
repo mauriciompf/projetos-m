@@ -6,10 +6,12 @@ import useClickOutside from "../../customHooks/useClickOutside";
 import { useExpandedImageContext } from "./ExpandedImageContext";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
 import useAlbumEditor from "../../customHooks/useAlbumEditor";
+import { useThemeContext } from "../../context/ThemeContext";
 
 function EditAlbum() {
   const settingsAlbumRef = useRef(null);
 
+  const { theme } = useThemeContext();
   const { editAlbumBoxes } = useEditAlbumContext();
   const { isExpand } = useExpandedImageContext();
   const {
@@ -32,7 +34,7 @@ function EditAlbum() {
         <article
           ref={settingsAlbumRef}
           key={editBox.id}
-          className="absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl border border-gray-400 bg-white p-4 text-black shadow-2xl"
+          className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl p-4`}
         >
           {/* Header with title input and close button for album settings */}
           <div className="flex items-center justify-between">
@@ -40,7 +42,7 @@ function EditAlbum() {
               <input
                 type="text"
                 onChange={(event) => handleAddInputTitle(event, editBox.id)}
-                className="w-36 text-2xl outline-none"
+                className={`w-36 bg-inherit text-2xl outline-none`}
                 placeholder="Título"
                 value={editBox.title}
                 autoComplete="off"
@@ -49,11 +51,13 @@ function EditAlbum() {
                 id={`album-title-${editBox.id}`}
                 name="albumTitle"
               />
-              <div className="rounded-full border border-black"></div>
+              <div
+                className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-full border`}
+              ></div>
             </div>
             <Button
               onClick={() => handleCloseAlbum(editBox.id)}
-              className="p-0 text-2xl leading-none ring-transparent hover:text-red-700 focus:text-red-700"
+              className="rounded-full p-0 text-3xl leading-none"
               aria-labelledby="Feche configurações de galeria"
             >
               {closeIcon}

@@ -10,6 +10,7 @@ import {
 } from "../../utils/icons";
 import Button from "../Button";
 import { INTERVALTIME } from "../../utils/constants";
+import { useThemeContext } from "../../context/ThemeContext";
 
 function MainAlbumGrid() {
   const {
@@ -22,9 +23,9 @@ function MainAlbumGrid() {
     setImageIndex,
   } = useEditAlbumContext();
 
-  // const [imageIndex, setImageIndex] = useState(0);
+  const { theme } = useThemeContext();
   const intervalIdRef = useRef<number | null>(null);
-  const [extendAlbum, setExtendAlbum] = useState(false);
+  const [expandAlbum, setexpandAlbum] = useState(false);
 
   const clearIntervalId = () => {
     if (intervalIdRef.current) clearInterval(intervalIdRef.current);
@@ -75,7 +76,7 @@ function MainAlbumGrid() {
       }
 
       clearIntervalId(); // Clear interval when clicked
-      if (!extendAlbum) {
+      if (!expandAlbum) {
         // Restart interval only if album is not expanded
         setTimeout(startInterval, INTERVALTIME);
       }
@@ -86,7 +87,7 @@ function MainAlbumGrid() {
   const startInterval = useCallback(() => {
     clearIntervalId();
 
-    if (!extendAlbum) {
+    if (!expandAlbum) {
       intervalIdRef.current = setInterval(() => {
         const album = albumBoxes.find((album) => album.isMain); // Get album which isMain is true
 
@@ -101,40 +102,40 @@ function MainAlbumGrid() {
     (index: number) => {
       clearIntervalId();
       setImageIndex(index);
-      if (!extendAlbum) {
+      if (!expandAlbum) {
         setTimeout(startInterval, INTERVALTIME); // Restart interval only if album is not expanded
       }
     },
-    [setImageIndex, clearIntervalId, extendAlbum, startInterval],
+    [setImageIndex, clearIntervalId, expandAlbum, startInterval],
   );
 
   const handleExpandAlbum = useCallback(() => {
     clearIntervalId();
-    setExtendAlbum(true);
-  }, [setExtendAlbum, clearIntervalId]);
+    setexpandAlbum(true);
+  }, [setexpandAlbum, clearIntervalId]);
 
   useEffect(() => {
-    if (!extendAlbum) {
+    if (!expandAlbum) {
       startInterval();
     }
     return () => {
       clearIntervalId();
     };
-  }, [startInterval, extendAlbum]);
+  }, [startInterval, expandAlbum]);
 
   return (
     <section
       className={`${
-        editAlbumBoxes.length > 0 && "blur-md"
+        editAlbumBoxes.length > 0 && "opacity-70"
       } mx-auto mt-10 grid w-[90%] gap-4`}
     >
       {/* Carousel */}
-      <div className="relative flex overflow-hidden">
+      <div className="bg-columbia relative flex overflow-hidden rounded-2xl">
         {albumBoxes.some((album) => album.isMain) ? ( // Check if at least one isMain is true
           albumBoxes
             .filter((album) => album.isMain) // Filter which album isMain is true
             .map((album) => (
-              <div key={album.id} className="flex w-full rounded-2xl bg-white">
+              <div key={album.id} className="flex w-full rounded-2xl">
                 {album.images.length > 0 ? ( // Check if at least one image exist
                   album.images.map((image, index) => (
                     <img
@@ -142,7 +143,7 @@ function MainAlbumGrid() {
                       style={{
                         transform: `translateX(-${imageIndex * 100}%)`,
                       }}
-                      className="relative min-h-[300px] w-full select-none object-contain transition-transform"
+                      className="relative min-h-[18.75rem] w-full select-none object-contain transition-transform"
                       src={
                         image instanceof File
                           ? URL.createObjectURL(image)
@@ -152,7 +153,7 @@ function MainAlbumGrid() {
                     />
                   ))
                 ) : (
-                  <p className="grid h-[300px] place-items-center rounded-2xl bg-white px-4 text-center text-2xl text-black">
+                  <p className="text-jet bg-columbia grid h-[300px] place-items-center rounded-2xl px-4 text-center text-2xl">
                     <strong>
                       Adicione imagens dentro do álbum para visualizá-las por
                       aqui, ou crie um novo álbum clicando em "+"
@@ -164,7 +165,7 @@ function MainAlbumGrid() {
                   <>
                     <Button
                       onClick={handleExpandAlbum}
-                      className="absolute border border-black bg-white text-2xl text-black"
+                      className="border-jet text-jet bg-columbia absolute rounded-tl-2xl border text-2xl"
                     >
                       {expandIcon}
                     </Button>
@@ -175,7 +176,7 @@ function MainAlbumGrid() {
                           onClick={() =>
                             handleCarouselControls("Prev", album.images.length)
                           }
-                          className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                          className="border-jet text-jet bg-columbia absolute left-2 top-[50%] grid place-items-center rounded-full border px-2 py-1 shadow-md"
                         >
                           {previousIcon}
                         </Button>
@@ -184,7 +185,7 @@ function MainAlbumGrid() {
                           onClick={() =>
                             handleCarouselControls("Next", album.images.length)
                           }
-                          className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-black bg-white px-2 py-1 text-black shadow-md"
+                          className="border-jet text-jet bg-columbia absolute right-2 top-[50%] grid place-items-center rounded-full border px-2 py-1 shadow-md"
                         >
                           {nextIcon}
                         </Button>
@@ -195,7 +196,7 @@ function MainAlbumGrid() {
                       {album.images.map((_, index) => (
                         <Button
                           onClick={() => handleSelectImage(index)}
-                          className={`size-4 rounded-full border border-black bg-white hover:bg-[#4363D2] focus:bg-[#4363D2] active:bg-[#4363D2] ${index === imageIndex && "bg-[#4363D2]"} `}
+                          className={`border-jet hover:bg-savoy focus:bg-savoy active:bg-savoy bg-columbia size-4 rounded-full border ${index === imageIndex && "bg-savoy"} `}
                           key={index}
                         >
                           {""}
@@ -203,8 +204,8 @@ function MainAlbumGrid() {
                       ))}
                     </div>
 
-                    {extendAlbum && (
-                      <div className="fixed inset-0 z-50 grid select-none bg-black bg-opacity-85">
+                    {expandAlbum && (
+                      <div className="bg-jet fixed inset-0 z-50 grid select-none bg-opacity-85">
                         <div className="flex overflow-hidden">
                           {album.images.length > 0 && // Check if at least one image exist
                             album.images.map((image, index) => (
@@ -227,8 +228,8 @@ function MainAlbumGrid() {
 
                         <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
                           <Button
-                            onClick={() => setExtendAlbum(false)}
-                            className="h-[1.875rem] rounded-full px-0 py-0 text-4xl"
+                            onClick={() => setexpandAlbum(false)}
+                            className={`${theme === "light" && "text-columbia"} rounded-full px-0 py-0 text-4xl leading-3`}
                           >
                             {closeIcon}
                           </Button>
@@ -243,7 +244,7 @@ function MainAlbumGrid() {
                                   album.images.length,
                                 )
                               }
-                              className="absolute left-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
+                              className="border-jet text-jet bg-columbia absolute left-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border px-3 py-2 shadow-md"
                             >
                               {previousIcon}
                             </Button>
@@ -255,7 +256,7 @@ function MainAlbumGrid() {
                                   album.images.length,
                                 )
                               }
-                              className="absolute right-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-black bg-white px-3 py-2 text-black shadow-md"
+                              className="border-jet text-jet bg-columbia absolute right-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border px-3 py-2 shadow-md"
                             >
                               {nextIcon}
                             </Button>
@@ -268,7 +269,7 @@ function MainAlbumGrid() {
               </div>
             ))
         ) : (
-          <p className="grid h-[300px] place-items-center rounded-2xl bg-white px-4 text-center text-2xl text-black">
+          <p className="text-jet bg-columbia grid h-[300px] place-items-center rounded-2xl px-4 text-center text-2xl">
             <strong>Adicione um novo album clicando em "+"</strong>
           </p>
         )}
@@ -283,7 +284,7 @@ function MainAlbumGrid() {
             key={album.id}
             className={`${
               isEditAlbum && "ring-transparent"
-            } size-[4rem] break-words rounded-2xl bg-white leading-5 text-black`}
+            } text-jet bg-columbia size-[4rem] break-words rounded-2xl leading-5`}
           >
             {album.title}
           </Button>
@@ -295,7 +296,7 @@ function MainAlbumGrid() {
           onClick={handleCreateNewAlbum}
           className={`${
             editAlbumBoxes.length > 0 && "ring-transparent"
-          } size-[4rem] rounded-2xl bg-white text-black`}
+          } text-jet bg-columbia size-[4rem] rounded-2xl`}
         >
           {plusIcon}
         </Button>

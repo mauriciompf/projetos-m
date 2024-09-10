@@ -7,6 +7,7 @@ import isMatchingId from "../../utils/isMatchingId";
 import { deleteIcon, expandIcon } from "../../utils/icons";
 import { useExpandedImageContext } from "./ExpandedImageContext";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
+import { useThemeContext } from "../../context/ThemeContext";
 
 type BodyAlbumSettingsProps = {
   handleSaveAlbum: (
@@ -44,6 +45,7 @@ export default function BodyAlbumSettings({
     closeEditAlbum,
     isAlbumAtImageLimit,
   } = useEditAlbumUtils();
+  const { theme } = useThemeContext();
 
   const handleOnDrop = useCallback(
     (event: React.DragEvent, id: number) => {
@@ -160,7 +162,7 @@ export default function BodyAlbumSettings({
       {editAlbumBoxes.map((editBox) => (
         <label
           key={editBox.id}
-          className="flex cursor-pointer select-none gap-1 font-bold leading-4 tracking-tight"
+          className="flex cursor-pointer select-none gap-1 font-bold leading-4 tracking-tight hover:underline focus:underline"
           htmlFor={`mainAlbum-${editBox.id}`}
         >
           <input
@@ -177,7 +179,7 @@ export default function BodyAlbumSettings({
       {/* Button for uploading images */}
       <label
         htmlFor="files"
-        className="w-full cursor-pointer rounded-xl bg-[#4363D2] p-2 text-center font-bold text-white hover:ring-4 focus:ring-4"
+        className="bg-savoy text-columbia w-full cursor-pointer rounded-xl p-2 text-center font-bold hover:ring-4 focus:ring-4"
       >
         Faça Upload
       </label>
@@ -196,7 +198,7 @@ export default function BodyAlbumSettings({
         ou arraste uma imagem, cole imagem ou{" "}
         <Button
           onClick={() => handleURL(editBox.id)}
-          className="p-0 text-[#4363D2] underline"
+          className="text-savoy p-0 underline"
         >
           URL
         </Button>
@@ -227,7 +229,7 @@ export default function BodyAlbumSettings({
                   {/* Button to expand the image */}
                   <Button
                     onClick={() => handleExpandImage(image, editBox.id, index)}
-                    className="absolute bottom-0 left-0 hidden rounded-bl-2xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white group-hover:block"
+                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} hover:text-columbia focus:text-columbia absolute bottom-0 left-0 hidden rounded-bl-2xl px-2 py-0 ring-transparent hover:bg-blue-600 focus:bg-blue-600 group-hover:block`}
                   >
                     {expandIcon}
                   </Button>
@@ -235,7 +237,7 @@ export default function BodyAlbumSettings({
                   {/* Button to delete the image */}
                   <Button
                     onClick={() => handleRemoveImage(editBox.id, index)}
-                    className="absolute bottom-0 right-0 hidden rounded-br-xl border border-black bg-white px-2 py-0 ring-transparent hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white group-hover:block"
+                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} hover:text-columbia focus:text-columbia hover:bg-cornell focus:bg-cornell absolute bottom-0 right-0 hidden rounded-br-xl px-2 py-0 ring-transparent group-hover:block`}
                   >
                     {deleteIcon}
                   </Button>
@@ -258,14 +260,14 @@ export default function BodyAlbumSettings({
                 editBox.isMain,
               )
             }
-            // border-transparent bg-green-500 text-white
-            className={`${isEditing ? "border-transparent bg-green-500 text-white" : "border-black"} rounded-xl border hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white`}
+            // border-transparent bg-dark_spring text-columbia
+            className={` ${isEditing ? "text-columbia bg-dark_spring border-transparent" : `${theme === "light" ? "border-jet" : "border-columbia"}`} hover:bg-savoy focus:bg-savoy hover:text-columbia focus:text-columbia rounded-xl border`}
           >
             Salve alterações
           </Button>
           <Button
             onClick={() => handleRemoveAlbum(editBox.id, editBox.title)}
-            className="rounded-xl border border-black hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white"
+            className={`${theme === "light" ? "border-jet" : "border-columbia"} hover:text-columbia focus:text-columbia hover:bg-cornell focus:bg-cornell rounded-xl border`}
           >
             Deletar Álbum
           </Button>
@@ -273,7 +275,7 @@ export default function BodyAlbumSettings({
       ) : (
         <Button
           onClick={() => handleAddNewAlbum(editBox.id, editBox.title)}
-          className="rounded-xl border border-black hover:bg-[#4363D2] hover:text-white focus:bg-[#4363D2] focus:text-white"
+          className={`${theme === "light" ? "border-jet" : "border-columbia"} hover:bg-savoy focus:bg-savoy border-jet hover:text-columbia focus:text-columbia rounded-xl border`}
         >
           Adicionar Novo Álbum
         </Button>

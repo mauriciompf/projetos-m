@@ -21,7 +21,7 @@ function ExpandedImage() {
   });
 
   return (
-    <section className="fixed inset-0 z-50 flex select-none items-center justify-center bg-black bg-opacity-75">
+    <section className="bg-jet fixed inset-0 z-50 flex select-none items-center justify-center bg-opacity-75">
       {/* Wrapper for the expanded image and its controls */}
       <div>
         {/* Close button for the expanded image */}
@@ -29,7 +29,7 @@ function ExpandedImage() {
           <div className="mb-4 grid place-items-center">
             <Button
               onClick={handleCloseExpandImage}
-              className="h-[1.875rem] px-0 py-0 text-3xl"
+              className={`text-columbia rounded-full px-0 py-0 text-4xl leading-3`}
             >
               {closeIcon}
             </Button>
@@ -54,7 +54,7 @@ function ExpandedImage() {
             onClick={() =>
               handleRemoveImage(expandedImage!.id, expandedImage!.index)
             }
-            className="flex items-center gap-2 rounded-2xl bg-white p-2 px-3 text-black hover:bg-red-600 hover:text-white focus:bg-red-600 focus:text-white"
+            className="text-jet bg-columbia hover:text-columbia focus:text-columbia hover:bg-cornell focus:bg-cornell flex items-center gap-2 rounded-2xl p-2 px-3"
           >
             Excluir {deleteIcon}
           </Button>
