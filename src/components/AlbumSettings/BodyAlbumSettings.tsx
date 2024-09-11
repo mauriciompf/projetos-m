@@ -146,6 +146,7 @@ export default function BodyAlbumSettings({
 
       setEditAlbumBoxes((prev) => prev.map(updateIsMain));
       setAlbumBoxes((prev) => prev.map(updateIsMain));
+
       setIsEditing(true);
     },
     [setEditAlbumBoxes, setAlbumBoxes],
@@ -179,7 +180,7 @@ export default function BodyAlbumSettings({
       {/* Button for uploading images */}
       <label
         htmlFor="files"
-        className="bg-savoy text-columbia w-full cursor-pointer rounded-xl p-2 text-center font-bold hover:ring-4 focus:ring-4"
+        className="w-full cursor-pointer rounded-xl bg-savoy p-2 text-center font-bold text-columbia hover:ring-4 focus:ring-4"
       >
         Faça Upload
       </label>
@@ -198,7 +199,7 @@ export default function BodyAlbumSettings({
         ou arraste uma imagem, cole imagem ou{" "}
         <Button
           onClick={() => handleURL(editBox.id)}
-          className="text-savoy p-0 underline"
+          className="p-0 text-savoy underline"
         >
           URL
         </Button>
@@ -209,7 +210,7 @@ export default function BodyAlbumSettings({
         {editAlbumBoxes.map((editBox, index) => (
           <div
             key={index}
-            className="grid grid-cols-2 place-items-center gap-y-4"
+            className="mx-auto grid grid-cols-2 place-items-center justify-center gap-y-4"
           >
             {editBox.images.map((image, index) => {
               return (
@@ -229,7 +230,7 @@ export default function BodyAlbumSettings({
                   {/* Button to expand the image */}
                   <Button
                     onClick={() => handleExpandImage(image, editBox.id, index)}
-                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} hover:text-columbia focus:text-columbia absolute bottom-0 left-0 hidden rounded-bl-2xl px-2 py-0 ring-transparent hover:bg-blue-600 focus:bg-blue-600 group-hover:block`}
+                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute bottom-0 left-0 hidden rounded-bl-2xl px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-columbia focus:bg-blue-600 focus:text-columbia group-hover:block`}
                   >
                     {expandIcon}
                   </Button>
@@ -237,7 +238,7 @@ export default function BodyAlbumSettings({
                   {/* Button to delete the image */}
                   <Button
                     onClick={() => handleRemoveImage(editBox.id, index)}
-                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} hover:text-columbia focus:text-columbia hover:bg-cornell focus:bg-cornell absolute bottom-0 right-0 hidden rounded-br-xl px-2 py-0 ring-transparent group-hover:block`}
+                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute bottom-0 right-0 hidden rounded-br-xl px-2 py-0 ring-transparent hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia group-hover:block`}
                   >
                     {deleteIcon}
                   </Button>
@@ -261,13 +262,13 @@ export default function BodyAlbumSettings({
               )
             }
             // border-transparent bg-dark_spring text-columbia
-            className={` ${isEditing ? "text-columbia bg-dark_spring border-transparent" : `${theme === "light" ? "border-jet" : "border-columbia"}`} hover:bg-savoy focus:bg-savoy hover:text-columbia focus:text-columbia rounded-xl border`}
+            className={` ${isEditing ? "border-transparent bg-dark_spring text-columbia" : `${theme === "light" ? "border-jet" : "border-columbia"}`} rounded-xl border hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
           >
             Salve alterações
           </Button>
           <Button
             onClick={() => handleRemoveAlbum(editBox.id, editBox.title)}
-            className={`${theme === "light" ? "border-jet" : "border-columbia"} hover:text-columbia focus:text-columbia hover:bg-cornell focus:bg-cornell rounded-xl border`}
+            className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-xl border hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia`}
           >
             Deletar Álbum
           </Button>
@@ -275,7 +276,7 @@ export default function BodyAlbumSettings({
       ) : (
         <Button
           onClick={() => handleAddNewAlbum(editBox.id, editBox.title)}
-          className={`${theme === "light" ? "border-jet" : "border-columbia"} hover:bg-savoy focus:bg-savoy border-jet hover:text-columbia focus:text-columbia rounded-xl border`}
+          className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-xl border border-jet hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
         >
           Adicionar Novo Álbum
         </Button>

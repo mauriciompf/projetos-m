@@ -29,7 +29,7 @@ function EditAlbum() {
   );
 
   return (
-    <section>
+    <section className="grid">
       {editAlbumBoxes.map((editBox) => (
         <article
           ref={settingsAlbumRef}
@@ -37,16 +37,16 @@ function EditAlbum() {
           className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl p-4`}
         >
           {/* Header with title input and close button for album settings */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center gap-5">
             <div>
               <input
                 type="text"
                 onChange={(event) => handleAddInputTitle(event, editBox.id)}
-                className={`w-36 bg-inherit text-2xl outline-none`}
+                className={`w-full bg-inherit text-2xl outline-none`}
                 placeholder="Título"
                 value={editBox.title}
                 autoComplete="off"
-                maxLength={10}
+                maxLength={12}
                 aria-label="Título do album"
                 id={`album-title-${editBox.id}`}
                 name="albumTitle"
