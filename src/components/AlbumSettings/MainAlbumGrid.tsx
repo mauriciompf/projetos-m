@@ -127,7 +127,7 @@ function MainAlbumGrid() {
     <section
       className={`${
         editAlbumBoxes.length > 0 && "opacity-70"
-      } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start`}
+      } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start min-[1400px]:w-[60%]`}
     >
       {/* Carousel */}
       <div className="relative flex overflow-hidden rounded-2xl bg-columbia">
@@ -135,15 +135,19 @@ function MainAlbumGrid() {
           albumBoxes
             .filter((album) => album.isMain) // Filter which album isMain is true
             .map((album) => (
-              <div key={album.id} className="flex w-full rounded-2xl">
+              <div
+                key={album.id}
+                className="flex w-full rounded-2xl md:w-[3000px] min-[1400px]:w-[1200px]"
+              >
                 {album.images.length > 0 ? ( // Check if at least one image exist
                   album.images.map((image, index) => (
                     <img
                       key={index}
                       style={{
+                        // transform: "translateX(-600%)",
                         transform: `translateX(-${imageIndex * 100}%)`,
                       }}
-                      className="relative h-full min-h-[18.75rem] w-full select-none object-contain transition-transform"
+                      className="relative h-full min-h-[18.75rem] w-full select-none object-contain transition-transform min-[1024px]:h-[684px] min-[1400px]:h-full"
                       src={
                         image instanceof File
                           ? URL.createObjectURL(image)
@@ -176,7 +180,7 @@ function MainAlbumGrid() {
                           onClick={() =>
                             handleCarouselControls("Prev", album.images.length)
                           }
-                          className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-jet bg-columbia px-2 py-1 text-jet shadow-md"
+                          className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-jet bg-columbia px-3 py-2 text-jet shadow-md min-[425px]:px-4 min-[425px]:py-3"
                         >
                           {previousIcon}
                         </Button>
@@ -185,7 +189,7 @@ function MainAlbumGrid() {
                           onClick={() =>
                             handleCarouselControls("Next", album.images.length)
                           }
-                          className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-jet bg-columbia px-2 py-1 text-jet shadow-md"
+                          className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-jet bg-columbia px-3 py-2 text-jet shadow-md min-[425px]:px-4 min-[425px]:py-3"
                         >
                           {nextIcon}
                         </Button>
@@ -276,7 +280,7 @@ function MainAlbumGrid() {
       </div>
 
       {/* Grid of album buttons and add button */}
-      <div className="m flex flex-wrap items-center gap-2 min-[400px]:text-xl md:max-h-[550px]">
+      <div className="flex flex-wrap items-center gap-2 overflow-auto min-[400px]:text-xl md:max-h-[500px] md:justify-center md:pt-[4px] min-[1024px]:max-h-[680px]">
         {albumBoxes.map((album) => (
           <Button
             disabled={editAlbumBoxes.length > 0}
@@ -284,7 +288,7 @@ function MainAlbumGrid() {
             key={album.id}
             className={`${
               isEditAlbum && "ring-transparent"
-            } size-[4rem] break-words rounded-2xl bg-columbia leading-5 text-jet min-[400px]:size-[6rem]`}
+            } size-[4rem] break-words rounded-2xl bg-columbia leading-5 text-jet min-[400px]:size-[6rem] min-[1400px]:size-[8rem]`}
           >
             {album.title}
           </Button>
@@ -296,7 +300,7 @@ function MainAlbumGrid() {
           onClick={handleCreateNewAlbum}
           className={`${
             editAlbumBoxes.length > 0 && "ring-transparent"
-          } size-[4rem] rounded-2xl bg-columbia text-jet min-[400px]:size-[6rem]`}
+          } size-[4rem] rounded-2xl bg-columbia text-jet min-[400px]:size-[6rem] min-[1400px]:size-[8rem]`}
         >
           {plusIcon}
         </Button>
