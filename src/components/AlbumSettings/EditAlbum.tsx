@@ -29,7 +29,7 @@ function EditAlbum() {
   );
 
   return (
-    <section className="grid">
+    <section className="mx-auto grid w-[80%] justify-items-center">
       {editAlbumBoxes.map((editBox) => (
         <article
           ref={settingsAlbumRef}

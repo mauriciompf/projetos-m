@@ -146,8 +146,8 @@ export default function BodyAlbumSettings({
 
       setEditAlbumBoxes((prev) => prev.map(updateIsMain));
       setAlbumBoxes((prev) => prev.map(updateIsMain));
-
       setIsEditing(true);
+      setImageIndex(0);
     },
     [setEditAlbumBoxes, setAlbumBoxes],
   );
@@ -210,7 +210,7 @@ export default function BodyAlbumSettings({
         {editAlbumBoxes.map((editBox, index) => (
           <div
             key={index}
-            className="mx-auto grid grid-cols-2 place-items-center justify-center gap-y-4"
+            className="mx-auto grid grid-cols-2 place-items-center justify-center gap-y-4 min-[400px]:grid-cols-3"
           >
             {editBox.images.map((image, index) => {
               return (

@@ -10,7 +10,7 @@ import {
 } from "../../utils/icons";
 import Button from "../Button";
 import { INTERVALTIME } from "../../utils/constants";
-import { useThemeContext } from "../../context/ThemeContext";
+import { createPortal } from "react-dom";
 
 function MainAlbumGrid() {
   const {
@@ -23,9 +23,9 @@ function MainAlbumGrid() {
     setImageIndex,
   } = useEditAlbumContext();
 
-  const { theme } = useThemeContext();
   const intervalIdRef = useRef<number | null>(null);
-  const [expandAlbum, setexpandAlbum] = useState(false);
+  const [expandAlbum, setExpandAlbum] = useState(false);
+  const mainSectionRef = useRef(null);
 
   const clearIntervalId = () => {
     if (intervalIdRef.current) clearInterval(intervalIdRef.current);
@@ -111,8 +111,8 @@ function MainAlbumGrid() {
 
   const handleExpandAlbum = useCallback(() => {
     clearIntervalId();
-    setexpandAlbum(true);
-  }, [setexpandAlbum, clearIntervalId]);
+    setExpandAlbum(true);
+  }, [setExpandAlbum, clearIntervalId]);
 
   useEffect(() => {
     if (!expandAlbum) {
@@ -125,9 +125,10 @@ function MainAlbumGrid() {
 
   return (
     <section
+      ref={mainSectionRef}
       className={`${
         editAlbumBoxes.length > 0 && "opacity-70"
-      } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start min-[1400px]:w-[60%]`}
+      } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start min-[1400px]:mt-10 min-[1400px]:w-[60%]`}
     >
       {/* Carousel */}
       <div className="relative flex overflow-hidden rounded-2xl bg-columbia">
@@ -208,66 +209,78 @@ function MainAlbumGrid() {
                       ))}
                     </div>
 
-                    {expandAlbum && (
-                      <div className="fixed inset-0 z-50 grid select-none bg-jet bg-opacity-85">
-                        <div className="flex overflow-hidden">
-                          {album.images.length > 0 && // Check if at least one image exist
-                            album.images.map((image, index) => (
-                              <img
-                                key={index}
-                                draggable="false"
-                                style={{
-                                  transform: `translateX(-${imageIndex * 100}%)`,
-                                }}
-                                className="select-none rounded-2xl object-contain transition-transform"
-                                src={
-                                  image instanceof File
-                                    ? URL.createObjectURL(image)
-                                    : image
-                                }
-                                alt=""
-                              />
-                            ))}
-                        </div>
-
-                        <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
-                          <Button
-                            onClick={() => setexpandAlbum(false)}
-                            className={`${theme === "light" && "text-columbia"} rounded-full px-0 py-0 text-4xl leading-3`}
-                          >
-                            {closeIcon}
-                          </Button>
-                        </div>
-
-                        {album.images.length !== 1 && (
-                          <>
-                            <Button
-                              onClick={() =>
-                                handleCarouselControls(
-                                  "Prev",
-                                  album.images.length,
-                                )
-                              }
-                              className="absolute left-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-jet bg-columbia px-3 py-2 text-jet shadow-md"
+                    {expandAlbum &&
+                      createPortal(
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-jet bg-opacity-85">
+                          <div className="relative size-full overflow-hidden">
+                            {/* Slideshow Container */}
+                            <div
+                              className="flex size-full transition-transform ease-in-out"
+                              style={{
+                                transform: `translateX(-${imageIndex * 100}%)`,
+                              }}
                             >
-                              {previousIcon}
-                            </Button>
+                              {album.images.map((image, index) => (
+                                <div
+                                  key={index}
+                                  className="size-full flex-shrink-0"
+                                >
+                                  <img
+                                    draggable="false"
+                                    className="size-full object-contain"
+                                    src={
+                                      image instanceof File
+                                        ? URL.createObjectURL(image)
+                                        : image
+                                    }
+                                    alt=""
+                                  />
+                                </div>
+                              ))}
+                            </div>
 
-                            <Button
-                              onClick={() =>
-                                handleCarouselControls(
-                                  "Next",
-                                  album.images.length,
-                                )
-                              }
-                              className="absolute right-2 top-[50%] grid -translate-y-1/2 transform place-items-center rounded-full border border-jet bg-columbia px-3 py-2 text-jet shadow-md"
-                            >
-                              {nextIcon}
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    )}
+                            {/* Close Button */}
+                            <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
+                              <Button
+                                onClick={() => setExpandAlbum(false)}
+                                className="rounded-full bg-jet px-0 py-0 text-4xl leading-3"
+                              >
+                                {closeIcon}
+                              </Button>
+                            </div>
+
+                            {/* Navigation Controls */}
+                            {album.images.length > 1 && (
+                              <>
+                                <Button
+                                  onClick={() =>
+                                    handleCarouselControls(
+                                      "Prev",
+                                      album.images.length,
+                                    )
+                                  }
+                                  className="absolute left-4 top-[50%] -translate-y-1/2 transform rounded-full bg-columbia px-4 py-2 text-jet shadow-md"
+                                >
+                                  {previousIcon}
+                                </Button>
+
+                                <Button
+                                  onClick={() =>
+                                    handleCarouselControls(
+                                      "Next",
+                                      album.images.length,
+                                    )
+                                  }
+                                  className="absolute right-4 top-[50%] -translate-y-1/2 transform rounded-full bg-columbia px-4 py-2 text-jet shadow-md"
+                                >
+                                  {nextIcon}
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </div>,
+                        document.body,
+                      )}
                   </>
                 )}
               </div>
@@ -280,7 +293,7 @@ function MainAlbumGrid() {
       </div>
 
       {/* Grid of album buttons and add button */}
-      <div className="flex flex-wrap items-center gap-2 overflow-auto min-[400px]:text-xl md:max-h-[500px] md:justify-center md:pt-[4px] min-[1024px]:max-h-[680px]">
+      <div className="flex flex-wrap items-center gap-2 min-[400px]:text-xl md:max-h-[500px] md:justify-center md:pt-[4px] min-[1024px]:max-h-[680px] min-[1024px]:overflow-auto">
         {albumBoxes.map((album) => (
           <Button
             disabled={editAlbumBoxes.length > 0}
