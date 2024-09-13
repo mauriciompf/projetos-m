@@ -20,7 +20,19 @@ const useLocalStorage = <T>({
   });
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(storedValue));
+    try {
+      const data = JSON.stringify(storedValue);
+      const dataSize = new Blob([data]).size;
+      const storageLimit = 5 * 1024 * 1024; // 5 MiB
+
+      if (dataSize >= storageLimit) {
+        alert("Limite de armazenamento atingido.");
+      }
+
+      localStorage.setItem(key, data);
+    } catch (error) {
+      console.error("Failed to set item in localStorage", error);
+    }
   }, [key, storedValue]);
 
   return [storedValue, setStoredValue] as const;

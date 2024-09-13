@@ -128,7 +128,7 @@ function MainAlbumGrid() {
       ref={mainSectionRef}
       className={`${
         editAlbumBoxes.length > 0 && "opacity-70"
-      } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start min-[1400px]:mt-10 min-[1400px]:w-[60%]`}
+      } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start md:justify-center min-[1400px]:mt-10 min-[1400px]:w-[70%]`}
     >
       {/* Carousel */}
       <div className="relative flex overflow-hidden rounded-2xl bg-columbia">
@@ -138,24 +138,27 @@ function MainAlbumGrid() {
             .map((album) => (
               <div
                 key={album.id}
-                className="flex w-full rounded-2xl md:w-[3000px] min-[1400px]:w-[1200px]"
+                className="flex w-full rounded-2xl md:w-[3000px] min-[1400px]:w-[650px]"
               >
                 {album.images.length > 0 ? ( // Check if at least one image exist
                   album.images.map((image, index) => (
-                    <img
-                      key={index}
+                    <div
+                      className="h-full max-h-[38.75rem] w-full flex-shrink-0 transition-transform ease-in-out"
                       style={{
-                        // transform: "translateX(-600%)",
                         transform: `translateX(-${imageIndex * 100}%)`,
                       }}
-                      className="relative h-full min-h-[18.75rem] w-full select-none object-contain transition-transform min-[1024px]:h-[684px] min-[1400px]:h-full"
-                      src={
-                        image instanceof File
-                          ? URL.createObjectURL(image)
-                          : image
-                      }
-                      alt=""
-                    />
+                      key={index}
+                    >
+                      <img
+                        className="relative h-full w-full select-none object-contain"
+                        src={
+                          image instanceof File
+                            ? URL.createObjectURL(image)
+                            : image
+                        }
+                        alt=""
+                      />
+                    </div>
                   ))
                 ) : (
                   <p className="grid h-[300px] place-items-center rounded-2xl bg-columbia px-4 text-center text-2xl text-jet">
@@ -293,7 +296,7 @@ function MainAlbumGrid() {
       </div>
 
       {/* Grid of album buttons and add button */}
-      <div className="flex flex-wrap items-center gap-2 min-[400px]:text-xl md:max-h-[500px] md:justify-center md:pt-[4px] min-[1024px]:max-h-[680px] min-[1024px]:overflow-auto">
+      <div className="flex flex-wrap items-center gap-2 min-[400px]:text-xl md:max-h-[500px] md:justify-center md:pt-[4px] min-[1024px]:max-h-[680px]">
         {albumBoxes.map((album) => (
           <Button
             disabled={editAlbumBoxes.length > 0}

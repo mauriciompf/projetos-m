@@ -54,9 +54,10 @@ const useEditAlbumUtils = () => {
 
         // Insert url image to state
         setEditAlbumBoxes((prev) =>
-          prev
-            .filter(isMatchingId(id))
-            .map((album) => ({ ...album, images: [...album.images, url] })),
+          prev.filter(isMatchingId(id)).map((album) => ({
+            ...album,
+            images: [...album.images, url],
+          })),
         );
       });
     });

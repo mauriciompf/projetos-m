@@ -276,7 +276,7 @@ export default function BodyAlbumSettings({
       ) : (
         <Button
           onClick={() => handleAddNewAlbum(editBox.id, editBox.title)}
-          className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-xl border border-jet hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
+          className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-xl border hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
         >
           Adicionar Novo Álbum
         </Button>
