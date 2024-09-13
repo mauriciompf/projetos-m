@@ -29,7 +29,7 @@ export default function FilterBox({
   const { selectColumn } = useToggleDropDown("filter");
   const { searchParams, statusParams } = useFilterSearchContext();
 
-  useClickOutside(refFilterBox, () => setToggleFilter(false), refFilterBtn);
+  useClickOutside([refFilterBox, refFilterBtn], () => setToggleFilter(false));
   const navigate = useNavigate();
 
   const {

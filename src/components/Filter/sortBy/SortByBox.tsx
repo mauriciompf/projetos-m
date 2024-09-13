@@ -25,7 +25,7 @@ export default function SortByBox({
   const { handleOrderByToggle, handleSelectOrderBy, orderByToggle } =
     useSortByHandlers();
   const { searchParams } = useFilterSearchContext();
-  useClickOutside(refSortByBox, () => setToggleSortBy(false), refSortByBtn);
+  useClickOutside([refSortByBox, refSortByBtn], () => setToggleSortBy(false));
 
   return (
     <WrapSettingsBox

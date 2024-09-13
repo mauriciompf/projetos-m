@@ -11,6 +11,7 @@ import {
 import Button from "../Button";
 import { INTERVALTIME } from "../../utils/constants";
 import { createPortal } from "react-dom";
+import useClickOutside from "../../customHooks/useClickOutside";
 
 function MainAlbumGrid() {
   const {
@@ -25,7 +26,9 @@ function MainAlbumGrid() {
 
   const intervalIdRef = useRef<number | null>(null);
   const [expandAlbum, setExpandAlbum] = useState(false);
-  const mainSectionRef = useRef(null);
+  const btnPrevRef = useRef(null);
+  const btnNextRef = useRef(null);
+  const btnCloseRef = useRef(null);
 
   const clearIntervalId = () => {
     if (intervalIdRef.current) clearInterval(intervalIdRef.current);
@@ -123,9 +126,12 @@ function MainAlbumGrid() {
     };
   }, [startInterval, expandAlbum]);
 
+  useClickOutside([btnPrevRef, btnNextRef, btnCloseRef], () =>
+    setExpandAlbum(false),
+  );
+
   return (
     <section
-      ref={mainSectionRef}
       className={`${
         editAlbumBoxes.length > 0 && "opacity-70"
       } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start md:justify-center min-[1400px]:mt-10 min-[1400px]:w-[70%]`}
@@ -143,14 +149,27 @@ function MainAlbumGrid() {
                 {album.images.length > 0 ? ( // Check if at least one image exist
                   album.images.map((image, index) => (
                     <div
-                      className="h-full max-h-[38.75rem] w-full flex-shrink-0 transition-transform ease-in-out"
+                      className="relative h-full max-h-[38.75rem] w-full flex-shrink-0 transition-transform ease-in-out"
                       style={{
+                        // transform: `translateX(-${600}%)`,
                         transform: `translateX(-${imageIndex * 100}%)`,
                       }}
                       key={index}
                     >
+                      <div className={`absolute grid h-full w-full blur-md`}>
+                        <img
+                          className="h-[38.75rem] w-full scale-100 select-none object-cover"
+                          src={
+                            image instanceof File
+                              ? URL.createObjectURL(image)
+                              : image
+                          }
+                          alt=""
+                        />
+                      </div>
+
                       <img
-                        className="relative h-full w-full select-none object-contain"
+                        className="relative h-full w-full select-none object-contain shadow-2xl"
                         src={
                           image instanceof File
                             ? URL.createObjectURL(image)
@@ -226,11 +245,11 @@ function MainAlbumGrid() {
                               {album.images.map((image, index) => (
                                 <div
                                   key={index}
-                                  className="size-full flex-shrink-0"
+                                  className="grid size-full flex-shrink-0 place-items-center"
                                 >
                                   <img
                                     draggable="false"
-                                    className="size-full object-contain"
+                                    className="h-full min-w-min object-contain"
                                     src={
                                       image instanceof File
                                         ? URL.createObjectURL(image)
@@ -245,6 +264,7 @@ function MainAlbumGrid() {
                             {/* Close Button */}
                             <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
                               <Button
+                                refBtn={btnCloseRef}
                                 onClick={() => setExpandAlbum(false)}
                                 className="rounded-full bg-jet px-0 py-0 text-4xl leading-3 text-columbia"
                               >
@@ -256,6 +276,7 @@ function MainAlbumGrid() {
                             {album.images.length > 1 && (
                               <>
                                 <Button
+                                  refBtn={btnPrevRef}
                                   onClick={() =>
                                     handleCarouselControls(
                                       "Prev",
@@ -268,6 +289,7 @@ function MainAlbumGrid() {
                                 </Button>
 
                                 <Button
+                                  refBtn={btnNextRef}
                                   onClick={() =>
                                     handleCarouselControls(
                                       "Next",

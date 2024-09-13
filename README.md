@@ -10,7 +10,11 @@ O projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web
 
 ## Projeto 1 - Ordenação e Filtro
 
- Demonstra a capacidade de filtrar e organizar de forma básica dados provenientes da API gratuita [DummyJSON](https://dummyjson.com/docs/users). O objetivo foi criar uma interface que permite aos usuários gerenciar e visualizar dados em uma tabela de forma eficiente. A aplicação utiliza uma tabela para exibir informações de usuários, oferecendo funcionalidades de ordenação e filtragem para facilitar a análise dos dados.
+Demonstra a capacidade de filtrar e organizar de forma básica dados provenientes da API gratuita [DummyJSON](https://dummyjson.com/docs/users). O objetivo foi criar uma interface que permite aos usuários gerenciar e visualizar dados em uma tabela.
+
+## Projeto 2 - Galeria
+
+Permite aos usuários gerenciar e visualizar álbuns de fotos. A aplicação apresenta um carrossel de fotos e um botão para adicionar novas galerias à direita. Os usuários podem criar, visualizar e gerenciar galerias (albums), fazendo upload de fotos, expandindo imagens para visualização em tela cheia e deletando fotos ou galerias. Além disso, oferece interações como arrastar e soltar imagens e adicionar imagens via URLs.
 
 ## Funcionalidades
 
@@ -55,7 +59,7 @@ O projeto é uma vitrine das minhas habilidades técnicas como desenvolvedor web
 ### Geral
 
 - **Melhorias de Usabilidade:**
-  - Exibir um pop-up no menu lateral para facilitar o retorno a página principal.
+  - *Exibir um pop-up no menu lateral para facilitar o retorno a página principal.*
   - *Implementação de teclas de atalho para navegação rápida entre as páginas.*
 <!-- - **Design e Estética:** -->
 - **Acessibilidade e Feedback:**
