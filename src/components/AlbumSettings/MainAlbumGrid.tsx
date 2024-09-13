@@ -194,20 +194,20 @@ function MainAlbumGrid() {
                         >
                           {nextIcon}
                         </Button>
+
+                        <div className="absolute -left-[50%] bottom-3 mx-auto flex w-full translate-x-1/2 content-center justify-center gap-1">
+                          {album.images.map((_, index) => (
+                            <Button
+                              onClick={() => handleSelectImage(index)}
+                              className={`size-4 rounded-full border border-jet bg-columbia hover:bg-savoy focus:bg-savoy active:bg-savoy ${index === imageIndex && "bg-savoy"} `}
+                              key={index}
+                            >
+                              {""}
+                            </Button>
+                          ))}
+                        </div>
                       </>
                     )}
-
-                    <div className="absolute -left-[50%] bottom-3 mx-auto flex w-full translate-x-1/2 content-center justify-center gap-1">
-                      {album.images.map((_, index) => (
-                        <Button
-                          onClick={() => handleSelectImage(index)}
-                          className={`size-4 rounded-full border border-jet bg-columbia hover:bg-savoy focus:bg-savoy active:bg-savoy ${index === imageIndex && "bg-savoy"} `}
-                          key={index}
-                        >
-                          {""}
-                        </Button>
-                      ))}
-                    </div>
 
                     {expandAlbum &&
                       createPortal(
@@ -243,7 +243,7 @@ function MainAlbumGrid() {
                             <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
                               <Button
                                 onClick={() => setExpandAlbum(false)}
-                                className="rounded-full bg-jet px-0 py-0 text-4xl leading-3"
+                                className="rounded-full bg-jet px-0 py-0 text-4xl leading-3 text-columbia"
                               >
                                 {closeIcon}
                               </Button>
