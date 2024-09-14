@@ -22,6 +22,12 @@ const projectList: Projects[] = [
     path: "/pages/gallery",
     icon: "🖼️",
   },
+  {
+    id: 3,
+    label: "Hora Atual",
+    path: "/pages/time",
+    icon: "⏳",
+  },
 ];
 
 export default projectList;
