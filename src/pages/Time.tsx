@@ -2,12 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
 import useFetch from "../customHooks/useFetch";
+import Loading from "../components/Loading";
 
 export default function Time() {
   const [date, setDate] = useState(new Date()); // Current date
   const [geoUrl, setGeoUrl] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
   const [currentWeek, setCurrentWeek] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { data: ipData, isLoading: ipIsLoading } = useFetch(
     "https://api.ipify.org/?format=json",
@@ -56,10 +58,18 @@ export default function Time() {
   }, [ipIsLoading, ipData, geoIsLoading, geoData, date]);
 
   useEffect(() => {
+    const loadingTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
+    return () => clearTimeout(loadingTimer);
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setDate(new Date()); // Update date
       setCurrentWeek(getCurrentWeekNumber(new Date()));
-    }, 1000);
+    }, 500);
 
     return () => {
       clearInterval(timer);
@@ -81,10 +91,16 @@ export default function Time() {
       <section className="grid place-items-center">
         <div></div>
 
-        <div>{res}</div>
-        <div className="first-letter:capitalize">
-          {`${formattedDate}, ${currentWeek && `semana ${currentWeek}`}`}
-        </div>
+        {isLoading ? (
+          <Loading isLoading={isLoading} />
+        ) : (
+          <>
+            <div>{res}</div>
+            <div className="first-letter:capitalize">
+              {`${formattedDate}, ${currentWeek && `semana ${currentWeek}`}`}
+            </div>
+          </>
+        )}
       </section>
     </WrapOutlet>
   );
