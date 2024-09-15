@@ -10,6 +10,7 @@ export default function Time() {
   const [formattedDate, setFormattedDate] = useState("");
   const [currentWeek, setCurrentWeek] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [greeting, setGreeting] = useState("");
 
   const { data: ipData, isLoading: ipIsLoading } = useFetch(
     "https://api.ipify.org/?format=json",
@@ -53,6 +54,18 @@ export default function Time() {
   }, [date, addZeroDigit]);
 
   useEffect(() => {
+    const currentHour = date.getHours();
+
+    if (currentHour >= 6 && currentHour < 12) {
+      setGreeting("Bom dia!");
+    } else if (currentHour >= 12 && currentHour < 18) {
+      setGreeting("Boa tarde!");
+    } else {
+      setGreeting("Boa noite");
+    }
+  }, [date]);
+
+  useEffect(() => {
     if (!ipIsLoading && ipData) {
       setGeoUrl(`https://get.geojs.io/v1/ip/geo/${ipData.ip}`);
     }
@@ -92,7 +105,7 @@ export default function Time() {
   return (
     <WrapOutlet projectName={projectList[2].label}>
       <section className="grid place-items-center">
-        <div></div>
+        <div>{greeting}</div>
 
         {isLoading ? (
           <Loading isLoading={isLoading} />
