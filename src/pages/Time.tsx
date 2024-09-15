@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import WrapOutlet from "../components/WrapOutlet";
 import projectList from "../utils/projectList";
 import useFetch from "../customHooks/useFetch";
@@ -17,9 +17,9 @@ export default function Time() {
   );
   const { data: geoData, isLoading: geoIsLoading } = useFetch(geoUrl, "geo");
 
+  const startOfYear = useMemo(() => new Date(date.getFullYear(), 0, 1), [date]); // January 1st of the current year (0 === january)
   const getPastDaysOfYear = useCallback((date: Date) => {
     // Get difference between today and the january 1st in milliseconds
-    const startOfYear = new Date(date.getFullYear(), 0, 1); // January 1st of the current year (0 === january)
     const januaryTime = startOfYear.getTime();
     const currentTime = date.getTime();
     const timeDiff = currentTime - januaryTime;
@@ -30,7 +30,6 @@ export default function Time() {
 
   const getCurrentWeekNumber = useCallback(
     (date: Date) => {
-      const startOfYear = new Date(date.getFullYear(), 0, 1); // January 1st of the current year (0 === january)
       const dayOfWeekJanuary = startOfYear.getDay(); // How much of the first week of the year was already "used up" before the first full week begins (sunday is the day that start the week)
       const fullPastDays = getPastDaysOfYear(date) + dayOfWeekJanuary;
 
@@ -38,6 +37,20 @@ export default function Time() {
     },
     [getPastDaysOfYear],
   );
+
+  const addZeroDigit = useCallback((digit: number | string) => {
+    if (typeof digit === "number" && digit < 10) digit = "0" + digit; // Add 0 when below 10
+    return digit;
+  }, []);
+
+  const getRealTime = useCallback(() => {
+    const hour = addZeroDigit(date.getHours());
+    const minutes = addZeroDigit(date.getMinutes());
+    const seconds = addZeroDigit(date.getSeconds());
+    const time = `${hour}:${minutes}:${seconds}`; // display time
+
+    return time;
+  }, [date, addZeroDigit]);
 
   useEffect(() => {
     if (!ipIsLoading && ipData) {
@@ -76,16 +89,6 @@ export default function Time() {
     };
   }, []);
 
-  let hour: number | string = date.getHours();
-  let minutes: number | string = date.getMinutes();
-  let seconds: number | string = date.getSeconds();
-
-  // Add 0 when below 10
-  if (seconds < 10) seconds = "0" + seconds;
-  if (minutes < 10) minutes = "0" + minutes;
-  if (hour < 10) hour = "0" + hour;
-  const res = `${hour}:${minutes}:${seconds}`; // display date
-
   return (
     <WrapOutlet projectName={projectList[2].label}>
       <section className="grid place-items-center">
@@ -95,7 +98,7 @@ export default function Time() {
           <Loading isLoading={isLoading} />
         ) : (
           <>
-            <div>{res}</div>
+            <div>{getRealTime()}</div>
             <div className="first-letter:capitalize">
               {`${formattedDate}, ${currentWeek && `semana ${currentWeek}`}`}
             </div>
