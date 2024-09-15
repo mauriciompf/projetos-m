@@ -28,12 +28,15 @@ export default function Filter() {
             {isError && <p>Error...</p>}
 
             <section className="relative mx-auto my-0 w-[min(950px,_100%)] text-lg md:my-10">
-              <Loading isLoading={isLoading} />
-              {usersData && (
-                <>
-                  <FilterSettings />
-                  <FilterTable usersData={usersData} />
-                </>
+              {isLoading ? (
+                <Loading isLoading={isLoading} />
+              ) : (
+                usersData && (
+                  <>
+                    <FilterSettings />
+                    <FilterTable usersData={usersData} />
+                  </>
+                )
               )}
             </section>
           </WrapOutlet>
