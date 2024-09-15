@@ -10,7 +10,11 @@ import projectList from "../utils/projectList";
 const tableLength = 50;
 
 export default function Filter() {
-  const { data: usersData, isError } = useFetch(
+  const {
+    data: usersData,
+    isLoading,
+    isError,
+  } = useFetch(
     `https://dummyjson.com/users?limit=${tableLength}`,
     "users",
     "users",
@@ -24,7 +28,7 @@ export default function Filter() {
             {isError && <p>Error...</p>}
 
             <section className="relative mx-auto my-0 w-[min(950px,_100%)] text-lg md:my-10">
-              <Loading />
+              <Loading isLoading={isLoading} />
               {usersData && (
                 <>
                   <FilterSettings />

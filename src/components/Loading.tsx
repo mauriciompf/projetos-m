@@ -1,14 +1,6 @@
-import useFetch from "../customHooks/useFetch";
-import { tableLength } from "../pages/Filter";
 import gifImage from "../../assets/images/thinkingFaceThinking.gif";
 
-export default function Loading() {
-  const { isLoading } = useFetch(
-    `https://dummyjson.com/users?limit=${tableLength}`,
-    "users",
-    "users",
-  );
-
+export default function Loading(isLoading: { isLoading: boolean }) {
   return (
     isLoading && (
       <section className="mt-32 grid place-items-center">

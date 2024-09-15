@@ -26,7 +26,7 @@ const projectList: Projects[] = [
     id: 3,
     label: "Hora Atual",
     path: "/pages/time",
-    icon: "⏳",
+    icon: "🕗",
   },
 ];
 
