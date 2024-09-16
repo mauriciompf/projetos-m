@@ -6,6 +6,7 @@ import { ThemeContextProvider } from "./context/ThemeContext.tsx";
 import MenuContextProvider from "./context/MenuContext.tsx";
 import ExpandedImageProvider from "./components/AlbumSettings/ExpandedImageContext.tsx";
 import EditAlbumProvider from "./context/EditAlbumContext.tsx";
+import { TimeGeoContextProvider } from "./context/TimeGeoContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <ThemeContextProvider>
           <EditAlbumProvider>
             <ExpandedImageProvider>
-              <App />
+              <TimeGeoContextProvider>
+                <App />
+              </TimeGeoContextProvider>
             </ExpandedImageProvider>
           </EditAlbumProvider>
         </ThemeContextProvider>
