@@ -9,17 +9,15 @@ const useFormattedDate = () => {
   const { date, geoData } = useTimeGeoContext(); // geoURL associated with IP address
 
   useEffect(() => {
-    if (geoData) {
-      setFormattedDate(
-        date.toLocaleDateString("pt-BR", {
-          timeZone: geoData && geoData.timezone,
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          weekday: "long",
-        }),
-      );
-    }
+    const currentDate = date.toLocaleDateString("pt-BR", {
+      timeZone: geoData && geoData.timezone,
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+
+    setFormattedDate(currentDate);
   }, [geoData, date]);
 
   return { formattedDate };

@@ -6,6 +6,7 @@ import CurrentDate from "../components/Time/CurrentDate";
 import CurrentLocation from "../components/Time/CurrentLocation";
 import { useTimeGeoContext } from "../context/TimeGeoContext";
 import Loading from "../components/Loading";
+import WorldTime from "../components/Time/WorldTime";
 
 export default function Time() {
   const { geoIsLoading } = useTimeGeoContext();
@@ -24,6 +25,8 @@ export default function Time() {
             <CurrentLocation />
           </>
         )}
+
+        <WorldTime />
       </section>
     </WrapOutlet>
   );
