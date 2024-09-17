@@ -29,7 +29,7 @@ export default function Filter() {
 
             <section className="relative mx-auto my-0 w-[min(950px,_100%)] text-lg md:my-10">
               {isLoading ? (
-                <Loading isLoading={isLoading} />
+                <Loading />
               ) : (
                 usersData && (
                   <>

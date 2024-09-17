@@ -6,13 +6,13 @@ const useFormattedDate = () => {
   const [formattedDate, setFormattedDate] = useState("");
 
   useFetchGeoUrl();
-  const { date, geoData, geoIsLoading } = useTimeGeoContext(); // geoURL associated with IP address
+  const { date, geoData } = useTimeGeoContext(); // geoURL associated with IP address
 
   useEffect(() => {
-    if (!geoIsLoading && geoData) {
+    if (geoData) {
       setFormattedDate(
         date.toLocaleDateString("pt-BR", {
-          timeZone: geoData.timezone,
+          timeZone: geoData && geoData.timezone,
           year: "numeric",
           month: "long",
           day: "numeric",
@@ -20,7 +20,7 @@ const useFormattedDate = () => {
         }),
       );
     }
-  }, [geoIsLoading, geoData, date]);
+  }, [geoData, date]);
 
   return { formattedDate };
 };
