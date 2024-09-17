@@ -5,6 +5,7 @@ import Greeting from "../components/Time/Greeting";
 import CurrentTime from "../components/Time/CurrentTime";
 import CurrentDate from "../components/Time/CurrentDate";
 import useLoadingTimer from "../customHooks/useLoadingTimer";
+import CurrentLocation from "../components/Time/CurrentLocation";
 
 export default function Time() {
   const { isLoading } = useLoadingTimer();
@@ -19,6 +20,7 @@ export default function Time() {
             <Greeting />
             <CurrentTime />
             <CurrentDate />
+            <CurrentLocation />
           </>
         )}
       </section>

@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTimeGeoContext } from "../context/TimeGeoContext";
-import useFetch from "./useFetch";
 import useFetchGeoUrl from "./useFetchGeoUrl";
 
 const useFormattedDate = () => {
   const [formattedDate, setFormattedDate] = useState("");
 
   useFetchGeoUrl();
-  const { date, geoUrl } = useTimeGeoContext(); // geoURL associated with IP address
-  const { data: geoData, isLoading: geoIsLoading } = useFetch(geoUrl, "geo");
+  const { date, geoData, geoIsLoading } = useTimeGeoContext(); // geoURL associated with IP address
 
   useEffect(() => {
     if (!geoIsLoading && geoData) {
