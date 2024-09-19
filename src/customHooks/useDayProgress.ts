@@ -1,0 +1,26 @@
+import { useEffect, useState } from "react";
+import getMinutesDiff from "../utils/getMinutesDiff";
+
+const useDayProgress = () => {
+  const [dayProgress, setDayProgress] = useState(getMinutesDiff());
+
+  useEffect(() => {
+    const updateProgress = () => setDayProgress(getMinutesDiff());
+
+    const now = new Date();
+    const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000;
+
+    // Sync with the start of the next minute
+    const timeoutId = setTimeout(() => {
+      updateProgress();
+      const intervalId = setInterval(updateProgress, 1000);
+
+      return () => clearInterval(intervalId);
+    }, millisecondsUntilNextMinute);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  return { dayProgress };
+};
+export default useDayProgress;

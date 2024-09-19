@@ -49,8 +49,8 @@ export default function WorldTime() {
 
   useEffect(() => {
     const updateTime = () => {
-      setWorldTime(
-        worldTime.map((city) => {
+      setWorldTime((prev) =>
+        prev.map((city) => {
           const currentCityTime = new Date().toLocaleTimeString("pt-BR", {
             timeZone: city.timeZone,
             hour: "numeric",
@@ -69,7 +69,7 @@ export default function WorldTime() {
     const intervalId = setInterval(updateTime, 0);
 
     return () => clearInterval(intervalId);
-  }, [worldTime]);
+  }, []);
 
   return (
     <div>
