@@ -11,14 +11,14 @@ const useDayProgress = () => {
     const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000;
 
     // Sync with the start of the next minute
-    const timeoutId = setTimeout(() => {
+    const timeout = setTimeout(() => {
       updateProgress();
-      const intervalId = setInterval(updateProgress, 1000);
+      const interval = setInterval(updateProgress, 1000);
 
-      return () => clearInterval(intervalId);
+      return () => clearInterval(interval);
     }, millisecondsUntilNextMinute);
 
-    return () => clearTimeout(timeoutId);
+    return () => clearTimeout(timeout);
   }, []);
 
   return { dayProgress };

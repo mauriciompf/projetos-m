@@ -8,6 +8,7 @@ import { useTimeGeoContext } from "../context/TimeGeoContext";
 import Loading from "../components/Loading";
 import WorldTime from "../components/Time/WorldTime";
 import DayProgressBar from "../components/Time/DayProgressBar";
+import YearProgressBar from "../components/Time/YearProgressBar";
 
 export default function Time() {
   const { geoIsLoading } = useTimeGeoContext();
@@ -30,6 +31,7 @@ export default function Time() {
         <WorldTime />
 
         <DayProgressBar />
+        <YearProgressBar />
       </section>
     </WrapOutlet>
   );
