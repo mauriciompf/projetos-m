@@ -6,7 +6,7 @@ export default function CurrentTime() {
   useUpdateTime();
 
   return (
-    <p className="text-6xl md:text-8xl">
+    <p className="text-6xl lg:text-9xl">
       <strong>{realTimeText}</strong>
     </p>
   );

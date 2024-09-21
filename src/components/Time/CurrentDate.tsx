@@ -9,7 +9,7 @@ export default function CurrentDate() {
 
   return (
     geoData && (
-      <p className="mt-2 text-xl first-letter:capitalize">
+      <p className="mt-2 text-xl first-letter:capitalize lg:text-2xl">
         <strong>{`${formattedDate}, ${`semana ${currentDayWeek}`}`}</strong>
       </p>
     )

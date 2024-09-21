@@ -46,7 +46,6 @@ function MainAlbumGrid() {
     ]);
 
     setIsEditAlbum(false);
-    // setImageIndex(0);
   }, [setIsEditAlbum, setEditAlbumBoxes]);
 
   const handleEditAlbum = useCallback(
@@ -151,7 +150,6 @@ function MainAlbumGrid() {
                     <div
                       className="relative h-full max-h-[38.75rem] w-full flex-shrink-0 transition-transform ease-in-out"
                       style={{
-                        // transform: `translateX(-${600}%)`,
                         transform: `translateX(-${imageIndex * 100}%)`,
                       }}
                       key={index}
@@ -249,7 +247,7 @@ function MainAlbumGrid() {
                                 >
                                   <img
                                     draggable="false"
-                                    className="h-full min-w-min object-contain"
+                                    className="h-full min-h-min min-w-min object-contain"
                                     src={
                                       image instanceof File
                                         ? URL.createObjectURL(image)

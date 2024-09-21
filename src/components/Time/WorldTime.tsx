@@ -7,7 +7,7 @@ export default function WorldTime() {
     <div className="mt-4 flex flex-wrap justify-center gap-2">
       {worldTime.map((city) => (
         <div
-          className="w-[7.5rem] rounded-xl bg-columbia p-2 font-bold text-jet"
+          className="grid w-[7.5rem] place-items-center gap-0 rounded-xl bg-columbia p-2 font-bold text-jet lg:w-[8.5rem] lg:text-xl"
           key={city.id}
         >
           <p>{city.name}</p>

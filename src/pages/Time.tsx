@@ -28,7 +28,7 @@ export default function Time() {
           </>
         )}
         <WorldTime />
-        <div className="mt-4 flex flex-wrap justify-center gap-4 text-xl font-bold">
+        <div className="mt-4 flex flex-wrap justify-center gap-4 text-xl font-bold lg:mt-12 lg:gap-24">
           {!geoIsLoading && <DayProgressBar />}
           <YearProgressBar />
         </div>
