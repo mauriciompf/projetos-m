@@ -10,11 +10,11 @@ const useGreetingText = () => {
     const currentHour = date.getHours();
 
     if (currentHour >= 6 && currentHour < 12) {
-      setGreetingText("Bom dia!");
+      setGreetingText("Bom dia!🌞");
     } else if (currentHour >= 12 && currentHour < 18) {
-      setGreetingText("Boa tarde!");
+      setGreetingText("Boa tarde!😎");
     } else {
-      setGreetingText("Boa noite");
+      setGreetingText("Boa noite!🌙");
     }
   }, [date]);
 

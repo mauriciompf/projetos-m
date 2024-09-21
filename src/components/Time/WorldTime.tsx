@@ -1,80 +1,15 @@
-import { useEffect, useState } from "react";
-
-type WorldDateValues = {
-  id: number;
-  name: string;
-  timeZone: string;
-  time: string | null;
-};
+import useWorldTime from "../../customHooks/useWorldTime";
 
 export default function WorldTime() {
-  const [worldTime, setWorldTime] = useState<WorldDateValues[]>([
-    {
-      id: 0,
-      name: "Nova Iorque",
-      timeZone: "America/New_York",
-      time: null,
-    },
-    {
-      id: 1,
-      name: "São Paulo",
-      timeZone: "America/Sao_Paulo",
-      time: null,
-    },
-    {
-      id: 2,
-      name: "Londres",
-      timeZone: "Europe/London",
-      time: null,
-    },
-    {
-      id: 3,
-      name: "Paris",
-      timeZone: "Europe/Paris",
-      time: null,
-    },
-    {
-      id: 4,
-      name: "Hong Kong",
-      timeZone: "Asia/Hong_Kong",
-      time: null,
-    },
-    {
-      id: 5,
-      name: "Tóquio",
-      timeZone: "Asia/Tokyo",
-      time: null,
-    },
-  ]);
-
-  useEffect(() => {
-    const updateTime = () => {
-      setWorldTime((prev) =>
-        prev.map((city) => {
-          const currentCityTime = new Date().toLocaleTimeString("pt-BR", {
-            timeZone: city.timeZone,
-            hour: "numeric",
-            minute: "numeric",
-          });
-          return {
-            ...city,
-            time: currentCityTime,
-          };
-        }),
-      );
-    };
-
-    updateTime();
-
-    const intervalId = setInterval(updateTime, 0);
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const { worldTime } = useWorldTime();
 
   return (
-    <div>
+    <div className="mt-4 flex flex-wrap justify-center gap-2">
       {worldTime.map((city) => (
-        <div key={city.id}>
+        <div
+          className="w-[7.5rem] rounded-xl bg-columbia p-2 font-bold text-jet"
+          key={city.id}
+        >
           <p>{city.name}</p>
           <p>{city.time}</p>
         </div>

@@ -4,11 +4,11 @@ export default function YearProgressBar() {
   const { yearProgress } = useYearProgress();
 
   return (
-    <div className="text-center">
-      <p>Ano</p>
-      <div className="h-[40px] w-[200px] rounded-lg border-4 border-dark_spring bg-columbia">
+    <div className="grid gap-1">
+      <p>Progressão do ano</p>
+      <div className="h-[40px] w-[200px] rounded-lg bg-columbia">
         <div
-          className={`h-full rounded-r-lg bg-savoy`}
+          className={`h-full rounded-lg bg-savoy`}
           style={{
             width: `${yearProgress}%`,
           }}

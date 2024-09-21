@@ -5,5 +5,9 @@ export default function CurrentTime() {
   const { realTimeText } = useRealTime();
   useUpdateTime();
 
-  return <p>{realTimeText}</p>;
+  return (
+    <p className="text-6xl md:text-8xl">
+      <strong>{realTimeText}</strong>
+    </p>
+  );
 }

@@ -4,7 +4,9 @@ export default function CurrentLocation() {
 
   return (
     geoData && (
-      <p>{`${geoData.city || "Unknown City"}, ${geoData.region || "Unknown Region"}, ${geoData.country || "Unknown Country"}`}</p>
+      <p className="mt-4 text-xl">
+        <strong>{`${geoData.city || "Cidade desconhecida"}, ${geoData.region || "Estado desconhecido"}, ${geoData.country || "País desconhecido"}`}</strong>
+      </p>
     )
   );
 }

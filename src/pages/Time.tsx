@@ -15,7 +15,7 @@ export default function Time() {
 
   return (
     <WrapOutlet projectName={projectList[2].label}>
-      <section className="grid place-items-center">
+      <section className="mt-10 grid place-items-center px-2 text-center">
         <Greeting />
         <CurrentTime />
 
@@ -27,11 +27,11 @@ export default function Time() {
             <CurrentLocation />
           </>
         )}
-
         <WorldTime />
-
-        <DayProgressBar />
-        <YearProgressBar />
+        <div className="mt-4 flex flex-wrap justify-center gap-4 text-xl font-bold">
+          {!geoIsLoading && <DayProgressBar />}
+          <YearProgressBar />
+        </div>
       </section>
     </WrapOutlet>
   );
