@@ -2,27 +2,23 @@ import { createContext } from "react";
 import useLocalStorage from "../customHooks/useLocalStorage";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 
-type MenuContextValues = {
-  isOpenMenu: boolean;
-  handleToggleMenu: () => void;
-};
-
-const MenuContext = createContext<MenuContextValues | null>(null);
+const MenuContext = createContext<{
+  isMenuOpen: boolean;
+  setIsMenuOpen: (value: boolean) => void;
+} | null>(null);
 
 export default function MenuContextProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isOpenMenu, setIsOpenMenu] = useLocalStorage<boolean>({
-    key: "isOpenMenu",
+  const [isMenuOpen, setIsMenuOpen] = useLocalStorage<boolean>({
+    key: "isMenuOpen",
     initialState: true,
   });
 
-  const handleToggleMenu = () => setIsOpenMenu((prev) => !prev);
-
   return (
-    <MenuContext.Provider value={{ isOpenMenu, handleToggleMenu }}>
+    <MenuContext.Provider value={{ isMenuOpen, setIsMenuOpen }}>
       {children}
     </MenuContext.Provider>
   );

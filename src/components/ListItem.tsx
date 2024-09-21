@@ -11,11 +11,11 @@ export default function ListItem({ list, handleClick }: ListItemProps) {
 
   return (
     <li
-      className={`${theme === "dark" ? "border-white" : "border-black"} border`}
+      className={`${theme === "dark" ? "border-columbia" : "border-jet"} border`}
     >
       <Button
         onClick={handleClick}
-        className={`${theme !== "dark" && "hover:bg-black hover:text-white focus:bg-black focus:text-white"} w-full p-2 text-left hover:bg-white hover:text-black focus:bg-white focus:text-black`}
+        className={`${theme !== "dark" && "hover:bg-jet hover:text-columbia focus:bg-jet focus:text-columbia"} w-full p-2 text-left hover:bg-columbia hover:text-jet focus:bg-columbia focus:text-jet`}
       >
         {list}
       </Button>

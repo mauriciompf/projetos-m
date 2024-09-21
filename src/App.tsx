@@ -1,8 +1,8 @@
 import {
   createHashRouter as createBrowserRouter,
+  Outlet,
   RouterProvider,
 } from "react-router-dom";
-import HomePage from "./pages/HomePage";
 import SideBar from "./components/SideBar/SideBar";
 import Filter from "./pages/Filter";
 import NotFound from "./components/NotFound";
@@ -15,12 +15,17 @@ const router = createBrowserRouter([
     element: <NotFound />,
   },
   {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    element: <SideBar />,
+    element: (
+      <>
+        <SideBar />
+        <Outlet /> {/* Child routes will be rendered here */}
+      </>
+    ),
     children: [
+      {
+        path: "/",
+        element: <Filter />,
+      },
       {
         path: "/pages/filter",
         element: <Filter />,

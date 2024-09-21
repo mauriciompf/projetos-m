@@ -35,7 +35,7 @@ export default function UserRow({ user }: UserRowProps) {
 
   return (
     <tr
-      className={`${theme === "dark" ? "text-gray-300 odd:bg-[#25282a] even:bg-[#181a1b]" : "text-black odd:bg-slate-300 even:bg-white"} `}
+      className={`${theme === "dark" ? "text-gray-300 odd:bg-[#25282a] even:bg-[#181a1b]" : "text-jet odd:bg-slate-300 even:bg-columbia"} `}
     >
       <td className="text-center">{highLightMatch("id", id)}</td>
       <td className="p-2 text-center">{highLightMatch("nome", firstName)}</td>

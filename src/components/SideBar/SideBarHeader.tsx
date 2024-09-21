@@ -1,44 +1,29 @@
-import { Link } from "react-router-dom";
 import Heading from "../Heading";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquareCaretLeft } from "@fortawesome/free-solid-svg-icons";
-import { useMenuContext } from "../../context/MenuContext";
-import Button from "../Button";
+import ToggleMenu from "./ToggleMenu";
+import ThemeButton from "../ThemeButton";
 
-const hideMenuIcon = <FontAwesomeIcon icon={faSquareCaretLeft} />;
-
-type SideBarHeaderProps = {
+export default function SideBarHeader({
+  elementVisible,
+}: {
   elementVisible: boolean;
-};
-
-export default function SideBarHeader({ elementVisible }: SideBarHeaderProps) {
-  const { isOpenMenu, handleToggleMenu } = useMenuContext();
-
+}) {
   return (
     <section className={`relative my-4 ml-0.5 flex items-center gap-6`}>
-      <span className="sr-only">
-        {isOpenMenu ? "Reduza o menu" : "Amplie o menu"}
-      </span>
-      <Button
-        aria-label="toggleMenu"
-        onClick={handleToggleMenu}
-        className={`${!isOpenMenu && "rotate-180"} transform-gpu p-0 text-2xl transition-[rotate] duration-300`}
-      >
-        <span className="grid">{hideMenuIcon}</span>
-      </Button>
+      <ToggleMenu />
+
       <Heading
-        className={`${!elementVisible && "opacity-0 transition-opacity"} relative`}
+        className={`${!elementVisible && "select-none opacity-0 transition-opacity"} relative duration-100`}
         as="h2"
       >
-        <Link
-          className={`${!isOpenMenu && "pointer-events-none"} flex items-center gap-2`}
-          to={"/"}
-        >
-          <span className="cursor-pointer text-lg">🏠</span>
-          <span className="text-2xl hover:underline focus:underline">
-            Projetos
-          </span>
-        </Link>
+        <div className={`flex items-center gap-6`}>
+          <div className="flex items-center gap-2">
+            <span className="text-xl">⭐</span>
+            <span className="text-2xl">Projetos</span>
+          </div>
+          <ThemeButton
+            className={`relative p-0 text-xl transition-transform duration-300 ease-in-out`}
+          />
+        </div>
       </Heading>
     </section>
   );

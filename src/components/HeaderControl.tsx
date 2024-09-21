@@ -33,7 +33,7 @@ export default function HeaderControl({
   return isRemoveButton ? (
     <div
       className={twMerge(
-        `${theme === "dark" ? "border-white" : "border-black"} flex select-none items-center justify-between gap-1 border p-2`,
+        `${theme === "dark" ? "border-columbia" : "border-jet"} flex select-none items-center justify-between gap-1 border p-2`,
         className,
       )}
     >
@@ -49,7 +49,7 @@ export default function HeaderControl({
     <Button
       onClick={onClick}
       className={twMerge(
-        ` ${theme === "dark" ? "border-white" : "border-black"} flex w-full select-none items-center justify-between gap-2 border p-2`,
+        ` ${theme === "dark" ? "border-columbia" : "border-jet"} flex w-full select-none items-center justify-between gap-2 border p-2`,
         className,
       )}
     >
