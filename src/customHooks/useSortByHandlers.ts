@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useToggleContext } from "../context/ToggleContext";
+import { useTableParamsContext } from "../context/TableParamsContext";
 
 const useSortByHandlers = () => {
   const [orderByToggle, setOrderByToggle] = useState(false);
-  const { orderByParams, setOrderByParams } = useToggleContext();
+  const { orderByParams, setOrderByParams } = useTableParamsContext();
 
   const handleOrderByToggle = () => setOrderByToggle((prev) => !prev);
   const handleSelectOrderBy = (label: string) => {

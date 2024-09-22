@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { useToggleContext } from "../context/ToggleContext";
 import tableHeaders from "../utils/tableHeaders";
-import { useFilterSearchContext } from "../context/FilterSearchContext";
+import { useTableParamsContext } from "../context/TableParamsContext";
 
 const useToggleDropDown = (key: string) => {
-  const { setSelectColumn, selectColumnMap } = useToggleContext();
+  const { setSelectColumn, selectColumnMap, searchParams, setSearchParams } =
+    useTableParamsContext();
   const [selectColumnToggle, setSelectColumnToggle] = useState(false);
   const orderByLabels = ["Crescente", "Decrescente", "Padrão"];
-  const { searchParams, setSearchParams } = useFilterSearchContext();
 
   const handleSelectColumnToggle = () => setSelectColumnToggle((prev) => !prev);
 

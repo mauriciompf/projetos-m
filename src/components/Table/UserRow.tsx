@@ -1,10 +1,10 @@
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import { highlightText } from "../../utils/highlightText";
-import { useFilterSearchContext } from "../../context/FilterSearchContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import getSexNameTranslated from "../../utils/getSexNameTranslated";
 import { formatDate } from "../../utils/formatDate";
 import { UsersData } from "./FilterTable";
+import { useTableParamsContext } from "../../context/TableParamsContext";
 
 type UserRowProps = {
   user: UsersData;
@@ -12,7 +12,7 @@ type UserRowProps = {
 
 export default function UserRow({ user }: UserRowProps) {
   const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
-  const { searchParams, statusParams } = useFilterSearchContext();
+  const { searchParams, statusParams } = useTableParamsContext();
   const { theme } = useThemeContext();
 
   const { id, firstName, age, gender, email, phone, birthDate } = user;

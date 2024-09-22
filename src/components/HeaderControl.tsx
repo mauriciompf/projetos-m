@@ -1,18 +1,7 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { useThemeContext } from "../context/ThemeContext";
+import { closeIcon, downIcon } from "../utils/icons";
 import Button from "./Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { twMerge } from "tailwind-merge";
-const downIcon = (
-  <FontAwesomeIcon
-    width={15}
-    height={15}
-    icon={"fa-solid fa-chevron-down" as IconProp}
-  />
-);
-const removeButtonIcon = (
-  <FontAwesomeIcon icon={"fa-solid fa-circle-xmark" as IconProp} />
-);
 
 type HeaderControlProps = {
   onClick: () => void;
@@ -42,7 +31,7 @@ export default function HeaderControl({
         onClick={onClick}
         className="py-0 ring-transparent hover:text-red-500 focus:text-red-500"
       >
-        {removeButtonIcon}
+        {closeIcon}
       </Button>
     </div>
   ) : (

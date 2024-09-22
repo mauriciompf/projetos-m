@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useFilterSearchContext } from "../context/FilterSearchContext";
 import useToggleDropDown from "./useToggleDropDown";
+import { useTableParamsContext } from "../context/TableParamsContext";
 
 const useFilterHandlers = () => {
   const [statusToggle, setStatusToggle] = useState(false);
   const { selectColumn } = useToggleDropDown("filter");
   const { searchParams, setSearchParams, statusParams, setStatusParams } =
-    useFilterSearchContext();
+    useTableParamsContext();
 
   const handleSelectSex = (sex: string) => {
     searchParams.set("value", sex); // Set sex to params

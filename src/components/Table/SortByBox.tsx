@@ -1,14 +1,13 @@
 import { useRef, RefObject } from "react";
-import WrapSettingsBox from "../../WrapSettingsBox";
-import ListItem from "../../ListItem";
-import HeaderControl from "../../HeaderControl";
-import { useToggleContext } from "../../../context/ToggleContext";
-import useClickOutside from "../../../customHooks/useClickOutside";
-import ColumnSelector from "../../ColumnSelector";
-import toCapitalizeCase from "../../../utils/toCapitalizeCase";
-import { useFilterSearchContext } from "../../../context/FilterSearchContext";
-import ResetParams from "../../../utils/ResetParams";
-import useSortByHandlers from "../../../customHooks/useSortByHandlers";
+import WrapSettingsBox from "../WrapSettingsBox";
+import ListItem from "../ListItem";
+import HeaderControl from "../HeaderControl";
+import useClickOutside from "../../customHooks/useClickOutside";
+import ColumnSelector from "../ColumnSelector";
+import toCapitalizeCase from "../../utils/toCapitalizeCase";
+import ResetParams from "../../utils/ResetParams";
+import useSortByHandlers from "../../customHooks/useSortByHandlers";
+import { useTableParamsContext } from "../../context/TableParamsContext";
 
 type SortByBoxProps = {
   refSortByBtn: RefObject<HTMLButtonElement>;
@@ -21,10 +20,9 @@ export default function SortByBox({
 }: SortByBoxProps) {
   const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
   const refSortByBox = useRef<HTMLElement | null>(null);
-  const { orderByParams } = useToggleContext();
   const { handleOrderByToggle, handleSelectOrderBy, orderByToggle } =
     useSortByHandlers();
-  const { searchParams } = useFilterSearchContext();
+  const { orderByParams, searchParams } = useTableParamsContext();
   useClickOutside([refSortByBox, refSortByBtn], () => setToggleSortBy(false));
 
   return (

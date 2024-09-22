@@ -1,15 +1,14 @@
 import WrapOutlet from "../components/WrapOutlet";
-import FilterTable from "../components/Filter/FilterTable";
-import FilterSettings from "../components/Filter/FilterSettings";
+import FilterTable from "../components/Table/FilterTable";
 import useFetch from "../customHooks/useFetch";
-import { FilterSearchProvider } from "../context/FilterSearchContext";
-import { ToggleContextProvider } from "../context/ToggleContext";
 import Loading from "../components/Loading";
 import projectList from "../utils/projectList";
+import { tableLength } from "../utils/constants";
+import TableSettings from "../components/Table/TableSettings";
+import TableParamsProvider from "../context/TableParamsContext";
+import TableToggleProvider from "../context/TableToggleContext";
 
-const tableLength = 50;
-
-export default function Filter() {
+export default function Table() {
   const {
     data: usersData,
     isLoading,
@@ -20,30 +19,28 @@ export default function Filter() {
     "users",
   );
 
+  if (isError) console.error(isError);
+
   return (
     <div className="selection:bg-blue-400">
-      <FilterSearchProvider>
-        <ToggleContextProvider>
+      <TableParamsProvider>
+        <TableToggleProvider>
           <WrapOutlet projectName={projectList[0].label}>
-            {isError && <p>Error...</p>}
-
             <section className="relative mx-auto my-0 w-[min(950px,_100%)] text-lg md:my-10">
               {isLoading ? (
                 <Loading />
               ) : (
                 usersData && (
                   <>
-                    <FilterSettings />
+                    <TableSettings />
                     <FilterTable usersData={usersData} />
                   </>
                 )
               )}
             </section>
           </WrapOutlet>
-        </ToggleContextProvider>
-      </FilterSearchProvider>
+        </TableToggleProvider>
+      </TableParamsProvider>
     </div>
   );
 }
-
-export { tableLength };

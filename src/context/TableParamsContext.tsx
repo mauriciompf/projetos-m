@@ -1,20 +1,19 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
+import { TableParamsValues } from "../utils/types";
 
-type ToggleContextValues = {
-  orderByParams: URLSearchParams;
-  setOrderByParams: (params: URLSearchParams) => void;
-  setSelectColumnMap: () => void;
-  selectColumnMap: { [key: string]: string };
-  setSelectColumn: (key: string, column: string) => void;
-};
+const TableParamsContext = createContext<TableParamsValues | null>(null);
 
-const ToggleContext = createContext<ToggleContextValues | null>(null);
-
-function ToggleContextProvider({ children }: { children: React.ReactNode }) {
-  const [orderByParams, setOrderByParams] = useSearchParams();
+export default function TableParamsProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [statusParams, setStatusParams] = useSearchParams();
+  const [orderByParams, setOrderByParams] = useSearchParams();
+  const [filtedTableLength, setFiltedTableLength] = useState(0);
 
   const setSelectColumn = (key: string, column: string) => {
     const newSearchParams = new URLSearchParams(searchParams); // Get a new URLSearchParams instance with the current params
@@ -25,8 +24,14 @@ function ToggleContextProvider({ children }: { children: React.ReactNode }) {
   const selectColumnMap = Object.fromEntries(searchParams.entries()); // Convert searchParams to an object
 
   return (
-    <ToggleContext.Provider
+    <TableParamsContext.Provider
       value={{
+        searchParams,
+        setSearchParams,
+        statusParams,
+        setStatusParams,
+        filtedTableLength,
+        setFiltedTableLength,
         orderByParams,
         setOrderByParams,
         setSelectColumnMap: setSearchParams, // Set the search params directly as the select column map
@@ -35,15 +40,13 @@ function ToggleContextProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </ToggleContext.Provider>
+    </TableParamsContext.Provider>
   );
 }
 
-const useToggleContext = () =>
+export const useTableParamsContext = () =>
   useCustomHookContext(
-    ToggleContext,
-    "useToggleContext",
-    "ToggleContextProvider",
+    TableParamsContext,
+    "useTableParamsContext",
+    "TableParamsProvider",
   );
-
-export { ToggleContextProvider, useToggleContext };

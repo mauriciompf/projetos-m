@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from "react";
-import { useFilterSearchContext } from "../../context/FilterSearchContext";
+import { useTableParamsContext } from "../../context/TableParamsContext";
 import { useThemeContext } from "../../context/ThemeContext";
-import { useToggleContext } from "../../context/ToggleContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import tableHeaders from "../../utils/tableHeaders";
 import getSexNameTranslated from "../../utils/getSexNameTranslated";
@@ -22,17 +21,17 @@ type FilterTableProps = {
 };
 
 export default function FilterTable({ usersData }: FilterTableProps) {
-  const { orderByParams } = useToggleContext();
-  const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortby");
-  const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
-  const { theme } = useThemeContext();
   const {
     searchParams,
     setStatusParams,
     statusParams,
     setFiltedTableLength,
     filtedTableLength,
-  } = useFilterSearchContext();
+    orderByParams,
+  } = useTableParamsContext();
+  const { selectColumn: selectColumnSortBy } = useToggleDropDown("sortby");
+  const { selectColumn: selectColumnFilter } = useToggleDropDown("filter");
+  const { theme } = useThemeContext();
 
   // # TODO Simplify code
   const sortedUserData = useMemo(() => {

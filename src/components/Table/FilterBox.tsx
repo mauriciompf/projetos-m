@@ -1,17 +1,17 @@
-import WrapSettingsBox from "../../WrapSettingsBox";
-import ColumnSelector from "../../ColumnSelector";
-import useClickOutside from "../../../customHooks/useClickOutside";
 import { RefObject, useRef } from "react";
-import HeaderControl from "../../HeaderControl";
-import ListItem from "../../ListItem";
-import { useThemeContext } from "../../../context/ThemeContext";
-import useToggleDropDown from "../../../customHooks/useToggleDropDown";
-import { useFilterSearchContext } from "../../../context/FilterSearchContext";
-import toCapitalizeCase from "../../../utils/toCapitalizeCase";
-import Button from "../../Button";
-import ResetParams from "../../../utils/ResetParams";
 import { useNavigate } from "react-router-dom";
-import useFilterHandlers from "../../../customHooks/useFilterHandlers";
+import { useThemeContext } from "../../context/ThemeContext";
+import useToggleDropDown from "../../customHooks/useToggleDropDown";
+import useClickOutside from "../../customHooks/useClickOutside";
+import useFilterHandlers from "../../customHooks/useFilterHandlers";
+import WrapSettingsBox from "../WrapSettingsBox";
+import ResetParams from "../../utils/ResetParams";
+import ColumnSelector from "../ColumnSelector";
+import HeaderControl from "../HeaderControl";
+import toCapitalizeCase from "../../utils/toCapitalizeCase";
+import Button from "../Button";
+import ListItem from "../ListItem";
+import { useTableParamsContext } from "../../context/TableParamsContext";
 
 type FilterBoxProps = {
   refFilterBtn: RefObject<HTMLButtonElement>;
@@ -27,7 +27,7 @@ export default function FilterBox({
   const refFilterBox = useRef<HTMLElement | null>(null);
   const { theme } = useThemeContext();
   const { selectColumn } = useToggleDropDown("filter");
-  const { searchParams, statusParams } = useFilterSearchContext();
+  const { searchParams, statusParams } = useTableParamsContext();
 
   useClickOutside([refFilterBox, refFilterBtn], () => setToggleFilter(false));
   const navigate = useNavigate();

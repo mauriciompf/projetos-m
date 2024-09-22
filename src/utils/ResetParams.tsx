@@ -1,5 +1,5 @@
 import Button from "../components/Button";
-import { useFilterSearchContext } from "../context/FilterSearchContext";
+import { useTableParamsContext } from "../context/TableParamsContext";
 import { useThemeContext } from "../context/ThemeContext";
 
 type ResetParamsProps = {
@@ -13,7 +13,7 @@ export default function ResetParams({
   valueTwo,
   valueThree,
 }: ResetParamsProps) {
-  const { searchParams, setSearchParams } = useFilterSearchContext();
+  const { searchParams, setSearchParams } = useTableParamsContext();
   const { theme } = useThemeContext();
 
   // Delete specified search params and update context

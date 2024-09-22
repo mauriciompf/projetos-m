@@ -1,3 +1,4 @@
+export const tableLength = 50;
 export const regexImageFile = new RegExp(
   "\\.(jpg|gif|png|jpeg|webp)(\\?.*)?$",
   "i",

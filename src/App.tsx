@@ -4,10 +4,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import SideBar from "./components/SideBar/SideBar";
-import Filter from "./pages/Filter";
 import NotFound from "./components/NotFound";
 import Gallery from "./pages/Gallery";
 import Time from "./pages/Time";
+import Table from "./pages/Table";
 
 const router = createBrowserRouter([
   {
@@ -23,12 +23,12 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/",
-        element: <Filter />,
+        path: "/", // "Homepage"
+        element: <Table />,
       },
       {
         path: "/pages/filter",
-        element: <Filter />,
+        element: <Table />,
       },
       {
         path: "/pages/gallery",
