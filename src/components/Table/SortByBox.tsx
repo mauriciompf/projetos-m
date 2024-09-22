@@ -7,30 +7,31 @@ import ColumnSelector from "../ColumnSelector";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 import ResetParams from "../../utils/ResetParams";
 import useSortByHandlers from "../../customHooks/useSortByHandlers";
-import { useTableParamsContext } from "../../context/TableParamsContext";
-
-type SortByBoxProps = {
-  refSortByBtn: RefObject<HTMLButtonElement>;
-  setToggleSortBy: (val: boolean) => void;
-};
+import { useTableContext } from "../../context/TableContext";
+import { useTableToggleContext } from "../../context/TableToggleContext";
 
 export default function SortByBox({
   refSortByBtn,
-  setToggleSortBy,
-}: SortByBoxProps) {
-  const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
-  const refSortByBox = useRef<HTMLElement | null>(null);
-  const { handleOrderByToggle, handleSelectOrderBy, orderByToggle } =
+}: {
+  refSortByBtn: RefObject<HTMLButtonElement>;
+}) {
+  const { setOrderByToggle, handleSelectOrderBy, orderByToggle } =
     useSortByHandlers();
-  const { orderByParams, searchParams } = useTableParamsContext();
+  const { setToggleSortBy } = useTableToggleContext();
+  const { orderByParams, searchParams } = useTableContext();
+
+  const refSortByBox = useRef<HTMLElement | null>(null);
+
   useClickOutside([refSortByBox, refSortByBtn], () => setToggleSortBy(false));
+
+  const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
   return (
     <WrapSettingsBox
       refElem={refSortByBox}
-      className={`grid ${searchParams.has("sortby") && searchParams.has("orderby") && "pt-0"} `}
+      className={`${searchParams.has("sortby") && searchParams.has("orderby") && "pt-0"} grid`}
     >
-      <ResetParams valueOne={"sortby"} valueTwo={"orderby"} />
+      <ResetParams params={["sortby", "orderby"]} />
 
       <div className="flex flex-col gap-2 md:flex-row">
         <ColumnSelector
@@ -41,14 +42,14 @@ export default function SortByBox({
         <div>
           {orderByParams.has("orderby") ? (
             <HeaderControl
-              onClick={handleOrderByToggle}
+              onClick={() => setOrderByToggle(!orderByToggle)}
               isDropDownOpen={orderByToggle}
               headerLabel={toCapitalizeCase(orderByParams.get("orderby"))}
               className="w-[10rem]"
             />
           ) : (
             <HeaderControl
-              onClick={handleOrderByToggle}
+              onClick={() => setOrderByToggle(!orderByToggle)}
               isDropDownOpen={orderByToggle}
               headerLabel={"Ordernar por"}
               className="w-[10rem]"

@@ -1,8 +1,8 @@
-import { useTableParamsContext } from "../../context/TableParamsContext";
+import { useTableContext } from "../../context/TableContext";
 import { tableLength } from "../../utils/constants";
 
 export default function ResultInfo() {
-  const { filtedTableLength } = useTableParamsContext();
+  const { filtedTableLength } = useTableContext();
 
   return (
     <p className="text-right">

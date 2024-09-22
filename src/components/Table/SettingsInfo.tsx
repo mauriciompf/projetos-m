@@ -1,10 +1,10 @@
-import { useTableParamsContext } from "../../context/TableParamsContext";
+import { useTableContext } from "../../context/TableContext";
 import useFilterAndSortStatus from "../../customHooks/useFilterAndSortStatus";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 
 export default function SettingsInfo() {
   const { isFilter, isSortBy } = useFilterAndSortStatus();
-  const { searchParams, statusParams } = useTableParamsContext();
+  const { searchParams, statusParams } = useTableContext();
 
   return (
     <p className="grid text-base">

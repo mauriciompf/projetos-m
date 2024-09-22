@@ -1,14 +1,14 @@
 import { useState } from "react";
-import tableHeaders from "../utils/tableHeaders";
-import { useTableParamsContext } from "../context/TableParamsContext";
+import { tableHeaders } from "../utils/constants";
+import { useTableContext } from "../context/TableContext";
 
 const useToggleDropDown = (key: string) => {
-  const { setSelectColumn, selectColumnMap, searchParams, setSearchParams } =
-    useTableParamsContext();
   const [selectColumnToggle, setSelectColumnToggle] = useState(false);
-  const orderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
-  const handleSelectColumnToggle = () => setSelectColumnToggle((prev) => !prev);
+  const { setSelectColumn, selectColumnMap, searchParams, setSearchParams } =
+    useTableContext();
+
+  const orderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
   const removeSelectedColumn = (column: string) => {
     // Check if the selected column value is included in tableHeaders or orderByLabels
@@ -27,7 +27,7 @@ const useToggleDropDown = (key: string) => {
 
   return {
     selectColumnToggle,
-    handleSelectColumnToggle,
+    setSelectColumnToggle,
     removeSelectedColumn,
     handleSelectColumn,
     selectColumn: selectColumnMap[key], // Return the currently selected column value for the given key

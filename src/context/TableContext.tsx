@@ -2,10 +2,12 @@ import { createContext, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 import { TableParamsValues } from "../utils/types";
+import { tableLength } from "../utils/constants";
+import useFetch from "../customHooks/useFetch";
 
-const TableParamsContext = createContext<TableParamsValues | null>(null);
+const TableContext = createContext<TableParamsValues | null>(null);
 
-export default function TableParamsProvider({
+export default function TableProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -14,6 +16,20 @@ export default function TableParamsProvider({
   const [statusParams, setStatusParams] = useSearchParams();
   const [orderByParams, setOrderByParams] = useSearchParams();
   const [filtedTableLength, setFiltedTableLength] = useState(0);
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useFetch(
+    `https://dummyjson.com/users?limit=${tableLength}`,
+    "users",
+    "users",
+  );
+
+  if (isError) {
+    console.error(isError);
+    return;
+  }
 
   const setSelectColumn = (key: string, column: string) => {
     const newSearchParams = new URLSearchParams(searchParams); // Get a new URLSearchParams instance with the current params
@@ -24,8 +40,10 @@ export default function TableParamsProvider({
   const selectColumnMap = Object.fromEntries(searchParams.entries()); // Convert searchParams to an object
 
   return (
-    <TableParamsContext.Provider
+    <TableContext.Provider
       value={{
+        userData,
+        isLoading,
         searchParams,
         setSearchParams,
         statusParams,
@@ -40,13 +58,9 @@ export default function TableParamsProvider({
       }}
     >
       {children}
-    </TableParamsContext.Provider>
+    </TableContext.Provider>
   );
 }
 
-export const useTableParamsContext = () =>
-  useCustomHookContext(
-    TableParamsContext,
-    "useTableParamsContext",
-    "TableParamsProvider",
-  );
+export const useTableContext = () =>
+  useCustomHookContext(TableContext, "TableContext", "TableProvider");

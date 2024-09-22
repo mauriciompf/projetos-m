@@ -26,20 +26,11 @@ export default function SortByButton() {
             className={`${toggleSortBy && "animate-pulse"} absolute -right-0 -top-0 z-50 size-3 rounded-full bg-green-400`}
           ></span>
         )}
-        <strong>
-          <span className="max-[420px]:hidden">
-            {toggleSortBy ? "📂" : "📁"}
-          </span>{" "}
-          Organizar {downIcon}
-        </strong>
+        <span className="max-[420px]:hidden">{toggleSortBy ? "📂" : "📁"}</span>{" "}
+        Organizar {downIcon}
       </Button>
 
-      {toggleSortBy && (
-        <SortByBox
-          refSortByBtn={refSortByBtn}
-          setToggleSortBy={setToggleSortBy}
-        />
-      )}
+      {toggleSortBy && <SortByBox refSortByBtn={refSortByBtn} />}
     </div>
   );
 }

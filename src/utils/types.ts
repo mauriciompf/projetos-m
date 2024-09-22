@@ -23,6 +23,8 @@ export type TableToggleValues = {
 };
 
 export type TableParamsValues = {
+  userData: UserData[];
+  isLoading: boolean;
   searchParams: URLSearchParams;
   setSearchParams: (val: URLSearchParams) => void;
   statusParams: URLSearchParams;
@@ -34,4 +36,14 @@ export type TableParamsValues = {
   setSelectColumnMap: () => void;
   selectColumnMap: { [key: string]: string };
   setSelectColumn: (key: string, column: string) => void;
+};
+
+export type UserData = {
+  id: number;
+  firstName: string;
+  age: number;
+  gender: string;
+  email: string;
+  phone: string;
+  birthDate: string;
 };

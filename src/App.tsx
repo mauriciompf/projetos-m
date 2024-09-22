@@ -8,6 +8,15 @@ import NotFound from "./components/NotFound";
 import Gallery from "./pages/Gallery";
 import Time from "./pages/Time";
 import Table from "./pages/Table";
+import TableProvider from "./context/TableContext.tsx";
+
+function TableConfig() {
+  return (
+    <TableProvider>
+      <Table />
+    </TableProvider>
+  );
+}
 
 const router = createBrowserRouter([
   {
@@ -24,11 +33,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/", // "Homepage"
-        element: <Table />,
+        element: <TableConfig />,
       },
       {
         path: "/pages/filter",
-        element: <Table />,
+        element: <TableConfig />,
       },
       {
         path: "/pages/gallery",

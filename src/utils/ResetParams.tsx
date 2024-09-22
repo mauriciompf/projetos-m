@@ -1,37 +1,25 @@
 import Button from "../components/Button";
-import { useTableParamsContext } from "../context/TableParamsContext";
+import { useTableContext } from "../context/TableContext";
 import { useThemeContext } from "../context/ThemeContext";
 
-type ResetParamsProps = {
-  valueOne: string;
-  valueTwo: string;
-  valueThree?: string;
-};
-
-export default function ResetParams({
-  valueOne,
-  valueTwo,
-  valueThree,
-}: ResetParamsProps) {
-  const { searchParams, setSearchParams } = useTableParamsContext();
+export default function ResetParams({ params }: { params: string[] }) {
+  const { searchParams, setSearchParams } = useTableContext();
   const { theme } = useThemeContext();
 
-  // Delete specified search params and update context
-  const handleOnClick = () => {
-    searchParams.delete(valueOne);
-    searchParams.delete(valueTwo);
-    if (valueThree) {
-      searchParams.delete(valueThree);
-    }
+  const resetParams = () => {
+    params.forEach((param) => {
+      searchParams.delete(param);
+    });
     setSearchParams(new URLSearchParams(searchParams));
   };
 
+  const shouldRender = params.some((param) => searchParams.has(param)); // At least one parameter is present in searchParams
+
   return (
-    searchParams.has(valueOne) &&
-    searchParams.has(valueTwo) && (
+    shouldRender && (
       <div className="text-right">
         <Button
-          onClick={handleOnClick}
+          onClick={resetParams}
           className={`${theme === "light" ? "hover:bg-[#282A2D] hover:text-columbia focus:bg-[#282A2D] focus:text-columbia" : "hover:bg-columbia hover:text-jet focus:bg-columbia focus:text-jet"} my-2 w-min rounded-2xl border border-gray-300 text-base italic ring-transparent`}
         >
           Resetar

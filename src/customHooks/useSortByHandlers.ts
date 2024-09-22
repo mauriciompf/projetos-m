@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useTableParamsContext } from "../context/TableParamsContext";
+import { useTableContext } from "../context/TableContext";
 
 const useSortByHandlers = () => {
   const [orderByToggle, setOrderByToggle] = useState(false);
-  const { orderByParams, setOrderByParams } = useTableParamsContext();
+  const { orderByParams, setOrderByParams } = useTableContext();
 
-  const handleOrderByToggle = () => setOrderByToggle((prev) => !prev);
   const handleSelectOrderBy = (label: string) => {
     setOrderByToggle(false); // Close orderBy dropdown when an option is clicked
     orderByParams.set("orderby", label.toLowerCase()); // Set orderBy param
@@ -14,7 +13,7 @@ const useSortByHandlers = () => {
 
   return {
     orderByToggle,
-    handleOrderByToggle,
+    setOrderByToggle,
     handleSelectOrderBy,
   };
 };

@@ -1,9 +1,9 @@
 import useToggleDropDown from "../customHooks/useToggleDropDown";
-import tableHeaders from "../utils/tableHeaders";
 import ListItem from "./ListItem";
 import HeaderControl from "./HeaderControl";
 import toCapitalizeCase from "../utils/toCapitalizeCase";
 import useSortByHandlers from "../customHooks/useSortByHandlers";
+import { tableHeaders } from "../utils/constants";
 
 type ColumnSelectorProps = {
   keyName: string;
@@ -16,7 +16,7 @@ export default function ColumnSelector({
 }: ColumnSelectorProps) {
   const {
     selectColumnToggle,
-    handleSelectColumnToggle,
+    setSelectColumnToggle,
     removeSelectedColumn,
     handleSelectColumn,
     selectColumn,
@@ -35,7 +35,7 @@ export default function ColumnSelector({
         />
       ) : (
         <HeaderControl
-          onClick={handleSelectColumnToggle}
+          onClick={() => setSelectColumnToggle(!selectColumnToggle)}
           isDropDownOpen={orderByToggle}
           headerLabel={"Coluna"}
           className="w-[10rem]"

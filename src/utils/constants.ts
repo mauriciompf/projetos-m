@@ -1,4 +1,14 @@
 export const tableLength = 50;
+export const tableHeaders = [
+  "ID",
+  "Nome",
+  "Idade",
+  "Sexo",
+  "Email",
+  "Telefone",
+  "Data de Nasc.",
+];
+
 export const regexImageFile = new RegExp(
   "\\.(jpg|gif|png|jpeg|webp)(\\?.*)?$",
   "i",

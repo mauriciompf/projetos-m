@@ -1,7 +1,7 @@
-import { useTableParamsContext } from "../context/TableParamsContext";
+import { useTableContext } from "../context/TableContext";
 
 const useFilterAndSortStatus = () => {
-  const { searchParams } = useTableParamsContext();
+  const { searchParams } = useTableContext();
 
   const isSortBy = searchParams.get("sortby") && searchParams.get("orderby");
   const isFilter =

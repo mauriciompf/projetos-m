@@ -11,7 +11,7 @@ import HeaderControl from "../HeaderControl";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 import Button from "../Button";
 import ListItem from "../ListItem";
-import { useTableParamsContext } from "../../context/TableParamsContext";
+import { useTableContext } from "../../context/TableContext";
 
 type FilterBoxProps = {
   refFilterBtn: RefObject<HTMLButtonElement>;
@@ -27,7 +27,7 @@ export default function FilterBox({
   const refFilterBox = useRef<HTMLElement | null>(null);
   const { theme } = useThemeContext();
   const { selectColumn } = useToggleDropDown("filter");
-  const { searchParams, statusParams } = useTableParamsContext();
+  const { searchParams, statusParams } = useTableContext();
 
   useClickOutside([refFilterBox, refFilterBtn], () => setToggleFilter(false));
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ export default function FilterBox({
       refElem={refFilterBox}
       className={`-left-[120px] grid md:left-0 ${searchParams.has("filter") && searchParams.has("status") && "pt-0"}`}
     >
-      <ResetParams valueOne="filter" valueTwo="status" valueThree="value" />
+      <ResetParams params={["filter", "status", "value"]} />
 
       <div className="flex flex-col gap-2 md:flex-row">
         <ColumnSelector keyName="filter" restrictedList={["Data de Nasc."]} />
