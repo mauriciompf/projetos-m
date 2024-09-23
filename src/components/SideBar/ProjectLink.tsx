@@ -13,6 +13,7 @@ export default function ProjectLink({ project, elementVisible }: ProjectLink) {
         `${getActiveClasses(isActive)} ${isMenuOpen ? `${getHoverClasses()} cursor-pointer` : "w-min -translate-x-1"} relative -left-1 flex items-center gap-3 whitespace-nowrap rounded-md transition-all duration-100`
       }
       to={project.path}
+      title={project.label}
     >
       <span
         className={`${!isMenuOpen && getHoverClasses()} cursor-pointer rounded-md p-2 text-lg`}

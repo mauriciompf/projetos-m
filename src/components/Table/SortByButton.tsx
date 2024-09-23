@@ -19,7 +19,7 @@ export default function SortByButton() {
       <Button
         refBtn={refSortByBtn}
         onClick={() => setToggleSortBy(!toggleSortBy)}
-        className={`${theme === "dark" ? "border-transparent bg-[#25282A]" : "border-gray-300"} relative select-none rounded-3xl border px-2 py-2 font-bold`}
+        className={`${theme === "dark" ? "border-transparent bg-[#25282A]" : "border-gray-300"} relative select-none rounded-3xl border px-2 py-2 font-black`}
       >
         {isSortBy && (
           <span

@@ -3,13 +3,11 @@ import getSexNameTranslated from "../../utils/getSexNameTranslated";
 import { useTableContext } from "../../context/TableContext";
 import useFilter from "../../customHooks/useFilter";
 import { useThemeContext } from "../../context/ThemeContext";
-import useTableBody from "../../customHooks/useTableBody";
 
 export default function TableBody() {
   const { theme } = useThemeContext();
   const { userData } = useTableContext();
-  const { filteredUserData } = useFilter();
-  const { highLightMatch } = useTableBody();
+  const { filteredUserData, highLightMatch } = useFilter();
 
   return (
     <tbody>

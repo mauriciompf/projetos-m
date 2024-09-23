@@ -10,6 +10,9 @@ const useToggleDropDown = (key: string) => {
 
   const orderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
+  const handleSelectColumn = (header: string) =>
+    setSelectColumn(key, header.toLowerCase()); // Set column value in params
+
   const removeSelectedColumn = (column: string) => {
     // Check if the selected column value is included in tableHeaders or orderByLabels
     if (
@@ -21,9 +24,6 @@ const useToggleDropDown = (key: string) => {
       setSearchParams(new URLSearchParams(searchParams));
     }
   };
-
-  const handleSelectColumn = (header: string) =>
-    setSelectColumn(key, header.toLowerCase()); // Set column value in params
 
   return {
     selectColumnToggle,

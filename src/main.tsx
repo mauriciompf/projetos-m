@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeContextProvider } from "./context/ThemeContext.tsx";
 import MenuContextProvider from "./context/MenuContext.tsx";
-import ExpandedImageProvider from "./components/AlbumSettings/ExpandedImageContext.tsx";
+import ExpandedImageProvider from "./components/Gallery/ExpandedImageContext.tsx";
 import EditAlbumProvider from "./context/EditAlbumContext.tsx";
 import { TimeGeoContextProvider } from "./context/TimeGeoContext.tsx";
 
