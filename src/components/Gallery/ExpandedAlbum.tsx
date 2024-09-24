@@ -4,13 +4,13 @@ import Button from "../Button";
 import { closeIcon, nextIcon, previousIcon } from "../../utils/icons";
 import useClickOutside from "../../customHooks/useClickOutside";
 import { useRef } from "react";
+import useCarouselNavigation from "../../customHooks/useCarouselNavigation";
 
-export default function ExpandedAlbum({
-  expandAlbum,
-  setExpandAlbum,
-  handleCarouselControls,
-}: any) {
-  const { imageIndex, albumBoxes } = useEditAlbumContext();
+export default function ExpandedAlbum() {
+  const { imageIndex, albumBoxes, setExpandAlbum, expandAlbum } =
+    useEditAlbumContext();
+
+  const { handleCarouselControls } = useCarouselNavigation();
 
   const btnPrevRef = useRef(null);
   const btnNextRef = useRef(null);
