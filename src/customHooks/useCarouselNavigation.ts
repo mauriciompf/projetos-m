@@ -5,53 +5,47 @@ import { useEditAlbumContext } from "../context/EditAlbumContext";
 const useCarouselNavigation = () => {
   const { albumBoxes, setImageIndex, expandAlbum } = useEditAlbumContext();
 
-  const intervalIdRef = useRef<number | null>(null);
+  const intervalIdRef = useRef<number | null>(null); // Hold the value to start and clear
 
   const clearIntervalId = () => {
-    if (intervalIdRef.current) clearInterval(intervalIdRef.current);
+    if (intervalIdRef.current) clearInterval(intervalIdRef.current); // Stop looping until the interval time
   };
 
-  const handleCarouselControls = useCallback(
-    (controlButton: string, imagesLength: number) => {
-      const increaseIndex = (prev: number) =>
-        (prev + 1) % // Increment the current index
-        imagesLength; // Loop back to the start when reaching the end
+  const imagesLength = albumBoxes.find((album) => album.isMain)?.images.length; // Get the total of imagens in main album
 
-      const decreaseIndex = (prev: number) =>
-        (prev -
-          1 + // Decrement the current index
-          imagesLength) % // Ensure positive index even when wrapping around (< 0)
-        imagesLength;
+  const handleCarouselNavegation = useCallback(
+    (controlButton: string) => {
+      clearIntervalId();
 
-      if (controlButton === "Next") {
-        setImageIndex(increaseIndex);
-      } else if (controlButton === "Prev") {
-        setImageIndex(decreaseIndex);
-      }
-
-      clearIntervalId(); // Clear interval when clicked
-      if (!expandAlbum) {
-        setTimeout(startInterval, INTERVALTIME); // Restart interval only if album is not expanded
-      }
+      setImageIndex((prev) => {
+        if (controlButton === "Next") {
+          return (prev + 1) % imagesLength!; // Increment the current index
+        } else if (controlButton === "Prev") {
+          return (prev - 1 + imagesLength!) % imagesLength!; // Decrement and wrap around
+        }
+        return prev;
+      });
     },
     [clearIntervalId],
   );
 
+  // Loop slide show carousel
   const startInterval = useCallback(() => {
     clearIntervalId();
 
-    if (!expandAlbum) {
-      intervalIdRef.current = setInterval(() => {
-        const album = albumBoxes.find((album) => album.isMain); // Get album which isMain is true
+    if (expandAlbum) return; // STOP looping when expand
 
-        if (album && album.images.length > 0) {
-          handleCarouselControls("Next", album.images.length);
-        }
-      }, INTERVALTIME);
-    }
-  }, [albumBoxes, handleCarouselControls, clearIntervalId]);
+    // Only if the image album is not expanded
+    intervalIdRef.current = setInterval(() => {
+      const album = albumBoxes.find((album) => album.isMain);
 
-  return { handleCarouselControls, clearIntervalId, startInterval };
+      if (album && album.images.length > 0) {
+        handleCarouselNavegation("Next");
+      }
+    }, INTERVALTIME);
+  }, [albumBoxes, handleCarouselNavegation, clearIntervalId]);
+
+  return { handleCarouselNavegation, clearIntervalId, startInterval };
 };
 
 export default useCarouselNavigation;

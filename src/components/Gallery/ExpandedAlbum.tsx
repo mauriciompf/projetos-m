@@ -10,7 +10,7 @@ export default function ExpandedAlbum() {
   const { imageIndex, albumBoxes, setExpandAlbum, expandAlbum } =
     useEditAlbumContext();
 
-  const { handleCarouselControls } = useCarouselNavigation();
+  const { handleCarouselNavegation, startInterval } = useCarouselNavigation();
 
   const btnPrevRef = useRef(null);
   const btnNextRef = useRef(null);
@@ -55,11 +55,14 @@ export default function ExpandedAlbum() {
               </div>
 
               {/* Close Button */}
-              <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
+              <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center shadow-2xl">
                 <Button
                   refBtn={btnCloseRef}
-                  onClick={() => setExpandAlbum(false)}
-                  className="rounded-full bg-jet px-0 py-0 text-4xl leading-3 text-columbia"
+                  onClick={() => {
+                    setExpandAlbum(false);
+                    startInterval();
+                  }}
+                  className="rounded-full bg-jet px-0 py-0 text-4xl leading-3 text-white"
                 >
                   {closeIcon}
                 </Button>
@@ -70,20 +73,16 @@ export default function ExpandedAlbum() {
                 <>
                   <Button
                     refBtn={btnPrevRef}
-                    onClick={() =>
-                      handleCarouselControls("Prev", album.images.length)
-                    }
-                    className="absolute left-4 top-[50%] -translate-y-1/2 transform rounded-full bg-columbia px-4 py-2 text-jet shadow-md"
+                    onClick={() => handleCarouselNavegation("Prev")}
+                    className="absolute left-4 top-[50%] -translate-y-1/2 transform rounded-full bg-white px-4 py-2 text-jet shadow-md"
                   >
                     {previousIcon}
                   </Button>
 
                   <Button
                     refBtn={btnNextRef}
-                    onClick={() =>
-                      handleCarouselControls("Next", album.images.length)
-                    }
-                    className="absolute right-4 top-[50%] -translate-y-1/2 transform rounded-full bg-columbia px-4 py-2 text-jet shadow-md"
+                    onClick={() => handleCarouselNavegation("Next")}
+                    className="absolute right-4 top-[50%] -translate-y-1/2 transform rounded-full bg-white px-4 py-2 text-jet shadow-md"
                   >
                     {nextIcon}
                   </Button>

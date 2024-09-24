@@ -16,7 +16,7 @@ export default function AlbumImageSlider() {
             key={index}
           >
             {/* Blur image */}
-            <div className={`absolute grid h-full w-full blur-md`}>
+            <div className={`absolute grid h-full w-full blur-2xl`}>
               <img
                 className="h-[38.75rem] w-full scale-100 select-none object-cover"
                 src={image instanceof File ? URL.createObjectURL(image) : image}

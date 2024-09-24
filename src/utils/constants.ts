@@ -15,5 +15,5 @@ export const regexImageFile = new RegExp(
 );
 export const isNumber = /^[0-9]+$/;
 export const SIZELIMIT = 1.5 * 1024 * 1024; // 1.5 MB
-export const INTERVALTIME = 2500; // 1000ms === 1 seconds
+export const INTERVALTIME = 4500; // 1000ms === 1 seconds
 export const ALBUM_IMAGE_LIMIT = 6;

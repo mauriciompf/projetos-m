@@ -5,6 +5,7 @@ import AlbumCarousel from "./AlbumCarousel";
 
 function MainAlbumGrid() {
   const { editAlbumBoxes } = useEditAlbumContext();
+
   return (
     <section
       className={`${

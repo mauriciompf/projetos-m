@@ -1,28 +1,7 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, useState } from "react";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 import useLocalStorage from "../customHooks/useLocalStorage";
-
-type Album = {
-  id: number;
-  title: string;
-  images: (string | File)[];
-  isMain: boolean;
-};
-
-type EditAlbumValues = {
-  albumBoxes: Album[];
-  editAlbumBoxes: Album[];
-  setEditAlbumBoxes: (val: Album[]) => void;
-  setIsEditAlbum: (val: boolean) => void;
-  isEditAlbum: boolean;
-  setAlbumBoxes: (val: Album[]) => void;
-  isEditing: boolean;
-  setIsEditing: (val: boolean) => void;
-  imageIndex: number;
-  setImageIndex: Dispatch<SetStateAction<number>>;
-  expandAlbum: boolean;
-  setExpandAlbum: (val: boolean) => void;
-};
+import { Album, EditAlbumValues } from "../utils/types";
 
 export const EditAlbumContext = createContext<EditAlbumValues | null>(null);
 
