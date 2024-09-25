@@ -1,5 +1,5 @@
-import { useThemeContext } from "../context/ThemeContext";
-import Button from "./Button";
+import { useThemeContext } from "../../context/ThemeContext";
+import Button from "../Button";
 
 type ListItemProps = {
   list: string;

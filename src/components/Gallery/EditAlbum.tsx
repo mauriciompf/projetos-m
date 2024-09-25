@@ -3,14 +3,12 @@ import { closeIcon } from "../../utils/icons";
 import Button from "../Button";
 import BodyAlbumSettings from "./BodyAlbumSettings";
 import useClickOutside from "../../customHooks/useClickOutside";
-import { useExpandedImageContext } from "./ExpandedImageContext";
+import { useExpandedImageContext } from "../../context/ExpandedImageContext";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
 import useAlbumEditor from "../../customHooks/useAlbumEditor";
 import { useThemeContext } from "../../context/ThemeContext";
 
 function EditAlbum() {
-  const settingsAlbumRef = useRef(null);
-
   const { theme } = useThemeContext();
   const { editAlbumBoxes } = useEditAlbumContext();
   const { isExpand } = useExpandedImageContext();
@@ -21,8 +19,10 @@ function EditAlbum() {
     handleClickOutside,
   } = useAlbumEditor();
 
+  const EditAlbumBoxRef = useRef(null);
+
   useClickOutside(
-    [settingsAlbumRef],
+    [EditAlbumBoxRef],
     useCallback(() => {
       if (!isExpand) handleClickOutside();
     }, [isExpand, handleClickOutside]),
@@ -32,11 +32,11 @@ function EditAlbum() {
     <section className="mx-auto grid w-[80%] justify-items-center">
       {editAlbumBoxes.map((editBox) => (
         <article
-          ref={settingsAlbumRef}
+          ref={EditAlbumBoxRef}
           key={editBox.id}
           className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl p-4`}
         >
-          {/* Header with title input and close button for album settings */}
+          {/* Header with title input and close button */}
           <div className="flex items-center gap-5">
             <div>
               <input

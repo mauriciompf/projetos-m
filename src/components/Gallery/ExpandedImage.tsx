@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import Button from "../Button";
 import { closeIcon, deleteIcon } from "../../utils/icons";
-import { useExpandedImageContext } from "./ExpandedImageContext";
+import { useExpandedImageContext } from "../../context/ExpandedImageContext";
 import useClickOutside from "../../customHooks/useClickOutside";
 
 function ExpandedImage() {
@@ -21,7 +21,7 @@ function ExpandedImage() {
   });
 
   return (
-    <section className="bg-jet fixed inset-0 z-50 flex select-none items-center justify-center bg-opacity-75">
+    <section className="fixed inset-0 z-50 flex select-none items-center justify-center bg-jet bg-opacity-75">
       {/* Wrapper for the expanded image and its controls */}
       <div>
         {/* Close button for the expanded image */}
@@ -29,7 +29,7 @@ function ExpandedImage() {
           <div className="mb-4 grid place-items-center">
             <Button
               onClick={handleCloseExpandImage}
-              className={`text-columbia rounded-full px-0 py-0 text-4xl leading-3`}
+              className={`rounded-full px-0 py-0 text-4xl leading-3 text-columbia`}
             >
               {closeIcon}
             </Button>
@@ -54,7 +54,7 @@ function ExpandedImage() {
             onClick={() =>
               handleRemoveImage(expandedImage!.id, expandedImage!.index)
             }
-            className="text-jet bg-columbia hover:text-columbia focus:text-columbia hover:bg-cornell focus:bg-cornell flex items-center gap-2 rounded-2xl p-2 px-3"
+            className="flex items-center gap-2 rounded-2xl bg-columbia p-2 px-3 text-jet hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia"
           >
             Excluir {deleteIcon}
           </Button>

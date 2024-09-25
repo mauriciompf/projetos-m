@@ -5,13 +5,13 @@ import {
   useCallback,
   useState,
 } from "react";
-import useCustomHookContext from "../../customHooks/useCustomHookContext";
-import isMatchingId from "../../utils/isMatchingId";
-import { useEditAlbumContext } from "../../context/EditAlbumContext";
+import useCustomHookContext from "../customHooks/useCustomHookContext";
+import isMatchingId from "../utils/isMatchingId";
+import { useEditAlbumContext } from "./EditAlbumContext";
 
 type EditAlbumValues = {
   isExpand: boolean;
-  setIsExpand: Dispatch<SetStateAction<boolean>>;
+  setIsExpand: (val: boolean) => void;
   expandedImage: { image: string | File; id: number; index: number } | null;
   setExpandedImage: Dispatch<
     SetStateAction<{ image: string | File; id: number; index: number } | null>

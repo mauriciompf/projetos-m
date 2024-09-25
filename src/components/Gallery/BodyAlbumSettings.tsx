@@ -5,9 +5,10 @@ import { regexImageFile, SIZELIMIT } from "../../utils/constants";
 import axios from "axios";
 import isMatchingId from "../../utils/isMatchingId";
 import { deleteIcon, expandIcon } from "../../utils/icons";
-import { useExpandedImageContext } from "./ExpandedImageContext";
+import { useExpandedImageContext } from "../../context/ExpandedImageContext";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
 import { useThemeContext } from "../../context/ThemeContext";
+import { Album } from "../../utils/types";
 
 type BodyAlbumSettingsProps = {
   handleSaveAlbum: (
@@ -138,8 +139,7 @@ export default function BodyAlbumSettings({
     (event: ChangeEvent<HTMLInputElement>, id: number) => {
       const isChecked = event.target.checked;
 
-      // #FIXME any type
-      const updateIsMain = (album: any) => ({
+      const updateIsMain = (album: Album) => ({
         ...album,
         isMain: album.id === id ? isChecked : false,
       });

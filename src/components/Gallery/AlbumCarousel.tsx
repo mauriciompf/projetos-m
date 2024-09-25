@@ -13,7 +13,7 @@ export default function AlbumCarousel() {
           .map((album) => (
             <div
               key={album.id}
-              className="flex w-full rounded-2xl md:w-[3000px] min-[1400px]:w-[650px]"
+              className="group flex w-full rounded-2xl md:w-[3000px] min-[1400px]:w-[650px]"
             >
               <AlbumImageSlider />
               <CarouselControls />

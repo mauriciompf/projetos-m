@@ -27,7 +27,7 @@ export default function SortByButton() {
           ></span>
         )}
         <span className="max-[420px]:hidden">{toggleSortBy ? "📂" : "📁"}</span>{" "}
-        Organizar {downIcon}
+        Ordernar {downIcon}
       </Button>
 
       {toggleSortBy && <SortByBox refSortByBtn={refSortByBtn} />}

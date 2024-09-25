@@ -1,9 +1,9 @@
 import { useRef, RefObject } from "react";
 import WrapSettingsBox from "../WrapSettingsBox";
-import ListItem from "../ListItem";
-import HeaderControl from "../HeaderControl";
+import ListItem from "./ListItem";
+import HeaderControl from "./HeaderControl";
 import useClickOutside from "../../customHooks/useClickOutside";
-import ColumnSelector from "../ColumnSelector";
+import ColumnSelector from "./ColumnSelector";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 import ResetParams from "../../utils/ResetParams";
 import useSortByHandlers from "../../customHooks/useSortByHandlers";

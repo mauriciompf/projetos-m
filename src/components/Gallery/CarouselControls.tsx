@@ -39,7 +39,7 @@ export default function CarouselControls() {
             {/* Expand image album button */}
             <Button
               onClick={handleExpandAlbum}
-              className="absolute m-2 rounded-xl border border-jet bg-white text-2xl text-jet"
+              className="absolute m-2 rounded-xl border border-jet bg-white px-2 text-2xl text-jet transition-opacity group-hover:opacity-100 lg:opacity-0"
             >
               {expandIcon}
             </Button>
@@ -48,7 +48,7 @@ export default function CarouselControls() {
                 {/* Navegation */}
                 <Button
                   onClick={() => handleCarouselNavegation("Prev")}
-                  className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-jet bg-white px-3 py-2 text-jet shadow-md min-[425px]:px-4 min-[425px]:py-3"
+                  className="absolute left-2 top-[50%] grid place-items-center rounded-full border border-jet bg-white px-3 py-2 text-jet shadow-md transition-opacity group-hover:opacity-100 min-[425px]:px-4 min-[425px]:py-3 lg:opacity-0"
                 >
                   {previousIcon}
                 </Button>
@@ -56,13 +56,13 @@ export default function CarouselControls() {
                 {/* Navegation */}
                 <Button
                   onClick={() => handleCarouselNavegation("Next")}
-                  className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-jet bg-white px-3 py-2 text-jet shadow-md min-[425px]:px-4 min-[425px]:py-3"
+                  className="absolute right-2 top-[50%] grid place-items-center rounded-full border border-jet bg-white px-3 py-2 text-jet shadow-md transition-opacity group-hover:opacity-100 min-[425px]:px-4 min-[425px]:py-3 lg:opacity-0"
                 >
                   {nextIcon}
                 </Button>
 
                 {/* Image indicator */}
-                <div className="absolute -left-[50%] bottom-3 mx-auto flex w-full translate-x-1/2 content-center justify-center gap-1">
+                <div className="absolute -left-[50%] bottom-3 mx-auto flex w-full translate-x-1/2 content-center justify-center gap-1 transition-opacity group-hover:opacity-100 lg:opacity-0">
                   {album.images.map((_, index) => (
                     <Button
                       onClick={() => handleSelectIndex(index)}

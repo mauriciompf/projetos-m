@@ -1,10 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type ThemeButtonProps = {
-  className?: string;
-  isMenuOpen?: boolean;
-};
-
 export type Projects = {
   id: number;
   label: string;
@@ -63,7 +58,7 @@ export type EditAlbumValues = {
   setEditAlbumBoxes: Dispatch<SetStateAction<Album[]>>;
   setIsEditAlbum: (val: boolean) => void;
   isEditAlbum: boolean;
-  setAlbumBoxes: (val: Album[]) => void;
+  setAlbumBoxes: Dispatch<SetStateAction<Album[]>>;
   isEditing: boolean;
   setIsEditing: (val: boolean) => void;
   imageIndex: number;

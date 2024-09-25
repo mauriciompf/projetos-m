@@ -1,6 +1,6 @@
 import Heading from "../Heading";
+import ThemeButton from "./ThemeButton";
 import ToggleMenu from "./ToggleMenu";
-import ThemeButton from "../ThemeButton";
 
 export default function SideBarHeader({
   elementVisible,

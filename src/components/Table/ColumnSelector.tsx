@@ -1,9 +1,9 @@
-import useToggleDropDown from "../customHooks/useToggleDropDown";
+import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import ListItem from "./ListItem";
 import HeaderControl from "./HeaderControl";
-import toCapitalizeCase from "../utils/toCapitalizeCase";
-import useSortByHandlers from "../customHooks/useSortByHandlers";
-import { tableHeaders } from "../utils/constants";
+import toCapitalizeCase from "../../utils/toCapitalizeCase";
+import useSortByHandlers from "../../customHooks/useSortByHandlers";
+import { tableHeaders } from "../../utils/constants";
 
 type ColumnSelectorProps = {
   keyName: string;

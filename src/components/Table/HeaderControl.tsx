@@ -1,6 +1,6 @@
-import { useThemeContext } from "../context/ThemeContext";
-import { closeIcon, downIcon } from "../utils/icons";
-import Button from "./Button";
+import { useThemeContext } from "../../context/ThemeContext";
+import { closeIcon, downIcon } from "../../utils/icons";
+import Button from "../Button";
 import { twMerge } from "tailwind-merge";
 
 type HeaderControlProps = {

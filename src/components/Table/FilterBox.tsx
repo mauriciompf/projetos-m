@@ -6,11 +6,11 @@ import useClickOutside from "../../customHooks/useClickOutside";
 import useFilterHandlers from "../../customHooks/useFilterHandlers";
 import WrapSettingsBox from "../WrapSettingsBox";
 import ResetParams from "../../utils/ResetParams";
-import ColumnSelector from "../ColumnSelector";
-import HeaderControl from "../HeaderControl";
+import ColumnSelector from "./ColumnSelector";
+import HeaderControl from "./HeaderControl";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 import Button from "../Button";
-import ListItem from "../ListItem";
+import ListItem from "./ListItem";
 import { useTableContext } from "../../context/TableContext";
 
 type FilterBoxProps = {

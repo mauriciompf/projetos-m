@@ -1,13 +1,12 @@
-import Button from "./Button";
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { useLocation } from "react-router-dom";
-import { useMenuContext } from "../context/MenuContext";
-import { useThemeContext } from "../context/ThemeContext";
-import { darkIcon, lightIcon } from "../utils/icons";
-import { ThemeButtonProps } from "../utils/types";
+import { useMenuContext } from "../../context/MenuContext";
+import { useThemeContext } from "../../context/ThemeContext";
+import Button from "../Button";
+import { darkIcon, lightIcon } from "../../utils/icons";
 
-export default function ThemeButton({ className }: ThemeButtonProps) {
+export default function ThemeButton({ className }: { className: string }) {
   const { isMenuOpen } = useMenuContext();
   const { theme, setLight, setDark } = useThemeContext();
   const location = useLocation();
