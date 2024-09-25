@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
 import { plusIcon } from "../../utils/icons";
 import Button from "../Button";
-import isMatchingId from "../../utils/isMatchingId";
 
 export default function SelectAlbum() {
   const {
@@ -15,13 +14,13 @@ export default function SelectAlbum() {
 
   const handleEditAlbum = useCallback(
     (id: number) => {
-      const albumToEdit = albumBoxes.find(isMatchingId(id)); // Get the matching album
+      const albumToEdit = albumBoxes.find((album) => album.id === id); // Get the matching album
       if (!albumToEdit) return;
 
       setEditAlbumBoxes((prev) => [...prev, albumToEdit]);
       setIsEditAlbum(true);
     },
-    [albumBoxes, isMatchingId, setEditAlbumBoxes, setIsEditAlbum],
+    [albumBoxes, setEditAlbumBoxes, setIsEditAlbum],
   );
 
   const handleCreateNewAlbum = useCallback(() => {
@@ -37,7 +36,7 @@ export default function SelectAlbum() {
   }, [setEditAlbumBoxes]);
 
   return (
-    <div className="flex flex-wrap items-center gap-2 min-[400px]:text-xl md:max-h-[500px] max-md:justify-center md:pt-[4px] min-[1024px]:max-h-[680px]">
+    <div className="flex flex-wrap items-center gap-2 max-md:justify-center min-[400px]:text-xl md:max-h-[500px] md:pt-[4px] min-[1024px]:max-h-[680px]">
       {/* Button to open an album */}
       {albumBoxes.map((album) => (
         <Button

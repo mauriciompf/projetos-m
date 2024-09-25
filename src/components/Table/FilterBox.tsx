@@ -5,7 +5,7 @@ import useToggleDropDown from "../../customHooks/useToggleDropDown";
 import useClickOutside from "../../customHooks/useClickOutside";
 import useFilterHandlers from "../../customHooks/useFilterHandlers";
 import WrapSettingsBox from "../WrapSettingsBox";
-import ResetParams from "../../utils/ResetParams";
+import ResetParams from "./ResetParams";
 import ColumnSelector from "./ColumnSelector";
 import HeaderControl from "./HeaderControl";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";

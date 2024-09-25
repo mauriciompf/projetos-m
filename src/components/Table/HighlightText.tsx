@@ -1,6 +1,6 @@
-import { useThemeContext } from "../context/ThemeContext";
+import { useThemeContext } from "../../context/ThemeContext";
 
-const highlightText = (str: string, highlight: string) => {
+const HighlightText = (str: string, highlight: string) => {
   const { theme } = useThemeContext();
   const index = str.toLowerCase().indexOf(highlight.toLowerCase());
 
@@ -22,4 +22,4 @@ const highlightText = (str: string, highlight: string) => {
   );
 };
 
-export { highlightText };
+export { HighlightText };

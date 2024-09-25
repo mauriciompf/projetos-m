@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { useEditAlbumContext } from "../context/EditAlbumContext";
-import useEditAlbumUtils from "./useEditAlbumUtils";
-import isMatchingId from "../utils/isMatchingId";
+import validateInputTitle from "../utils/validateInputTitle";
 
 const useAlbumEditor = () => {
   const {
@@ -12,8 +11,7 @@ const useAlbumEditor = () => {
     setIsEditing,
     setImageIndex,
   } = useEditAlbumContext();
-  const { closeEditAlbum, validateInputTitle } = useEditAlbumUtils();
-  const { isEditAlbum } = useEditAlbumContext();
+  const { isEditAlbum, albumBoxes } = useEditAlbumContext();
 
   const handleAddInputTitle = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
@@ -21,7 +19,7 @@ const useAlbumEditor = () => {
 
       setEditAlbumBoxes((prev) =>
         prev
-          .filter(isMatchingId(id))
+          .filter((album) => album.id === id)
           .map((album) => ({ ...album, title: value })),
       );
 
@@ -30,21 +28,21 @@ const useAlbumEditor = () => {
       }
     },
 
-    [setEditAlbumBoxes, isMatchingId, setIsEditing],
+    [setEditAlbumBoxes, setIsEditing],
   );
 
   const handleCloseAlbum = useCallback(
     (id: number) => {
-      closeEditAlbum(id);
+      setEditAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
       setIsEditAlbum(false);
       setIsEditing(false);
     },
-    [closeEditAlbum, setIsEditAlbum, setIsEditing],
+    [setIsEditAlbum, setIsEditing],
   );
 
   const handleSaveAlbum = useCallback(
     (id: number, title: string, images: (string | File)[], isMain: boolean) => {
-      if (!validateInputTitle(title, id)) return;
+      if (!validateInputTitle(albumBoxes, title, id)) return;
 
       setAlbumBoxes((prev) =>
         prev.map(
@@ -56,18 +54,11 @@ const useAlbumEditor = () => {
       );
 
       setImageIndex(0);
-      closeEditAlbum(id);
+      setEditAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
       setIsEditAlbum(false);
       setIsEditing(false);
     },
-    [
-      validateInputTitle,
-      setAlbumBoxes,
-      isMatchingId,
-      closeEditAlbum,
-      setIsEditAlbum,
-      setIsEditing,
-    ],
+    [validateInputTitle, setAlbumBoxes, setIsEditAlbum, setIsEditing],
   );
 
   const handleClickOutside = useCallback(() => {

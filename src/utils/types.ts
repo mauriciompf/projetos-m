@@ -66,3 +66,13 @@ export type EditAlbumValues = {
   expandAlbum: boolean;
   setExpandAlbum: (val: boolean) => void;
 };
+
+export type BodyAlbumSettingsProps = {
+  handleSaveAlbum: (
+    id: number,
+    title: string,
+    images: (string | File)[],
+    isMain: boolean,
+  ) => void;
+  editBox: Album;
+};

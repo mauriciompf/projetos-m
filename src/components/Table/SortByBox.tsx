@@ -5,7 +5,7 @@ import HeaderControl from "./HeaderControl";
 import useClickOutside from "../../customHooks/useClickOutside";
 import ColumnSelector from "./ColumnSelector";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
-import ResetParams from "../../utils/ResetParams";
+import ResetParams from "./ResetParams";
 import useSortByHandlers from "../../customHooks/useSortByHandlers";
 import { useTableContext } from "../../context/TableContext";
 import { useTableToggleContext } from "../../context/TableToggleContext";

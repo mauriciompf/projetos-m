@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { closeIcon } from "../../utils/icons";
 import Button from "../Button";
 import BodyAlbumSettings from "./BodyAlbumSettings";
@@ -8,7 +8,7 @@ import { useEditAlbumContext } from "../../context/EditAlbumContext";
 import useAlbumEditor from "../../customHooks/useAlbumEditor";
 import { useThemeContext } from "../../context/ThemeContext";
 
-function EditAlbum() {
+export default function EditAlbum() {
   const { theme } = useThemeContext();
   const { editAlbumBoxes } = useEditAlbumContext();
   const { isExpand } = useExpandedImageContext();
@@ -19,20 +19,17 @@ function EditAlbum() {
     handleClickOutside,
   } = useAlbumEditor();
 
-  const EditAlbumBoxRef = useRef(null);
+  const editAlbumBoxRef = useRef(null);
 
-  useClickOutside(
-    [EditAlbumBoxRef],
-    useCallback(() => {
-      if (!isExpand) handleClickOutside();
-    }, [isExpand, handleClickOutside]),
-  );
+  useClickOutside([editAlbumBoxRef], () => {
+    if (!isExpand) handleClickOutside();
+  });
 
   return (
     <section className="mx-auto grid w-[80%] justify-items-center">
       {editAlbumBoxes.map((editBox) => (
         <article
-          ref={EditAlbumBoxRef}
+          ref={editAlbumBoxRef}
           key={editBox.id}
           className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl p-4`}
         >
@@ -73,5 +70,3 @@ function EditAlbum() {
     </section>
   );
 }
-
-export default EditAlbum;

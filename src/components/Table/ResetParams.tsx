@@ -1,6 +1,6 @@
-import Button from "../components/Button";
-import { useTableContext } from "../context/TableContext";
-import { useThemeContext } from "../context/ThemeContext";
+import Button from "../Button";
+import { useTableContext } from "../../context/TableContext";
+import { useThemeContext } from "../../context/ThemeContext";
 
 export default function ResetParams({ params }: { params: string[] }) {
   const { searchParams, setSearchParams } = useTableContext();

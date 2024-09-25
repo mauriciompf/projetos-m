@@ -1,29 +1,13 @@
 import React, { ChangeEvent, useCallback } from "react";
-import useEditAlbumUtils from "../../customHooks/useEditAlbumUtils";
-import Button from "../Button";
 import { regexImageFile, SIZELIMIT } from "../../utils/constants";
-import axios from "axios";
-import isMatchingId from "../../utils/isMatchingId";
-import { deleteIcon, expandIcon } from "../../utils/icons";
 import { useExpandedImageContext } from "../../context/ExpandedImageContext";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
-import { useThemeContext } from "../../context/ThemeContext";
-import { Album } from "../../utils/types";
-
-type BodyAlbumSettingsProps = {
-  handleSaveAlbum: (
-    id: number,
-    title: string,
-    images: (string | File)[],
-    isMain: boolean,
-  ) => void;
-  editBox: {
-    id: number;
-    title: string;
-    images: (string | File)[];
-    isMain: boolean;
-  };
-};
+import { Album, BodyAlbumSettingsProps } from "../../utils/types";
+import isAlbumAtImageLimit from "../../utils/isAlbumAtImageLimit";
+import validateInputTitle from "../../utils/validateInputTitle";
+import AlbumActionButton from "./AlbumActionButtons";
+import UploadedImages from "./UploadedImages";
+import ImageUploadInput from "./ImageUploadInput";
 
 export default function BodyAlbumSettings({
   handleSaveAlbum,
@@ -32,26 +16,60 @@ export default function BodyAlbumSettings({
   const {
     setEditAlbumBoxes,
     editAlbumBoxes,
-    isEditAlbum,
     setAlbumBoxes,
     setIsEditAlbum,
-    isEditing,
     setIsEditing,
     setImageIndex,
+    albumBoxes,
   } = useEditAlbumContext();
   const { handleRemoveImage, handleExpandImage } = useExpandedImageContext();
-  const {
-    uploadValidImage,
-    validateInputTitle,
-    closeEditAlbum,
-    isAlbumAtImageLimit,
-  } = useEditAlbumUtils();
-  const { theme } = useThemeContext();
+
+  const uploadValidImage = (
+    files: (File | string)[] | FileList | null,
+    id: number,
+  ) => {
+    if (!files || files.length < 1) return;
+
+    // Convert files to array
+    const validFiles = Array.from(files)
+      .filter((file) => file instanceof File)
+      .filter((file) =>
+        !regexImageFile.test(file.name)
+          ? alert("Somente imagens devem ser usadas.")
+          : true,
+      )
+      .filter((file) =>
+        file.size > SIZELIMIT
+          ? alert(`A imagem é muito grande e não será adicionada.`)
+          : true,
+      );
+
+    if (validFiles.length < 1) return;
+
+    validFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file as Blob); // Read the content and convert each file object to a Data URL
+
+      reader.addEventListener("load", () => {
+        const url = reader.result as string; // base64-encoded string (Data URL) representing the file
+
+        // Insert url image to state
+        setEditAlbumBoxes((prev) =>
+          prev
+            .filter((album) => album.id === id)
+            .map((album) => ({
+              ...album,
+              images: [...album.images, url],
+            })),
+        );
+      });
+    });
+  };
 
   const handleOnDrop = useCallback(
     (event: React.DragEvent, id: number) => {
       event.preventDefault(); // Prevent to open the file in the browser
-      if (isAlbumAtImageLimit(id)) return;
+      if (isAlbumAtImageLimit(editAlbumBoxes, id)) return;
       uploadValidImage(event.dataTransfer.files, id);
       setIsEditing(true);
     },
@@ -63,76 +81,33 @@ export default function BodyAlbumSettings({
     [],
   );
 
-  const handleUpload = useCallback(
-    (event: ChangeEvent<HTMLInputElement>, id: number) => {
-      if (isAlbumAtImageLimit(id)) return;
-      uploadValidImage(event.target.files, id);
-      event.target.value = ""; // Clear file input value to be selected again
-      setIsEditing(true);
-    },
-    [uploadValidImage, isEditAlbum],
-  );
-
-  const handleURL = useCallback(
-    async (id: number) => {
-      try {
-        const url = prompt("Insira a URL da imagem:");
-        if (!url || isAlbumAtImageLimit(id)) return;
-
-        if (!regexImageFile.test(url)) {
-          alert("Somente imagens devem ser usados.");
-          return handleURL(id);
-        }
-
-        const response = await axios.get(url, { responseType: "blob" }); // Fetch url image
-        const blob = response.data; // Get Blob Object (image details)
-
-        if (blob.size > SIZELIMIT) {
-          alert("A imagem é muito grande e não será adicionada.");
-          return handleURL(id);
-        }
-
-        setEditAlbumBoxes((prev) =>
-          prev
-            .filter(isMatchingId(id))
-            .map((box) => ({ ...box, images: [...box.images, url] })),
-        );
-
-        if (isEditing) setIsEditing(true);
-      } catch (error) {
-        console.error(`Erro ao validar a imagem...`);
-        return;
-      }
-    },
-    [setEditAlbumBoxes, setIsEditing, isMatchingId],
-  );
-
   const handleRemoveAlbum = useCallback(
     (id: number, title: string) => {
       if (!confirm(`Tem certeza que deseja excluir ${title}?`)) return;
 
       setAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
-      closeEditAlbum(id);
+      setEditAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
       setIsEditAlbum(false);
       setIsEditing(false);
     },
-    [setAlbumBoxes, closeEditAlbum, setIsEditAlbum, setIsEditing],
+    [setAlbumBoxes, setIsEditAlbum, setIsEditing],
   );
 
   const handleAddNewAlbum = useCallback(
     (id: number, title: string) => {
-      if (!validateInputTitle(title, id)) return;
+      if (!validateInputTitle(albumBoxes, title, id)) return;
 
-      const boxToAdd = editAlbumBoxes.find(isMatchingId(id)); // Get all the elements of editAlbumBoxes array
+      const boxToAdd = editAlbumBoxes.find((album) => album.id === id); // Get all the elements of editAlbumBoxes array
+
       if (!boxToAdd) return;
 
       setAlbumBoxes((prev) => [...prev, { ...boxToAdd, id: Date.now() }]);
+      setEditAlbumBoxes((prev) => prev.filter((album) => album.id !== id));
       setIsEditAlbum(false);
       setIsEditing(false);
-      closeEditAlbum(id);
       setImageIndex(0);
     },
-    [setAlbumBoxes, setIsEditAlbum, setIsEditing, closeEditAlbum],
+    [setAlbumBoxes, setIsEditAlbum, setIsEditing],
   );
 
   const handleAddMainAlbum = useCallback(
@@ -158,14 +133,15 @@ export default function BodyAlbumSettings({
       onDragOver={handleOnDragOver}
       className="grid gap-4"
     >
-      <span className="sr-only">Adicionar álbum em visualização principal</span>
-
       {editAlbumBoxes.map((editBox) => (
         <label
           key={editBox.id}
           className="flex cursor-pointer select-none gap-1 font-bold leading-4 tracking-tight hover:underline focus:underline"
           htmlFor={`mainAlbum-${editBox.id}`}
         >
+          <span className="sr-only">
+            Adicionar álbum em visualização principal
+          </span>
           <input
             onChange={(event) => handleAddMainAlbum(event, editBox.id)}
             type="checkbox"
@@ -177,110 +153,19 @@ export default function BodyAlbumSettings({
         </label>
       ))}
 
-      {/* Button for uploading images */}
-      <label
-        htmlFor="files"
-        className="w-full cursor-pointer rounded-xl bg-savoy p-2 text-center font-bold text-columbia hover:ring-4 focus:ring-4"
-      >
-        Faça Upload
-      </label>
-      {/* Hidden input for file selection */}
-      <input
-        onChange={(event) => handleUpload(event, editBox.id)}
-        className="invisible hidden"
-        type="file"
-        id="files"
-        accept="image/*"
-        multiple
+      <ImageUploadInput uploadValidImage={uploadValidImage} editBox={editBox} />
+
+      <UploadedImages
+        handleExpandImage={handleExpandImage}
+        handleRemoveImage={handleRemoveImage}
       />
 
-      {/* Text and button for image URL input */}
-      <p className="text-center">
-        ou arraste uma imagem, cole imagem ou{" "}
-        <Button
-          onClick={() => handleURL(editBox.id)}
-          className="p-0 text-savoy underline"
-        >
-          URL
-        </Button>
-      </p>
-
-      {/* Container for displaying uploaded images */}
-      <div className="max-h-52 select-none overflow-y-auto">
-        {editAlbumBoxes.map((editBox, index) => (
-          <div
-            key={index}
-            className="mx-auto grid grid-cols-2 place-items-center justify-center gap-y-4 min-[400px]:grid-cols-3"
-          >
-            {editBox.images.map((image, index) => {
-              return (
-                <div key={index} className="group relative">
-                  {/* Display each image */}
-                  <img
-                    draggable="false"
-                    className="size-20 rounded-xl object-cover"
-                    src={
-                      image instanceof File
-                        ? URL.createObjectURL(image as File)
-                        : (image as string)
-                    }
-                    alt=""
-                  />
-
-                  {/* Button to expand the image */}
-                  <Button
-                    onClick={() => handleExpandImage(image, editBox.id, index)}
-                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute bottom-0 left-0 hidden rounded-bl-2xl px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-columbia focus:bg-blue-600 focus:text-columbia group-hover:block`}
-                  >
-                    {expandIcon}
-                  </Button>
-
-                  {/* Button to delete the image */}
-                  <Button
-                    onClick={() => handleRemoveImage(editBox.id, index)}
-                    className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute bottom-0 right-0 hidden rounded-br-xl px-2 py-0 ring-transparent hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia group-hover:block`}
-                  >
-                    {deleteIcon}
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* Conditional buttons for saving changes or adding a new album */}
-      {isEditAlbum ? (
-        <>
-          <Button
-            onClick={() =>
-              handleSaveAlbum(
-                editBox.id,
-                editBox.title,
-                editBox.images,
-                editBox.isMain,
-              )
-            }
-            // border-transparent bg-dark_spring text-columbia
-            className={` ${isEditing ? "border-transparent bg-dark_spring text-columbia" : `${theme === "light" ? "border-jet" : "border-columbia"}`} rounded-xl border hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
-          >
-            Salve alterações
-          </Button>
-          <Button
-            onClick={() => handleRemoveAlbum(editBox.id, editBox.title)}
-            className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-xl border hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia`}
-          >
-            Deletar Álbum
-          </Button>
-        </>
-      ) : (
-        <Button
-          onClick={() => handleAddNewAlbum(editBox.id, editBox.title)}
-          className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-xl border hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
-        >
-          Adicionar Novo Álbum
-        </Button>
-      )}
+      <AlbumActionButton
+        editBox={editBox}
+        handleSaveAlbum={handleSaveAlbum}
+        handleRemoveAlbum={handleRemoveAlbum}
+        handleAddNewAlbum={handleAddNewAlbum}
+      />
     </div>
   );
 }

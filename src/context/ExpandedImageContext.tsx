@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
-import isMatchingId from "../utils/isMatchingId";
 import { useEditAlbumContext } from "./EditAlbumContext";
 
 type EditAlbumValues = {
@@ -42,14 +41,16 @@ export default function ExpandedImageProvider({
       if (!confirm(`Tem certeza que deseja excluir esta imagem?`)) return;
 
       setEditAlbumBoxes((prev) =>
-        prev.filter(isMatchingId(id)).map((album) => ({
-          ...album,
-          images: album.images.filter((_, i) => i !== index),
-        })),
+        prev
+          .filter((album) => album.id === id)
+          .map((album) => ({
+            ...album,
+            images: album.images.filter((_, i) => i !== index),
+          })),
       );
       setIsEditing(true);
     },
-    [setEditAlbumBoxes, setIsExpand, isMatchingId],
+    [setEditAlbumBoxes, setIsExpand],
   );
 
   const handleExpandImage = useCallback(

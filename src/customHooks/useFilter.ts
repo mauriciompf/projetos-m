@@ -4,7 +4,7 @@ import useToggleDropDown from "./useToggleDropDown";
 import { useTableContext } from "../context/TableContext";
 import { UserData } from "../utils/types";
 import getSearchCondition from "../utils/getSearchCondition";
-import { highlightText } from "../utils/highlightText";
+import { HighlightText } from "../components/Table/HighlightText";
 
 const useFilter = () => {
   const { setStatusParams, statusParams, searchParams, setFiltedTableLength } =
@@ -17,7 +17,7 @@ const useFilter = () => {
 
     if (statusParams.get("status") === "não é") return dataValue;
     if (selectColumnFilter === columnName)
-      return highlightText(dataValue.toString(), searchTerm);
+      return HighlightText(dataValue.toString(), searchTerm);
 
     return dataValue;
   };

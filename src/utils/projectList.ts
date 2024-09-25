@@ -4,7 +4,7 @@ const projectList: Projects[] = [
   {
     id: 1,
     label: "Ordenação e Filtro",
-    path: "/pages/filter",
+    path: "/pages/filter" || "/",
     icon: "📊",
   },
   {
