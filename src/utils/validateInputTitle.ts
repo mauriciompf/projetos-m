@@ -1,16 +1,22 @@
 import { Album } from "./types";
 
-const validateInputTitle = (albumBoxes: Album[], title: string, id: number) => {
+const validateInputTitle = (
+  editAlbumBoxes: Album[],
+  title: string,
+  id: number,
+) => {
   if (!title) {
     alert("Adicione um título para o álbum");
     return;
   }
 
-  const AlbumTitles = albumBoxes
+  const albumTitles = editAlbumBoxes
     .filter((album) => album.id !== id)
     .map((album) => album.title);
-  // Prevent insert the title again
-  if (AlbumTitles.includes(title)) {
+
+  console.log(albumTitles);
+
+  if (albumTitles.includes(title)) {
     alert("Já está criado um álbum com este mesmo nome");
     return;
   }

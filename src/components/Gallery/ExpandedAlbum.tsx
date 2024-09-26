@@ -42,7 +42,7 @@ export default function ExpandedAlbum() {
                   >
                     <img
                       draggable="false"
-                      className="h-full min-h-min min-w-min object-contain"
+                      className="min-w-auto h-full min-h-min object-contain"
                       src={
                         image instanceof File
                           ? URL.createObjectURL(image)
@@ -55,14 +55,14 @@ export default function ExpandedAlbum() {
               </div>
 
               {/* Close Button */}
-              <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center shadow-2xl">
+              <div className="absolute left-[50%] top-28 grid -translate-x-1/2 place-items-center">
                 <Button
                   refBtn={btnCloseRef}
                   onClick={() => {
                     setExpandAlbum(false);
                     startInterval();
                   }}
-                  className="rounded-full bg-jet px-0 py-0 text-4xl leading-3 text-white"
+                  className="rounded-full bg-jet px-0 py-0 text-4xl leading-3 text-white shadow-2xl"
                 >
                   {closeIcon}
                 </Button>
@@ -74,7 +74,7 @@ export default function ExpandedAlbum() {
                   <Button
                     refBtn={btnPrevRef}
                     onClick={() => handleCarouselNavegation("Prev")}
-                    className="absolute left-4 top-[50%] -translate-y-1/2 transform rounded-full bg-white px-4 py-2 text-jet shadow-md"
+                    className="absolute left-4 top-[50%] -translate-y-1/2 transform rounded-full bg-white px-4 py-2 text-jet shadow-2xl"
                   >
                     {previousIcon}
                   </Button>
@@ -82,7 +82,7 @@ export default function ExpandedAlbum() {
                   <Button
                     refBtn={btnNextRef}
                     onClick={() => handleCarouselNavegation("Next")}
-                    className="absolute right-4 top-[50%] -translate-y-1/2 transform rounded-full bg-white px-4 py-2 text-jet shadow-md"
+                    className="absolute right-4 top-[50%] -translate-y-1/2 transform rounded-full bg-white px-4 py-2 text-jet shadow-2xl"
                   >
                     {nextIcon}
                   </Button>

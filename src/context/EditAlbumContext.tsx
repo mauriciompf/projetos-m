@@ -1,7 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 import useLocalStorage from "../customHooks/useLocalStorage";
 import { Album, EditAlbumValues } from "../utils/types";
+import validateInputTitle from "../utils/validateInputTitle";
 
 export const EditAlbumContext = createContext<EditAlbumValues | null>(null);
 
@@ -20,6 +21,27 @@ export default function EditAlbumProvider({
   const [imageIndex, setImageIndex] = useState(0);
   const [expandAlbum, setExpandAlbum] = useState(false);
 
+  const handleSaveAlbum = useCallback(
+    ({ title, id, images, isMain }: Album) => {
+      if (!validateInputTitle(albumBoxes, title, id)) return;
+
+      setAlbumBoxes((prev) =>
+        prev.map(
+          (album) =>
+            album.id === id
+              ? { ...album, title, images, isMain } // Update the album being edited
+              : album, // Keep other albums unchanged
+        ),
+      );
+
+      setImageIndex(0);
+      setEditAlbumBoxes([]);
+      setIsEditAlbum(true);
+      setIsEditing(false);
+    },
+    [validateInputTitle, setAlbumBoxes, setIsEditAlbum, setIsEditing],
+  );
+
   return (
     <EditAlbumContext.Provider
       value={{
@@ -35,6 +57,7 @@ export default function EditAlbumProvider({
         setImageIndex,
         expandAlbum,
         setExpandAlbum,
+        handleSaveAlbum,
       }}
     >
       {children}
