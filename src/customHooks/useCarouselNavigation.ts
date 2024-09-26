@@ -3,7 +3,8 @@ import { INTERVALTIME } from "../utils/constants";
 import { useEditAlbumContext } from "../context/EditAlbumContext";
 
 const useCarouselNavigation = () => {
-  const { albumBoxes, setImageIndex, expandAlbum, setExpandAlbum } = useEditAlbumContext();
+  const { albumBoxes, setImageIndex, imageIndex, expandAlbum, setExpandAlbum } =
+    useEditAlbumContext();
 
   const intervalIdRef = useRef<number | null>(null); // Hold the value to start and clear
 
@@ -26,7 +27,7 @@ const useCarouselNavigation = () => {
         return prev;
       });
     },
-    [clearIntervalId],
+    [clearIntervalId, setImageIndex, imagesLength],
   );
 
   // Loop slide show carousel
@@ -39,19 +40,23 @@ const useCarouselNavigation = () => {
     intervalIdRef.current = setInterval(() => {
       const album = albumBoxes.find((album) => album.isMain);
 
-      if (album && album.images.length > 0) {
-        handleCarouselNavegation("Next");
-      }
+      if (album && album.images.length > 0)
+        setImageIndex((imageIndex + 1) % imagesLength!);
     }, INTERVALTIME);
-  }, [albumBoxes, handleCarouselNavegation, clearIntervalId]);
+  }, [
+    intervalIdRef,
+    albumBoxes,
+    handleCarouselNavegation,
+    setImageIndex,
+    clearIntervalId,
+  ]);
 
-  
   const handleSelectIndex = useCallback(
     (index: number) => {
       clearIntervalId();
       setImageIndex(index);
     },
-    [setImageIndex, clearIntervalId, expandAlbum, startInterval],
+    [setImageIndex, clearIntervalId],
   );
 
   const handleExpandAlbum = useCallback(() => {
@@ -63,9 +68,15 @@ const useCarouselNavigation = () => {
     if (!expandAlbum) startInterval();
 
     return () => clearIntervalId();
-  }, [startInterval, expandAlbum]);
+  }, [startInterval, expandAlbum, clearIntervalId]);
 
-  return { handleCarouselNavegation, handleExpandAlbum, handleSelectIndex, clearIntervalId, startInterval };
+  return {
+    handleCarouselNavegation,
+    handleExpandAlbum,
+    handleSelectIndex,
+    clearIntervalId,
+    startInterval,
+  };
 };
 
 export default useCarouselNavigation;
