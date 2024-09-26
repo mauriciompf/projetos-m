@@ -36,7 +36,6 @@ export default function AlbumActionButton({ editBox }: { editBox: Album }) {
       setIsEditing(false);
       setImageIndex(0);
     },
-
     [
       albumBoxes,
       editAlbumBoxes,

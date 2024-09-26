@@ -4,11 +4,7 @@ import HeaderControl from "./HeaderControl";
 import toCapitalizeCase from "../../utils/toCapitalizeCase";
 import useSortByHandlers from "../../customHooks/useSortByHandlers";
 import { tableHeaders } from "../../utils/constants";
-
-type ColumnSelectorProps = {
-  keyName: string;
-  restrictedList?: string[];
-};
+import { ColumnSelectorProps } from "../../utils/types";
 
 export default function ColumnSelector({
   keyName,

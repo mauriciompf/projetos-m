@@ -1,15 +1,8 @@
 import { useThemeContext } from "../../context/ThemeContext";
 import { closeIcon, downIcon } from "../../utils/icons";
+import { HeaderControlProps } from "../../utils/types";
 import Button from "../Button";
 import { twMerge } from "tailwind-merge";
-
-type HeaderControlProps = {
-  onClick: () => void;
-  isDropDownOpen?: boolean;
-  headerLabel: string | URLSearchParams | null;
-  isRemoveButton?: boolean;
-  className?: string;
-};
 
 export default function HeaderControl({
   onClick,

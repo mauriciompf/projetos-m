@@ -1,10 +1,5 @@
-import { AllHTMLAttributes } from "react";
 import { twMerge } from "tailwind-merge";
-
-interface HeadingProps extends AllHTMLAttributes<HTMLHeadingElement> {
-  as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  children: React.ReactNode;
-}
+import { HeadingProps } from "../utils/types";
 
 export default function Heading({
   as: Component = "h1",

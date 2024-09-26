@@ -1,9 +1,9 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { INTERVALTIME } from "../utils/constants";
 import { useEditAlbumContext } from "../context/EditAlbumContext";
 
 const useCarouselNavigation = () => {
-  const { albumBoxes, setImageIndex, expandAlbum } = useEditAlbumContext();
+  const { albumBoxes, setImageIndex, expandAlbum, setExpandAlbum } = useEditAlbumContext();
 
   const intervalIdRef = useRef<number | null>(null); // Hold the value to start and clear
 
@@ -45,7 +45,27 @@ const useCarouselNavigation = () => {
     }, INTERVALTIME);
   }, [albumBoxes, handleCarouselNavegation, clearIntervalId]);
 
-  return { handleCarouselNavegation, clearIntervalId, startInterval };
+  
+  const handleSelectIndex = useCallback(
+    (index: number) => {
+      clearIntervalId();
+      setImageIndex(index);
+    },
+    [setImageIndex, clearIntervalId, expandAlbum, startInterval],
+  );
+
+  const handleExpandAlbum = useCallback(() => {
+    clearIntervalId();
+    setExpandAlbum(true);
+  }, [setExpandAlbum, clearIntervalId]);
+
+  useEffect(() => {
+    if (!expandAlbum) startInterval();
+
+    return () => clearIntervalId();
+  }, [startInterval, expandAlbum]);
+
+  return { handleCarouselNavegation, handleExpandAlbum, handleSelectIndex, clearIntervalId, startInterval };
 };
 
 export default useCarouselNavigation;

@@ -12,7 +12,6 @@ export default function SelectAlbum() {
       {/* Button to open an album */}
       {albumBoxes.map((album) => (
         <Button
-          disabled={editAlbumBoxes.length > 0}
           onClick={() => handleEditAlbum(album.id)}
           key={album.id}
           className={`${
@@ -25,7 +24,6 @@ export default function SelectAlbum() {
 
       {/* Button to create a new album */}
       <Button
-        disabled={editAlbumBoxes.length > 0}
         onClick={handleCreateNewAlbum}
         className={`${
           editAlbumBoxes.length > 0 && "ring-transparent"

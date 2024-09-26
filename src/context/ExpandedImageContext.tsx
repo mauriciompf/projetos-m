@@ -1,26 +1,11 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useState,
-} from "react";
+import { createContext, useCallback, useState } from "react";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 import { useEditAlbumContext } from "./EditAlbumContext";
+import { ExpandedImageValues } from "../utils/types";
 
-type EditAlbumValues = {
-  isExpand: boolean;
-  setIsExpand: (val: boolean) => void;
-  expandedImage: { image: string | File; id: number; index: number } | null;
-  setExpandedImage: Dispatch<
-    SetStateAction<{ image: string | File; id: number; index: number } | null>
-  >;
-  handleRemoveImage: (id: number, index: number) => void;
-  handleExpandImage: (image: string | File, id: number, index: number) => void;
-  handleCloseExpandImage: () => void;
-};
-
-export const ExpandedImageContext = createContext<EditAlbumValues | null>(null);
+export const ExpandedImageContext = createContext<ExpandedImageValues | null>(
+  null,
+);
 
 export default function ExpandedImageProvider({
   children,

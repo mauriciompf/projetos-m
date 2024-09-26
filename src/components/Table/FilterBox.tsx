@@ -1,4 +1,4 @@
-import { RefObject, useRef } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useThemeContext } from "../../context/ThemeContext";
 import useToggleDropDown from "../../customHooks/useToggleDropDown";
@@ -12,11 +12,7 @@ import toCapitalizeCase from "../../utils/toCapitalizeCase";
 import Button from "../Button";
 import ListItem from "./ListItem";
 import { useTableContext } from "../../context/TableContext";
-
-type FilterBoxProps = {
-  refFilterBtn: RefObject<HTMLButtonElement>;
-  setToggleFilter: (val: boolean) => void;
-};
+import { FilterBoxProps } from "../../utils/types";
 
 export default function FilterBox({
   refFilterBtn,

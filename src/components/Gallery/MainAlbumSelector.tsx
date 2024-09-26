@@ -39,7 +39,7 @@ export default function MainAlbumSelector() {
         onChange={(event) => handleAddMainAlbum(event, editBox.id)}
         type="checkbox"
         id={`mainAlbum-${editBox.id}`}
-        className="w-8 cursor-pointer"
+        className="w-8 cursor-pointer accent-savoy"
         checked={editBox.isMain}
       />
       <span>Album principal</span>

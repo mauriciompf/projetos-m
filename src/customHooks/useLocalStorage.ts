@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-type useLocalStorageParams<T> = {
-  key: string;
-  initialState: T;
-};
+import { useLocalStorageParams } from "../utils/types";
 
 const useLocalStorage = <T>({
   key,

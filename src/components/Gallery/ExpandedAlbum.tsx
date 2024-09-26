@@ -9,7 +9,6 @@ import useCarouselNavigation from "../../customHooks/useCarouselNavigation";
 export default function ExpandedAlbum() {
   const { imageIndex, albumBoxes, setExpandAlbum, expandAlbum } =
     useEditAlbumContext();
-
   const { handleCarouselNavegation, startInterval } = useCarouselNavigation();
 
   const btnPrevRef = useRef(null);

@@ -1,10 +1,6 @@
 import { useMenuContext } from "../context/MenuContext";
+import { WrapOutletProps } from "../utils/types";
 import Heading from "./Heading";
-
-type WrapOutletProps = {
-  children: React.ReactNode;
-  projectName: string;
-};
 
 export default function WrapOutlet({ children, projectName }: WrapOutletProps) {
   const { isMenuOpen } = useMenuContext();

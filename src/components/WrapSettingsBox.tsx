@@ -1,12 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { useThemeContext } from "../context/ThemeContext";
-import { RefObject } from "react";
-
-type WrapSettingsBoxProps = {
-  refElem: RefObject<HTMLElement>;
-  children: React.ReactNode;
-  className: string;
-};
+import { WrapSettingsBoxProps } from "../utils/types";
 
 export default function WrapSettingsBox({
   refElem,

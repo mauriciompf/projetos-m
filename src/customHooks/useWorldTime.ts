@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-
-type WorldDateValues = {
-  id: number;
-  name: string;
-  timeZone: string;
-  time: string | null;
-};
+import { WorldDateValues } from "../utils/types";
 
 const useWorldTime = () => {
   const [worldTime, setWorldTime] = useState<WorldDateValues[]>([

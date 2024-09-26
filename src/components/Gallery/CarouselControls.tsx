@@ -1,34 +1,13 @@
-import React, { useCallback, useEffect } from "react";
-import { useEditAlbumContext } from "../../context/EditAlbumContext";
+import React from "react";
 import { expandIcon, nextIcon, previousIcon } from "../../utils/icons";
 import Button from "../Button";
 import useCarouselNavigation from "../../customHooks/useCarouselNavigation";
+import { useEditAlbumContext } from "../../context/EditAlbumContext";
 
 export default function CarouselControls() {
-  const { albumBoxes, imageIndex, setImageIndex, setExpandAlbum, expandAlbum } =
-    useEditAlbumContext();
-
-  const { clearIntervalId, startInterval, handleCarouselNavegation } =
+  const { albumBoxes, imageIndex } = useEditAlbumContext();
+  const { handleCarouselNavegation, handleExpandAlbum, handleSelectIndex } =
     useCarouselNavigation();
-
-  const handleSelectIndex = useCallback(
-    (index: number) => {
-      clearIntervalId();
-      setImageIndex(index);
-    },
-    [setImageIndex, clearIntervalId, expandAlbum, startInterval],
-  );
-
-  const handleExpandAlbum = useCallback(() => {
-    clearIntervalId();
-    setExpandAlbum(true);
-  }, [setExpandAlbum, clearIntervalId]);
-
-  useEffect(() => {
-    if (!expandAlbum) startInterval();
-
-    return () => clearIntervalId();
-  }, [startInterval, expandAlbum]);
 
   return albumBoxes
     .filter((album) => album.isMain)
@@ -66,7 +45,7 @@ export default function CarouselControls() {
                   {album.images.map((_, index) => (
                     <Button
                       onClick={() => handleSelectIndex(index)}
-                      className={`size-4 rounded-full border border-jet bg-white hover:bg-savoy ${index === imageIndex && "bg-savoy"} `}
+                      className={`size-4 rounded-lg border border-jet bg-white hover:bg-savoy ${index === imageIndex && "bg-savoy"} `}
                       key={index}
                     >
                       {""}

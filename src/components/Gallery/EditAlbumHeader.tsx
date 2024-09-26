@@ -6,7 +6,7 @@ import { useThemeContext } from "../../context/ThemeContext";
 import { Album } from "../../utils/types";
 
 export default function EditAlbumHeader({ editBox }: { editBox: Album }) {
-  const { setEditAlbumBoxes, isEditAlbum, setIsEditing, setIsEditAlbum } =
+  const { setEditAlbumBoxes, setIsEditing, setIsEditAlbum } =
     useEditAlbumContext();
   const { theme } = useThemeContext();
 
@@ -29,9 +29,7 @@ export default function EditAlbumHeader({ editBox }: { editBox: Album }) {
           .map((album) => ({ ...album, title: value })),
       );
 
-      if (!isEditAlbum) {
-        setIsEditing(true);
-      }
+      setIsEditing(true);
     },
 
     [setEditAlbumBoxes, setIsEditing],

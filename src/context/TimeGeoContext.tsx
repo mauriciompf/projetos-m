@@ -1,15 +1,7 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, useState } from "react";
 import useCustomHookContext from "../customHooks/useCustomHookContext";
 import useFetch from "../customHooks/useFetch";
-
-type TimeGeoContextValues = {
-  date: Date;
-  setDate: Dispatch<SetStateAction<Date>>;
-  geoUrl: string;
-  setGeoUrl: Dispatch<SetStateAction<string>>;
-  geoData: { timezone: string; city: string; country: string; region: string };
-  geoIsLoading: boolean;
-};
+import { TimeGeoContextValues } from "../utils/types";
 
 const TimeGeoContext = createContext<TimeGeoContextValues | null>(null);
 

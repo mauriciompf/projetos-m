@@ -1,10 +1,6 @@
 import { useThemeContext } from "../../context/ThemeContext";
+import { ListItemProps } from "../../utils/types";
 import Button from "../Button";
-
-type ListItemProps = {
-  list: string;
-  handleClick: () => void;
-};
 
 export default function ListItem({ list, handleClick }: ListItemProps) {
   const { theme } = useThemeContext();
