@@ -9,7 +9,7 @@ export default function ImageUploadInput({ editBox }: { editBox: Album }) {
     <>
       <label
         htmlFor="files"
-        className="w-full cursor-pointer rounded-xl bg-savoy p-2 text-center font-bold text-columbia hover:ring-4 focus:ring-4"
+        className="text-alt_white w-full cursor-pointer rounded-xl bg-savoy p-2 text-center font-bold hover:ring-4 focus:ring-4"
       >
         Faça Upload
       </label>

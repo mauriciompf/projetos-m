@@ -7,11 +7,11 @@ export default function ListItem({ list, handleClick }: ListItemProps) {
 
   return (
     <li
-      className={`${theme === "dark" ? "border-columbia" : "border-jet"} border`}
+      className={`${theme === "dark" ? "border-alt_white" : "border-jet"} border`}
     >
       <Button
         onClick={handleClick}
-        className={`${theme !== "dark" && "hover:bg-jet hover:text-columbia focus:bg-jet focus:text-columbia"} w-full p-2 text-left hover:bg-columbia hover:text-jet focus:bg-columbia focus:text-jet`}
+        className={`${theme !== "dark" && "hover:text-alt_white focus:text-alt_white hover:bg-jet focus:bg-jet"} hover:bg-alt_white focus:bg-alt_white w-full p-2 text-left hover:text-jet focus:text-jet`}
       >
         {list}
       </Button>

@@ -7,7 +7,7 @@ export default function NotFound() {
 
   return (
     <main
-      className={`${theme === "dark" && "bg-[#181a1b] text-columbia"} grid h-screen place-items-center text-center`}
+      className={`${theme === "dark" && "bg-alt_black text-alt_white"} grid h-screen place-items-center text-center`}
     >
       <div className="grid gap-16">
         <div className="grid gap-8 sm:gap-2">
@@ -19,7 +19,7 @@ export default function NotFound() {
 
         <p>
           <Link
-            className={`${theme === "dark" ? "bg-columbia text-jet hover:border-gray-300 hover:bg-[#181a1b] hover:text-columbia focus:border-gray-300 focus:bg-[#181a1b] focus:text-columbia" : "text-columbia hover:bg-columbia hover:text-jet focus:bg-columbia focus:text-[#181a1b]"} rounded-2xl border border-[#181a1b] bg-[#181a1b] p-2 font-bold transition-colors duration-300 ease-in-out`}
+            className={`${theme === "dark" ? "hover:bg-alt_black focus:bg-alt_black bg-alt_white hover:text-alt_white focus:text-alt_white text-jet hover:border-gray-300 focus:border-gray-300" : "focus:text-alt_black text-alt_white hover:bg-alt_white focus:bg-alt_white hover:text-jet"} border-alt_black bg-alt_black rounded-2xl border p-2 font-bold transition-colors duration-300 ease-in-out`}
             to={"/"}
           >
             Página inicial

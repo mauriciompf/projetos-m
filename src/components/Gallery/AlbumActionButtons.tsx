@@ -68,19 +68,19 @@ export default function AlbumActionButton({ editBox }: { editBox: Album }) {
         onClick={() => handleSaveAlbum(editBox)}
         className={`${
           isEditing
-            ? "border-transparent bg-dark_spring text-columbia"
+            ? "text-alt_white border-transparent bg-dark_spring"
             : theme === "light"
               ? "border-jet"
-              : "border-columbia"
-        } rounded-xl border hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
+              : "border-alt_white"
+        } hover:text-alt_white focus:text-alt_white rounded-xl border hover:bg-savoy focus:bg-savoy`}
       >
         Salve alterações
       </Button>
       <Button
         onClick={() => handleRemoveAlbum(editBox.id, editBox.title)}
         className={`${
-          theme === "light" ? "border-jet" : "border-columbia"
-        } rounded-xl border hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia`}
+          theme === "light" ? "border-jet" : "border-alt_white"
+        } hover:text-alt_white focus:text-alt_white rounded-xl border hover:bg-cornell focus:bg-cornell`}
       >
         Deletar Álbum
       </Button>
@@ -89,8 +89,8 @@ export default function AlbumActionButton({ editBox }: { editBox: Album }) {
     <Button
       onClick={() => handleAddNewAlbum(editBox.id, editBox.title)}
       className={`${
-        theme === "light" ? "border-jet" : "border-columbia"
-      } rounded-xl border hover:bg-savoy hover:text-columbia focus:bg-savoy focus:text-columbia`}
+        theme === "light" ? "border-jet" : "border-alt_white"
+      } hover:text-alt_white focus:text-alt_white rounded-xl border hover:bg-savoy focus:bg-savoy`}
     >
       Adicionar Novo Álbum
     </Button>

@@ -20,7 +20,7 @@ export default function ResetParams({ params }: { params: string[] }) {
       <div className="text-right">
         <Button
           onClick={resetParams}
-          className={`${theme === "light" ? "hover:bg-[#282A2D] hover:text-columbia focus:bg-[#282A2D] focus:text-columbia" : "hover:bg-columbia hover:text-jet focus:bg-columbia focus:text-jet"} my-2 w-min rounded-2xl border border-gray-300 text-base italic ring-transparent`}
+          className={`${theme === "light" ? "hover:text-alt_white focus:text-alt_white hover:bg-[#282A2D] focus:bg-[#282A2D]" : "hover:bg-alt_white focus:bg-alt_white hover:text-jet focus:text-jet"} my-2 w-min rounded-2xl border border-gray-300 text-base italic ring-transparent`}
         >
           Resetar
           <span className="not-italic">⚠️</span>

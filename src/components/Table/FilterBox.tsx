@@ -85,7 +85,7 @@ export default function FilterBox({
                 <Button
                   key={label}
                   onClick={() => handleSelectSex(label.toLowerCase())}
-                  className={`border p-2 ${theme === "dark" ? "border-columbia" : "border-jet"}`}
+                  className={`border p-2 ${theme === "dark" ? "border-alt_white" : "border-jet"}`}
                 >
                   {label}
                 </Button>
@@ -94,7 +94,7 @@ export default function FilterBox({
           ) : (
             <input
               type="text"
-              className={`border ${theme === "dark" ? "border-columbia" : "border-jet"} w-[10rem] bg-transparent p-2 outline-none placeholder:opacity-50 hover:ring-4`}
+              className={`border ${theme === "dark" ? "border-alt_white" : "border-jet"} w-[10rem] bg-transparent p-2 outline-none placeholder:opacity-50 hover:ring-4`}
               placeholder="👀"
               maxLength={27}
               value={

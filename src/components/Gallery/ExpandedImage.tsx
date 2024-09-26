@@ -29,7 +29,7 @@ function ExpandedImage() {
           <div className="mb-4 grid place-items-center">
             <Button
               onClick={handleCloseExpandImage}
-              className={`rounded-full px-0 py-0 text-4xl leading-3 text-columbia`}
+              className={`text-alt_white rounded-full px-0 py-0 text-4xl leading-3`}
             >
               {closeIcon}
             </Button>
@@ -54,7 +54,7 @@ function ExpandedImage() {
             onClick={() =>
               handleRemoveImage(expandedImage!.id, expandedImage!.index)
             }
-            className="flex items-center gap-2 rounded-2xl bg-columbia p-2 px-3 text-jet hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia"
+            className="bg-alt_white hover:text-alt_white focus:text-alt_white flex items-center gap-2 rounded-2xl p-2 px-3 text-jet hover:bg-cornell focus:bg-cornell"
           >
             Excluir {deleteIcon}
           </Button>

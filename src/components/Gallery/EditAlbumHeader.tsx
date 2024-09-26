@@ -51,7 +51,7 @@ export default function EditAlbumHeader({ editBox }: { editBox: Album }) {
           name="albumTitle"
         />
         <div
-          className={`${theme === "light" ? "border-jet" : "border-columbia"} rounded-full border`}
+          className={`${theme === "light" ? "border-jet" : "border-alt_white"} rounded-full border`}
         ></div>
       </div>
       <Button

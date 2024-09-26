@@ -29,7 +29,7 @@ export default function EditAlbum() {
         <article
           ref={editAlbumBoxRef}
           key={editBox.id}
-          className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl p-4`}
+          className={`${theme === "light" ? "bg-slate-200" : "bg-jet"} absolute z-10 ml-[.75rem] mr-4 grid gap-6 rounded-2xl p-4 shadow-2xl`}
         >
           <EditAlbumHeader editBox={editBox} />
           <EditAlbumBody editBox={editBox} />

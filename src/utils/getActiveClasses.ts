@@ -4,8 +4,8 @@ const getActiveClasses = (isActive: boolean) => {
   const { theme } = useThemeContext();
   return isActive
     ? theme === "dark"
-      ? "bg-columbia text-jet"
-      : "bg-jet text-columbia"
+      ? "bg-alt_white text-jet"
+      : "bg-jet text-alt_white"
     : "";
 };
 export default getActiveClasses;

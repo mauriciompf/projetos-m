@@ -1,15 +1,13 @@
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
+import { useExpandedImageContext } from "../../context/ExpandedImageContext";
 import { useThemeContext } from "../../context/ThemeContext";
 import { deleteIcon, expandIcon } from "../../utils/icons";
 import Button from "../Button";
 
-// FIXME any
-export default function UploadedImages({
-  handleExpandImage,
-  handleRemoveImage,
-}: any) {
+export default function UploadedImages() {
   const { editAlbumBoxes } = useEditAlbumContext();
   const { theme } = useThemeContext();
+  const { handleExpandImage, handleRemoveImage } = useExpandedImageContext();
 
   return (
     <div className="max-h-52 select-none overflow-y-auto">
@@ -36,7 +34,7 @@ export default function UploadedImages({
                 {/* Button to expand the image */}
                 <Button
                   onClick={() => handleExpandImage(image, editBox.id, index)}
-                  className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute bottom-0 left-0 hidden rounded-bl-2xl px-2 py-0 ring-transparent hover:bg-blue-600 hover:text-columbia focus:bg-blue-600 focus:text-columbia group-hover:block`}
+                  className={`${theme === "light" ? "bg-alt_white" : "bg-jet"} hover:text-alt_white focus:text-alt_white absolute bottom-0 left-0 hidden rounded-bl-2xl px-2 py-0 ring-transparent hover:bg-blue-600 focus:bg-blue-600 group-hover:block`}
                 >
                   {expandIcon}
                 </Button>
@@ -44,7 +42,7 @@ export default function UploadedImages({
                 {/* Button to delete the image */}
                 <Button
                   onClick={() => handleRemoveImage(editBox.id, index)}
-                  className={`${theme === "light" ? "bg-columbia" : "bg-jet"} absolute bottom-0 right-0 hidden rounded-br-xl px-2 py-0 ring-transparent hover:bg-cornell hover:text-columbia focus:bg-cornell focus:text-columbia group-hover:block`}
+                  className={`${theme === "light" ? "bg-alt_white" : "bg-jet"} hover:text-alt_white focus:text-alt_white absolute bottom-0 right-0 hidden rounded-br-xl px-2 py-0 ring-transparent hover:bg-cornell focus:bg-cornell group-hover:block`}
                 >
                   {deleteIcon}
                 </Button>

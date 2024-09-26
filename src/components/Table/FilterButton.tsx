@@ -20,7 +20,7 @@ export default function FilterButton() {
       <Button
         refBtn={refFilterBtn}
         onClick={() => setToggleFilter(!toggleFilter)}
-        className={`${theme === "dark" ? "border-transparent bg-[#25282A]" : "border-gray-300"} relative select-none rounded-3xl border px-2 py-2 font-bold`}
+        className={`${theme === "dark" ? "border-transparent bg-jet" : "border-jet"} relative select-none rounded-3xl border px-2 py-2 font-bold shadow-sm transition-opacity`}
       >
         {isFilter && (
           <span

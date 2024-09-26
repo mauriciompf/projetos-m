@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { useExpandedImageContext } from "../../context/ExpandedImageContext";
 import { useEditAlbumContext } from "../../context/EditAlbumContext";
 import isAlbumAtImageLimit from "../../utils/isAlbumAtImageLimit";
 import AlbumActionButton from "./AlbumActionButtons";
@@ -12,7 +11,6 @@ import { Album } from "../../utils/types";
 export default function EditAlbumBody({ editBox }: { editBox: Album }) {
   const { setEditAlbumBoxes, editAlbumBoxes, setIsEditing } =
     useEditAlbumContext();
-  const { handleRemoveImage, handleExpandImage } = useExpandedImageContext();
 
   const handleOnDrop = useCallback(
     (event: React.DragEvent, id: number) => {
@@ -39,10 +37,7 @@ export default function EditAlbumBody({ editBox }: { editBox: Album }) {
 
       <ImageUploadInput editBox={editBox} />
 
-      <UploadedImages
-        handleExpandImage={handleExpandImage}
-        handleRemoveImage={handleRemoveImage}
-      />
+      <UploadedImages />
 
       <AlbumActionButton editBox={editBox} />
     </div>

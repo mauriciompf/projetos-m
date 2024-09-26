@@ -13,7 +13,7 @@ export default function SideBar() {
   return (
     <>
       <aside
-        className={`${theme === "dark" ? "bg-[#1e2124]" : "bg-columbia"} ${isMenuOpen ? "w-[16.25rem]" : "w-[3.75rem]"} fixed z-50 h-full border-r border-gray-300 p-4 transition-all duration-300 ease-in-out`}
+        className={`${theme === "dark" ? "bg-jet" : "bg-alt_white"} ${isMenuOpen ? "w-[16.25rem]" : "w-[3.75rem]"} fixed z-50 h-full border-r border-gray-300 p-4 transition-all duration-300 ease-in-out`}
       >
         <SideBarHeader elementVisible={elementVisible} />
 

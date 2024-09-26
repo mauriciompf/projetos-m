@@ -20,16 +20,16 @@ export default function ThemeButton({ className }: { className: string }) {
   useEffect(() => {
     const bodyClassList = document.body.classList;
     bodyClassList.remove(
-      `bg-[#181a1b]`,
-      "bg-columbia",
-      "text-columbia",
-      `text-jet`,
+      "bg-alt_black",
+      "bg-alt_white",
+      "text-alt_white",
+      "text-jet",
     );
 
     if (theme === "dark") {
-      bodyClassList.add(`bg-[#181a1b]`, "text-columbia");
+      bodyClassList.add("bg-alt_black", "text-alt_white");
     } else {
-      bodyClassList.add("bg-columbia", `text-jet`);
+      bodyClassList.add("bg-alt_white", `text-jet`);
     }
   }, [theme]);
 

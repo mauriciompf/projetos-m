@@ -15,7 +15,7 @@ export default function TableBody() {
         filteredUserData().map((userData) => (
           <tr
             key={userData.id}
-            className={`${theme === "dark" ? "text-gray-300 odd:bg-jet even:bg-[#181a1b]" : "text-jet odd:bg-slate-300 even:bg-columbia"}`}
+            className={`${theme === "dark" ? "even:bg-alt_black text-alt_white odd:bg-jet" : "even:bg-alt_white text-jet odd:bg-slate-300"}`}
           >
             <td className="p-2">{highLightMatch("id", userData.id)}</td>
             <td>{highLightMatch("nome", userData.firstName)}</td>

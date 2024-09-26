@@ -10,7 +10,7 @@ function MainAlbumGrid() {
     <section
       className={`${
         editAlbumBoxes.length > 0 && "opacity-5"
-      } mx-auto mt-4 grid w-[90%] gap-4 md:flex md:items-start md:justify-center min-[1400px]:mt-10 min-[1400px]:w-[70%]`}
+      } mx-auto mt-4 grid w-[90%] gap-6 md:flex md:items-start md:justify-center min-[1400px]:mt-10 min-[1400px]:w-[70%]`}
     >
       <AlbumCarousel />
       <SelectAlbum />
