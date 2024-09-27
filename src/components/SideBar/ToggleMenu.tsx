@@ -6,10 +6,8 @@ export default function ToggleMenu() {
   const { isMenuOpen, setIsMenuOpen } = useMenuContext();
   return (
     <>
-      <span className="sr-only">
-        {isMenuOpen ? "Reduza o menu" : "Amplie o menu"}
-      </span>
       <Button
+        aria-label={isMenuOpen ? "Reduza o menu" : "Amplie o menu"}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className={`${!isMenuOpen && "rotate-180"} p-0 text-2xl transition-[rotate] duration-100`}
       >
