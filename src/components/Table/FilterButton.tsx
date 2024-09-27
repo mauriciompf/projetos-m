@@ -28,7 +28,7 @@ export default function FilterButton() {
           ></span>
         )}
         <strong>
-          <span className="max-[420px]:hidden">🔍</span> Filtrar {downIcon}
+          <span className="max-[420px]:hidden">🔍</span> Filtro {downIcon}
         </strong>
       </Button>
 

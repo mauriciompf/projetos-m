@@ -10,7 +10,11 @@ import {
   faMoon,
   faSquareCaretLeft,
   faChevronDown,
+  faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
+
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+
 export const plusIcon = <FontAwesomeIcon icon={faPlus} />;
 export const expandIcon = <FontAwesomeIcon icon={faExpand} />;
 export const deleteIcon = <FontAwesomeIcon icon={faTrash} />;
@@ -23,3 +27,7 @@ export const hideMenuIcon = <FontAwesomeIcon icon={faSquareCaretLeft} />;
 export const downIcon = (
   <FontAwesomeIcon width={15} height={15} icon={faChevronDown} />
 );
+export const externalLinkIcon = (
+  <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+);
+export const githubIcon = <FontAwesomeIcon icon={faGithub} />;

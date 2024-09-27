@@ -20,6 +20,7 @@ export default function SideBarHeader({
             <span className="text-xl">⭐</span>
             <span className="text-2xl">Projetos</span>
           </div>
+
           <ThemeButton
             className={`relative p-0 text-xl transition-transform duration-300 ease-in-out`}
           />

@@ -35,14 +35,13 @@ export default function ThemeButton({ className }: { className: string }) {
 
   return (
     <>
-      <span className="sr-only">Mude o tema</span>
       <Button
         onClick={handleThemeNameChange}
         className={twMerge(
           ` ${isHomePage && isMenuOpen && "px-3 py-2"} flex select-none gap-2 rounded-2xl shadow-sm ring-transparent hover:text-savoy focus:text-savoy`,
           className,
         )}
-        aria-label={`Change to ${theme === "dark" ? "dark" : "light"} theme`}
+        aria-label={`Altere o tema`}
       >
         <span draggable={false} className="select-none">
           {theme === "dark" ? lightIcon : darkIcon}
