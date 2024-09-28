@@ -18,7 +18,7 @@ export default function CarouselControls() {
             {/* Expand image album button */}
             <Button
               onClick={handleExpandAlbum}
-              className="absolute m-2 rounded-xl border border-jet bg-white px-2 text-2xl text-jet transition-opacity group-hover:opacity-100 lg:opacity-0"
+              className="absolute left-0 top-0 m-2 rounded-xl border border-jet bg-white px-2 text-2xl text-jet transition-opacity group-hover:opacity-100 lg:opacity-0"
             >
               {expandIcon}
             </Button>

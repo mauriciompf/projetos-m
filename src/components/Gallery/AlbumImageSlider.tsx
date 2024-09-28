@@ -42,7 +42,7 @@ export default function AlbumImageSlider() {
               ))}
             </div>
           ) : (
-            <p className="bg-alt_white grid h-[300px] place-items-center rounded-2xl px-4 text-center text-2xl text-jet">
+            <p className="grid h-[300px] place-items-center rounded-2xl bg-alt_white px-4 text-center text-2xl text-jet">
               <strong>
                 Adicione imagens dentro do álbum para visualizá-las por aqui, ou
                 crie um novo álbum clicando em "+"

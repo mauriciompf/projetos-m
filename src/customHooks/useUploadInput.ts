@@ -2,8 +2,7 @@ import { ChangeEvent, useCallback } from "react";
 import { useEditAlbumContext } from "../context/EditAlbumContext";
 import isAlbumAtImageLimit from "../utils/isAlbumAtImageLimit";
 import uploadValidImage from "../utils/uploadValidImage";
-import { regexImageFile, SIZELIMIT } from "../utils/constants";
-import axios from "axios";
+import { regexImageFile } from "../utils/constants";
 
 const useUploadInput = () => {
   const {
@@ -25,37 +24,24 @@ const useUploadInput = () => {
   );
 
   const handleURL = useCallback(
-    async (id: number) => {
-      try {
-        const url = prompt("Insira a URL da imagem:");
-        if (!url || isAlbumAtImageLimit(editAlbumBoxes, id)) return;
+    (id: number) => {
+      const url: string | null = prompt("Insira a URL da imagem:");
+      if (!url || isAlbumAtImageLimit(editAlbumBoxes, id)) return;
 
-        if (!regexImageFile.test(url)) {
-          alert("Somente imagens devem ser usados.");
-          return handleURL(id);
-        }
-
-        const response = await axios.get(url, { responseType: "blob" }); // Fetch url image
-        const blob = response.data; // Get Blob Object (image details)
-
-        if (blob.size > SIZELIMIT) {
-          alert("A imagem é muito grande e não será adicionada.");
-          return handleURL(id);
-        }
-
-        setEditAlbumBoxes((prev) =>
-          prev
-            .filter((album) => album.id === id)
-            .map((box) => ({ ...box, images: [...box.images, url] })),
-        );
-
-        if (isEditing) setIsEditing(true);
-      } catch (error) {
-        console.error(`Erro ao validar a imagem...`);
-        return;
+      if (!regexImageFile.test(url)) {
+        alert("Somente imagens devem ser usados.");
+        return handleURL(id);
       }
+
+      setEditAlbumBoxes((prev) =>
+        prev
+          .filter((album) => album.id === id)
+          .map((album) => ({ ...album, images: [...album.images, url] })),
+      );
+
+      if (isEditing) setIsEditing(true);
     },
-    [setEditAlbumBoxes, setIsEditing],
+    [setEditAlbumBoxes, setIsEditing, isEditing],
   );
 
   return { handleUpload, handleURL };
