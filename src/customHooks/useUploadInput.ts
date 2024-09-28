@@ -29,7 +29,7 @@ const useUploadInput = () => {
       if (!url || isAlbumAtImageLimit(editAlbumBoxes, id)) return;
 
       if (!regexImageFile.test(url)) {
-        alert("Somente imagens devem ser usados.");
+        alert("Somente imagens devem ser usadas.");
         return handleURL(id);
       }
 
@@ -39,7 +39,7 @@ const useUploadInput = () => {
           .map((album) => ({ ...album, images: [...album.images, url] })),
       );
 
-      if (isEditing) setIsEditing(true);
+      setIsEditing(true);
     },
     [setEditAlbumBoxes, setIsEditing, isEditing],
   );

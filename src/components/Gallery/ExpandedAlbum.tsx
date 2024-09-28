@@ -41,7 +41,7 @@ export default function ExpandedAlbum() {
                   >
                     <img
                       draggable="false"
-                      className="min-w-auto h-full min-h-min object-contain"
+                      className="min-w-auto h-full min-h-full object-contain"
                       src={
                         image instanceof File
                           ? URL.createObjectURL(image)
