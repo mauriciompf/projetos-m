@@ -42,7 +42,7 @@ export default function MainAlbumSelector() {
         className="w-8 cursor-pointer accent-savoy"
         checked={editBox.isMain}
       />
-      <span>Album principal</span>
+      <span>Álbum principal</span>
     </label>
   ));
 }

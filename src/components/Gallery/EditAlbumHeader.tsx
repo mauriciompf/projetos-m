@@ -46,7 +46,7 @@ export default function EditAlbumHeader({ editBox }: { editBox: Album }) {
           value={editBox.title}
           autoComplete="off"
           maxLength={12}
-          aria-label="Título do album"
+          aria-label="Título do álbum"
           id={`album-title-${editBox.id}`}
           name="albumTitle"
         />
