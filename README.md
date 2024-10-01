@@ -33,7 +33,7 @@ Exibe informações detalhadas sobre a data, hora, e localização do usuário, 
 ### **Tabela**
 
 - **Configuração de Parâmetros**:
-  - **Organizar**: Permite ao usuário definir a coluna para ordenação e ordernar os valores entre crescente, decrescente ou padrão.
+  - **Organizar**: Permite ao usuário definir a coluna para ordenação e ordernar os valores entre crescente ou decrescente.
   
   - **Filtro**: Define critérios de filtragem. Selecione a coluna e um filtro de status com opções "é" ou "não é", além de uma barra de busca dependendo da coluna selecionada.
   
