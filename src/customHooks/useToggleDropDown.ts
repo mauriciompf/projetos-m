@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { tableHeaders } from "../utils/constants";
+import { orderByLabels, tableHeaders } from "../utils/constants";
 import { useTableContext } from "../context/TableContext";
 
 const useToggleDropDown = (key: string) => {
@@ -7,8 +7,6 @@ const useToggleDropDown = (key: string) => {
 
   const { setSelectColumn, selectColumnMap, searchParams, setSearchParams } =
     useTableContext();
-
-  const orderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
   const handleSelectColumn = (header: string) =>
     setSelectColumn(key, header.toLowerCase()); // Set column value in params

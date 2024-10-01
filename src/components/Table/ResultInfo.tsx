@@ -7,7 +7,7 @@ export default function ResultInfo() {
   return (
     <p className="text-right">
       <em>
-        Exibindo {filtedTableLength} de {tableLength} Resultados
+        Exibindo {filtedTableLength} de {tableLength} resultados
       </em>
     </p>
   );

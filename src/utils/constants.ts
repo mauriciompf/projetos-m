@@ -8,7 +8,7 @@ export const tableHeaders = [
   "Telefone",
   "Data de Nasc.",
 ];
-
+export const orderByLabels = ["Crescente", "Decrescente"];
 export const regexImageFile = new RegExp(
   "\\.(jpg|gif|png|jpeg|webp)(\\?.*)?$",
   "i",

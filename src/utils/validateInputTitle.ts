@@ -11,7 +11,7 @@ const validateInputTitle = (albumBoxes: Album[], title: string, id: number) => {
     .map((album) => album.title);
 
   if (albumTitles.includes(title)) {
-    alert("Já está criado um álbum com este mesmo nome");
+    alert("Já foi criado um álbum com este mesmo nome.");
     return;
   }
 

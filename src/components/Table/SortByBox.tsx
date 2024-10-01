@@ -9,6 +9,7 @@ import ResetParams from "./ResetParams";
 import useSortByHandlers from "../../customHooks/useSortByHandlers";
 import { useTableContext } from "../../context/TableContext";
 import { useTableToggleContext } from "../../context/TableToggleContext";
+import { orderByLabels } from "../../utils/constants";
 
 export default function SortByBox({
   refSortByBtn,
@@ -23,8 +24,6 @@ export default function SortByBox({
   const refSortByBox = useRef<HTMLElement | null>(null);
 
   useClickOutside([refSortByBox, refSortByBtn], () => setToggleSortBy(false));
-
-  const OrderByLabels = ["Crescente", "Decrescente", "Padrão"];
 
   return (
     <WrapSettingsBox
@@ -58,7 +57,7 @@ export default function SortByBox({
 
           {orderByToggle && (
             <ul>
-              {OrderByLabels.map((label) => (
+              {orderByLabels.map((label) => (
                 <ListItem
                   list={label}
                   key={label}
