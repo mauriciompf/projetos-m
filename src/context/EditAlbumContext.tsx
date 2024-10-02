@@ -36,7 +36,7 @@ export default function EditAlbumProvider({
 
       setImageIndex(0);
       setEditAlbumBoxes([]);
-      setIsEditAlbum(true);
+      setIsEditAlbum(false);
       setIsEditing(false);
     },
     [validateInputTitle, setAlbumBoxes, setIsEditAlbum, setIsEditing],
