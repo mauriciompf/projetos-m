@@ -110,7 +110,7 @@ Exibe informações detalhadas sobre a data, hora, e localização do usuário, 
 - **[Vite](https://vitejs.dev)**: Para desenvolvimento rápido e ferramenta de build.
 - **[React Router](https://reactrouter.com/en/main)**: Para navegação entre diferentes visualizações e  useSearchParams() para gerenciar parâmetros de consulta na URL.
 - **[tailwind-merge](https://www.npmjs.com/package/tailwind-merge)**: Para evitar duplicação de classes utilizando Tailwind CSS
-- **[Font Awesome](https://fontawesome.com/)**: Icones.
+- **[Font Awesome](https://fontawesome.com/)**: Ícones.
 
 ---
 
