@@ -30,7 +30,7 @@ export default function SideBarNav({
         >
           <em>
             <a
-              href="https://github.com/mauriciompf/mauricioProjetos"
+              href="https://github.com/mauriciompf/projetos-m"
               target="_blank"
               rel="noopener noreferrer"
             >
